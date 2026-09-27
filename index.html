@@ -1,14 +1,4 @@
-<!doctype html>
-<html lang="zh-CN">
-<head>
-<title>东京十月手帐</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="robots" content="noindex,nofollow">
-<meta name="color-scheme" content="light dark">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
-</head>
-<body>
+<!doctype html><html lang="zh-CN"><head><title>东京十月手帐</title><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"></head><body>
 <style>
 :root{
   --paper:#F1F4F3; --grid:#DCE4E2; --surface:#FFFFFF; --ink:#172024; --muted:#5B696E; --line:#D3DCDA;
@@ -254,6 +244,10 @@ const P = {
  nyg:{q:"Park Hyatt Tokyo New York Grill",ll:[35.6856,139.6907],n:"柏悦 52F"},
  izuei:{q:"鰻割烹 伊豆榮 本店 上野",ll:[35.7101,139.7727],n:"伊豆荣"},
  hongwanji:{q:"築地本願寺",ll:[35.6665,139.7724],n:"筑地本愿寺"},
+ kaijin:{q:"麺屋海神 新宿店",ll:[35.6886,139.7038],n:"麺屋海神"},
+ auralee:{q:"AURALEE TOKYO 南青山",ll:[35.6618,139.7155],n:"AURALEE"},
+ birdland:{q:"銀座バードランド",ll:[35.6719,139.7667],n:"Birdland"},
+ punch:{q:"Punch Room Tokyo EDITION Ginza",ll:[35.6746,139.7686],n:"Punch Room"},
  tower:{q:"東京タワー",ll:[35.6586,139.7454],n:"东京塔"},
  stellar:{q:"Sky Bar & Dining Stellar Garden ザ・プリンス パークタワー東京",ll:[35.6552,139.7468],n:"Stellar Garden"},
  maisen:{q:"とんかつ まい泉 青山本店",ll:[35.6680,139.7115],n:"まい泉"},
@@ -291,7 +285,11 @@ const P = {
  lambre:{q:"カフェ・ド・ランブル 銀座",ll:[35.6676,139.7614],n:"L'Ambre"},
  dsm:{q:"Dover Street Market Ginza",ll:[35.6693,139.7641],n:"DSM Ginza"},
  itoya:{q:"銀座 伊東屋 本店",ll:[35.6737,139.7676],n:"伊东屋"},
- mitsukoshi:{q:"銀座三越",ll:[35.6713,139.7661],n:"三越"}
+ mitsukoshi:{q:"銀座三越",ll:[35.6713,139.7661],n:"三越"},
+ tonkatsujp:{q:"とんかつ.jp 表参道",ll:[35.6668,139.7095],n:"とんかつ.jp"},
+ nakajima:{q:"新宿割烹 中嶋",ll:[35.6905,139.7043],n:"中嶋"},
+ matsubara:{q:"鎌倉 松原庵",km:[35.3128,139.5418],n:"松原庵"},
+ nodaya:{q:"入谷鬼子母神門前 のだや",ll:[35.7205,139.7846],n:"のだや"}
 };
 
 /* ---------- 行程 ---------- */
@@ -299,7 +297,7 @@ const DAYS=[
 {id:"8",wd:"周四",color:"--d8",title:"落地 → 旧芝离宫 + 增上寺 + 东京塔 → 日落时在王子公园塔 33 楼对着东京塔喝一杯",
  tags:[["","中国上班日"],["free","可玩 15:00–19:30"]],
  lead:"12:30 落地成田 T2。第一天只在酒店周边，打车都在 10 分钟内。20:00（北京 19:00）回酒店开会。",
- work:[["CAFE AZUR（酒店 4F 咖啡厅）","CAFE AZUR ベイサイドホテルアジュール竹芝","酒店步行 2 分钟，官方写明「咖啡厅兼共享办公」，免费 Wi‑Fi、沙发座，看海湾和彩虹桥；11:00–17:00"],["Blue Bottle 竹芝","ブルーボトルコーヒー 竹芝カフェ","Portcity 竹芝 3F，8:00–19:00，有 Wi‑Fi，22 座，安静明亮；店小，电话尽量短"],["王子公园塔 1F 大堂酒廊","ザ・プリンス パークタワー東京 ロビーラウンジ","就在 Stellar Garden 楼下，平日 10:00–20:00，125 座，可以谈公事，看得到东京塔"]],
+ work:[["Lit Coffee & Tea Stand（芝）","Lit Coffee & Tea Stand 芝2-15-15","Tabelog 3.59，大门站 / 芝公园之间，8:00–19:00，有 Wi‑Fi 和插座，本地上班族常在这里开电脑；小店，电话去门外"],["Le Pain Quotidien 芝公园","ル・パン・コティディアン 芝公園店","Tabelog Café 百名店 2025（3.70 · 3,371 条），就在去增上寺和东京塔的路上，东京塔下的大落地窗，长桌适合开电脑；早午餐也好吃"],["InterContinental Tokyo Bay · NY Lounge","ニューヨークラウンジ インターコンチネンタル東京ベイ","Tabelog 3.56，酒店隔壁步行 5 分钟，沙发座间距大，谈事情不打扰别人"]],
  stops:[
   {t:"12:30",p:"nrt",k:"move",n:"成田 T2 → 大门站",lines:["keisei"],note:"T2 地下搭京成 Access 特急（往羽田方向），直达大门站不换乘，约 80 分钟。行李多就打车或预约接机。"},
   {t:"15:00",p:"hotel",n:"mesm Tokyo 入住",kind:"酒店",note:"跟前台确认 10.13 晚退房和行李寄存（也可提前发邮件 reservation@mesm.jp）。",meta:["港区海岸 1-10-30 · +81-3-5777-1111"]},
@@ -313,101 +311,105 @@ const DAYS=[
   {t:"19:15",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 8 分钟。"},
   {t:"20:00",p:"hotel",k:"move",n:"开会",meeting:1,note:"北京 19:00 起，到次日东京 12:00。"}
  ]},
-{id:"9",wd:"周五",color:"--d9",title:"新宿买齐南极装备 → 思出横丁早晚饭 → 回酒店开会",
+{id:"9",wd:"周五",color:"--d9",title:"新宿买齐南极装备 → 鱼汤拉面早晚饭 → 回酒店开会",
  tags:[["","中国上班日"],["free","可玩 12:00–19:30"]],
- lead:"新宿站南口和东口 800 米内集中了东京最大的户外店，装备清单见「待办」。平日人少好试穿，买完直接打车带回酒店。",
- work:[["Caffice（办公咖啡厅）","Caffice 新宿三丁目","新宿三丁目站 E6 出口直通，离高岛屋 3 分钟；每个座位都有插座和 Wi‑Fi，86 座，10:00–23:00；满座时限 2 小时。三家里最适合接电话"],["Blue Bottle 新宿","ブルーボトルコーヒー 新宿カフェ","NEWoMan 1F，8:00–21:00，有 Wi‑Fi，设计最好看；靠近车站比较热闹，小声通话不突兀"],["珈琲貴族エジンバラ","珈琲貴族エジンバラ 新宿","新宿 3-2-4 2F，离 Alpen 7 分钟，24 小时，Wi‑Fi + 插座，130 座，老派水晶灯虹吸咖啡馆（Tabelog 3.71）；吸烟区没有完全隔开"]],
+ lead:"新宿站南口和东口 800 米内集中了东京最大的户外店，装备清单见「待办」。平日人少好试穿，买完直接打车带回酒店。想少走路：只去 mont-bell 东京京桥店（东京 Square Garden，京桥站直通，11:00–21:00，大门坐浅草线到宝町），一家买齐。",
+ work:[["珈琲貴族エジンバラ","珈琲貴族エジンバラ 新宿","Tabelog 喫茶店百名店 2026（3.71 · 1,769 条），新宿 3-2-4 2F，离 Alpen 7 分钟，24 小时营业，130 座，水晶灯老派喫茶，开电脑的人很多；吸烟区没完全隔开，坐禁烟区里侧"],["ALL SEASONS COFFEE","ALL SEASONS COFFEE 新宿","Tabelog Café 百名店 2025（3.68），新宿御苑前，小而精的精品咖啡，适合回邮件处理半小时，不适合长坐"],["Brooklyn Parlor 新宿","BROOKLYN PARLOR SHINJUKU","新宿三丁目 B1，评分一般（3.49）但座位多、灯光暗、音乐大，三家里最适合长时间开电脑和小声接电话"]],
  stops:[
-  {t:"12:00",p:"tsunahachi",k:"move",n:"大门 → 新宿",lines:["oedo"],note:"都营大江户线，约 20 分钟不换乘。"},
-  {t:"12:30",p:"tsunahachi",n:"天ぷら新宿つな八 新宿髙岛屋店",kind:"天妇罗",r:[["Tabelog","3.27"]],book:"https://tunahachi.co.jp/reservation/index.html",bookN:"官网预约",note:"1924 年创业的江户前天妇罗；总本店在整修，去高岛屋 13F 分店。",meta:["周五 11:00–23:00，午市到 16:00 · 电话 03-5361-1860"],lines:["walk"],
-   alt:[["船桥屋 本店（天妇罗）","天ぷら 船橋屋 本店","新宿 3-28-14，步行 5 分钟，只能电话预约"]]},
+  {t:"12:00",p:"nakajima",k:"move",n:"大门 → 新宿三丁目",lines:["oedo"],note:"都营大江户线到新宿西口，或浅草线换乘，约 20 分钟。"},
+  {t:"12:20",p:"nakajima",n:"新宿割烹 中嶋",kind:"沙丁鱼定食 · 米其林一星割烹",r:[["Tabelog","3.67"]],note:"晚上是米其林星级割烹，午市只做沙丁鱼定食（炸、煮、生拌、柳川锅），¥1,000 出头吃到星级厨房。本地上班族排队的地下小店，吧台座，小红书上被叫作「新宿最值的午饭」。",meta:["午餐 11:30–14:00 · 新宿 3-32-5 日原大楼 B1 · 03-3356-4534","午市一般不接受预约，12:20 到大约排 15–30 分钟；周日及节假日休"],lines:["walk"],
+   alt:[["Katsu プリポー（歌舞伎町）","かつ プリポー 新宿","Tabelog 3.85，炸猪排百名店 2026，周五午市 12:00–15:00，电话 050-5600-6368。周六已经安排了猪排，周五去这家就把周六换成别的"],["船桥屋 本店（天妇罗）","天ぷら 船橋屋 本店","新宿 3-28-14，步行 5 分钟，只能电话预约"]]},
   {t:"13:30",p:"montbell",n:"mont-bell 新宿南口店",kind:"户外",note:"打底、抓绒、轻羽绒。日本码偏小，试大一码。",lines:["walk"]},
   {t:"14:15",p:"lbreath",n:"L-Breath 新宿",kind:"户外",note:"10 层户外店，3F 有 500+ 款背包，买防水袋。",meta:["平日 11:00–20:00"],lines:["walk"]},
   {t:"15:00",p:"alpen",n:"Alpen TOKYO",kind:"户外",note:"10 层旗舰店，滑雪区买防水手套、护目镜。",meta:["平日 11:00–22:00 · 新宿区新宿 3-23-7"],lines:["walk"]},
   {t:"16:45",p:"alpen",n:"药妆店",kind:"补货",note:"防晒 SPF 50、润唇膏、暖宝宝、晕船药。"},
-  {t:"17:30",p:"omoide",n:"思出横丁",kind:"烧鸟",note:"整趟行程只来这一次。多数店 16:00 左右开门，17:30 前后还有位；人均 ¥2,000–3,000，基本只收现金，不接受预约。",lines:["walk"],
-   alt:[["つな八晚餐","天ぷら新宿つな八 新宿髙島屋","横丁太挤或太烟熏时，营业到 23:00"]]},
+  {t:"17:30",p:"kaijin",n:"麺屋海神 新宿店",kind:"拉面 · Tabelog 百名店",r:[["Tabelog","3.73 · 4,254"]],note:"用每天进货的鱼骨熬汤的盐味拉面，新宿三丁目，离 Alpen 步行约 5 分钟。16 个座位，不接受预约，只收现金。",meta:["平日 11:00–15:00、16:30–22:00 · 新宿区新宿 3-35-7 2F · 03-3356-5658"],lines:["walk"],
+   alt:[["五ノ神製作所（虾汤沾面）","五ノ神製作所","Tabelog 3.77，拉面百名店 2025，新宿南口步行 7 分钟，浓郁虾汤沾面，同样只能排队"],["思出横丁（烧鸟小巷）","思い出横丁","更想吃烧鸟和气氛就来这里，西口，多数店 16:00 开门，只收现金"]]},
   {t:"18:45",p:"hotel",k:"move",n:"带着装备打车回酒店",lines:["taxi"],note:"约 25–30 分钟。"},
   {t:"20:00",p:"hotel",k:"move",n:"开会",meeting:1,note:"北京 19:00 起。"}
  ]},
-{id:"10",wd:"周六",color:"--d10",title:"表参道做造型 → 青山设计师店 → 虎之门 31 楼日落拍照 → 柏悦 52 楼晚餐 + 爵士",
+{id:"10",wd:"周六",color:"--d10",title:"表参道做造型 → 青山设计师店 → 虎之门 31 楼日落拍照 → 银座烧鸟 + Punch Room",
  tags:[["","中国调休上班日"],["free","12:00 起到深夜，晚上不开会"]],
- lead:"造型放在晚上不开会的这天，妆发一直用到深夜：傍晚在 31 楼对着东京塔拍照，晚上去电影《迷失东京》里的柏悦酒店 52 楼吃饭听爵士。原定的 Bar BenFiddich 10.10 已经全部订满，改成这里。",
+ lead:"造型放在晚上不开会的这天，妆发一直用到深夜：傍晚在 31 楼对着东京塔拍照，晚上在银座吃烧鸟名店，再去东京排名最高的榜单酒吧 Punch Room，两处步行 5 分钟、离酒店打车 10 分钟。原定的 Bar BenFiddich 10.10 已经全部订满。",
  stops:[
-  {t:"11:55",p:"maisen",n:"とんかつ まい泉 青山本店",kind:"猪排",r:[["Google","4.4 · 5,187"],["Tabelog","3.44"]],note:"周末单点不接受预约，只能排队，12:00 前到。点黑猪里脊。",meta:["每天 11:00–22:00 · 涩谷区神宫前 4-8-5"],lines:["taxi"],
-   alt:[["排太久：先做造型再吃","表参道ヒルズ","表参道之丘里有多家餐厅"]]},
+  {t:"11:45",p:"tonkatsujp",n:"とんかつ.jp 表参道",kind:"猪排 · Tabelog 百名店",r:[["Tabelog","3.70"]],note:"炸猪排百名店 2024 / 2026 双榜，低温慢炸的厚切里脊，粉红切面，配盐和芥末吃。比观光客多的まい泉更本地、更好吃。11:45 到排队，赶得上 13:30 做造型。",meta:["周六午市 11:00–15:00 · 午餐不接受预约","表参道站步行约 5 分钟"],lines:["taxi"],
+   alt:[["まい泉 青山本店（排不上时）","とんかつ まい泉 青山本店","Google 4.4 · 5,187 条，Tabelog 3.44，座位多翻台快"],["排太久：先做造型再吃","表参道ヒルズ","表参道之丘里有多家餐厅"]]},
   {t:"13:30",p:"haruka",k:"key",n:"Atelier Haruka Echika 表参道店",kind:"妆发",r:[["小红书","编发攻略 1,000+ 赞"],["Google","4.2 · 83"]],book:"https://wrpcxa.b-merit.jp/y8hkz5/web/",bookN:"官网即时预约",
    note:"小红书上中国游客推荐最多的编发连锁，就在表参道站内。带参考图；喜欢高颅顶要提前说。",meta:["周六 10:00–20:00 · 港区北青山 3-6-12 Echika 表参道 · 03-3796-3301","每人头发 ¥3,520 + 化妆 ¥3,520 起；两人都做要订 2 个名额，同一时段不够就一前一后；也可用 LINE 预约"],lines:["walk"],
-   alt:[["Felice（更完整的妆造）","Felice ヘアメイク 南青山6-2-13","Hot Pepper Beauty 4.84 · 351 条，发型 + 全妆 ¥8,900，周末 7:00–18:00；当天取消收全款","https://beauty.hotpepper.jp/CSP/bt/reserve/?storeId=H000343022"]]},
-  {t:"14:45",p:"mameya",n:"KOFFEE MAMEYA",kind:"咖啡",r:[["Google","4.6 · 1,932"]],note:"豆子专门店的站立吧台，做完造型第一张照片在这里拍。",meta:["每天 10:00–18:00"],lines:["walk"]},
+   alt:[["Felice（更完整的妆造）","Felice ヘアメイク 南青山6-2-13","Hot Pepper Beauty 4.84 · 351 条，发型 + 全妆 ¥8,900，周末 7:00–18:00；当天取消收全款","https://beauty.hotpepper.jp/CSP/bt/reserve/?storeId=H000343022"],["想剪发染发：LONESS 表参道","LONESS 表参道 南青山3-15-6","Hot Pepper Beauty 4.78 · 715 条，周六 10:30–20:00，剪 + 染 ¥11,800 起（新客），约 2.5–3 小时","https://beauty.hotpepper.jp/slnH000344908/"]]},
+  {t:"14:45",p:"mameya",n:"KOFFEE MAMEYA",kind:"咖啡",r:[["Google","4.6 · 1,932"]],note:"豆子专门店的站立吧台，做完造型第一张照片在这里拍。它的姐妹店 KOFFEE MAMEYA Kakeru（清澄白河）是东京唯一进「世界 100 佳咖啡店」的（2026 #28），要预约品鉴套餐 ¥8,500 起，这次时间不够就先打卡表参道本店。",meta:["每天 10:00–18:00"],lines:["walk"]},
   {t:"15:15",p:"mame",n:"Mame Kurogouchi Aoyama",kind:"设计师店",note:"黑河内真衣子旗舰店，织物和工艺感很强的女装、包和首饰。",meta:["13:00–20:00，周二休 · 港区北青山 3-8-3"],lines:["walk"]},
   {t:"15:45",p:"call",n:"call by minä perhonen",kind:"买手店",note:"皆川明的布料、服饰和世界各地的生活器物。",meta:["周六 11:00–20:00 · Spiral 5F"],lines:["walk"]},
-  {t:"16:15",p:"arts",n:"Arts & Science Aoyama",kind:"买手店",note:"麻、羊绒基础款和手工包袋；周边还有 &SHOP、HIN。",meta:["11:00–19:00，周二休 · 港区南青山 4-23-11"],lines:["walk"]},
+  {t:"16:15",p:"auralee",n:"AURALEE TOKYO",kind:"设计师店",note:"面料和剪裁见长的日本品牌，低调无 Logo，针织、衬衫、裤装都值得试。",meta:["12:00–20:00，不定休 · 港区南青山 6-3-2 QC cube 1F"],lines:["walk"],
+   alt:[["Arts & Science Aoyama","Arts & Science 南青山4-23-11","麻、羊绒基础款和手工包袋，11:00–19:00"],["SHIHARA TOKYO（几何感首饰）","SHIHARA TOKYO 北青山","北青山 3-12-13，周六 12:00–20:00，可以网上约店内时段"]]},
   {t:"16:45",p:"edition",k:"key",n:"The Tokyo EDITION, Toranomon · Lobby Bar",kind:"看塔酒吧 · 31F",r:[["Google","4.0 · 208"]],
-   note:"打车约 15 分钟。晚间不接受预约，先到先坐，16:45 到挑窗边位。这天日落约 17:13，带着妆发拍日落和东京塔亮灯。",meta:["周六 7:30–23:30 · 港区虎之门 4-1-1","网上只能订下午茶；要保证看塔位得订 ¥11,520 的香槟下午茶（12:00–17:00）"],book:"https://www.tablecheck.com/en/shops/editionhotels-tokyo-lobbybar/reserve",bookN:"TableCheck（下午茶）",lines:["taxi"],
-   alt:[["Andaz Tokyo Rooftop Bar（52F）","Rooftop Bar Andaz Tokyo","步行 5 分钟，可预约，17:00–20:00 露台免座位费","https://www.tablecheck.com/en/andaz-tokyo-rooftop-bar/reserve/message"]]},
-  {t:"18:30",p:"nyg",k:"move",n:"打车去西新宿柏悦酒店",lines:["taxi"],note:"约 20–25 分钟。"},
-  {t:"19:00",p:"nyg",k:"key",n:"New York Grill（柏悦 52F）",kind:"晚餐 · 夜景",note:"2025 年 12 月重装后重开。52 楼落地窗看新宿夜景，吃牛排或海鲜。9.28 按 2 位查，10.10 19:00 还有位。",meta:["餐厅电话 +81-3-5323-3005 · 新宿区西新宿 3-7-1-2"],book:"https://www.tablecheck.com/en/shops/tokyo-park-hyatt-nyg/reserve",bookN:"TableCheck 预约",lines:["walk"],
-   alt:[["19:00 订不到：18:30 或 19:15","Park Hyatt Tokyo New York Grill","按 2 位查这两个时段也有位"]]},
-  {t:"20:30",p:"nyg",k:"key",n:"New York Bar（同层）",kind:"爵士酒吧",note:"饭后走几步到同层酒吧听现场爵士（20:30–21:15）。不接受预约。",meta:["17:00–24:00 · 座位费 ¥3,300（17:00–18:30 到免费） · 着装：不穿短裤、拖鞋、运动服"],lines:["walk"],
-   alt:[["新宿黄金街（迷你酒吧）","新宿ゴールデン街","打车 10 分钟，200 多家只坐几个人的小酒吧，很多只收现金、收座位费"]]},
-  {t:"21:45",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 25 分钟。第二天 9:15 出发去镰仓，别太晚。"}
+   note:"打车约 15 分钟。晚间不接受预约，先到先坐，16:45 到挑窗边位。这天日落约 17:13，带着妆发拍日落和东京塔亮灯。大堂吧本身没上榜；同楼的 Gold Bar 进过 Asia's 50 Best 51–100（2025 #67），想喝榜单酒就下楼去那里。",meta:["周六 7:30–23:30 · 港区虎之门 4-1-1","网上只能订下午茶；要保证看塔位得订 ¥11,520 的香槟下午茶（12:00–17:00）"],book:"https://www.tablecheck.com/en/shops/editionhotels-tokyo-lobbybar/reserve",bookN:"TableCheck（下午茶）",lines:["taxi"],
+   alt:[["Gold Bar at EDITION（同一栋楼）","Gold Bar at EDITION Tokyo Toranomon","Asia's 50 Best 51–100（2025 #67），金色吧台，适合拍照；看不到塔"],["Andaz Tokyo Rooftop Bar（52F）","Rooftop Bar Andaz Tokyo","步行 5 分钟，可预约，17:00–20:00 露台免座位费","https://www.tablecheck.com/en/andaz-tokyo-rooftop-bar/reserve/message"]]},
+  {t:"18:15",p:"birdland",k:"move",n:"打车去银座",lines:["taxi"],note:"约 10 分钟。"},
+  {t:"18:30",p:"birdland",k:"key",n:"銀座バードランド",kind:"烧鸟 · Tabelog 百名店 2023–2025",r:[["Tabelog","3.60 · 517"]],book:"https://restaurant.ikyu.com/107602/plan11534186/",bookN:"一休（只订座位）",
+   note:"用奥久慈军鸡在备长炭上烤的烧鸟名店，吧台座。和周五的拉面、周二的寿司都不重样。",meta:["周六 17:00–21:30 · 银座 4-2-15 塚本素山大楼 B1 · 03-5250-1081","人均 ¥12,000–15,000；座位限 2 小时；当天 17:00 后取消每人 ¥11,000"],lines:["taxi"],
+   alt:[["New York Grill（柏悦 52F）","Park Hyatt Tokyo New York Grill","9.28 按 2 位查 10.10 19:00 还有位；去这家就把下一站换成同层 New York Bar","https://www.tablecheck.com/en/shops/tokyo-park-hyatt-nyg/reserve"]]},
+  {t:"20:30",p:"punch",k:"key",n:"Punch Room Tokyo",kind:"Asia's 50 Best #23",r:[["Google","4.6 · 145"]],book:"https://www.tablecheck.com/en/editionhotels-ginza-punchroom/reserve",bookN:"TableCheck",
+   note:"东京排名最高的榜单酒吧，用日本食材做潘趣酒，可以一杯杯点，也可以整碗分享。离 Birdland 步行 5 分钟，周六营业。",meta:["周五周六 18:00–02:00，周日周一休 · 银座 2-8-13 东京 EDITION 银座 · +81-3-6228-7400"],lines:["walk"],
+   alt:[["New York Bar（柏悦 52F）","Park Hyatt Tokyo New York Bar","不接受预约，现场爵士，座位费 ¥3,300"],["Virtù（四季大手町 39F）","Virtù Four Seasons Otemachi","Asia 2026 #26 · World 2025 #45，不用预约，17:00 开门，打车 10 分钟"],["Star Bar Ginza","スタアバー 銀座","Tabelog 酒吧百名店（3.77），岸久的经典日式调酒，步行 5 分钟"]]},
+  {t:"22:00",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 10 分钟。第二天 8:50 出发去镰仓，别太晚。"}
  ]},
 {id:"11",wd:"周日",color:"--d11",title:"上午稻村崎看富士山 → 大佛 → 回酒店休息 → 麻布十番看塔 → 惠比寿榜单酒吧",
  tags:[["free","全天休息"],["","日本三连休中间一天，镰仓会很挤"]],
  lead:"秋天上午空气更通透，富士山露脸概率比下午高。前一晚看天气：阴天就改走小町通和鹤冈八幡宫。下午不想休息的话，可以把回酒店换成麻布台之丘的 teamLab 无界美术馆（离晚饭的麻布十番步行 10 分钟，需买时段票）。",
  stops:[
-  {t:"9:15",p:"kamakura",k:"move",n:"滨松町 → 品川 → 镰仓",lines:["jr","yokosuka"],note:"约 1 小时；横须贺线坐绿色车厢（刷卡加钱）更舒服。"},
-  {t:"10:30",p:"inamura",k:"key",n:"稻村崎公园",kind:"看富士山",note:"一个画面里有富士山、大海和江之岛。海边风大，带外套。三连休江之电镰仓站会排队进站，预留 20 分钟。",lines:["enoden"],
+  {t:"8:50",p:"kamakura",k:"move",n:"滨松町 → 品川 → 镰仓",lines:["jr","yokosuka"],note:"约 1 小时；横须贺线坐绿色车厢（刷卡加钱）更舒服。"},
+  {t:"10:00",p:"inamura",k:"key",n:"稻村崎公园",kind:"看富士山",note:"一个画面里有富士山、大海和江之岛。海边风大，带外套。三连休江之电镰仓站会排队进站，预留 20 分钟。",lines:["enoden"],
    alt:[["阴天改：鹤冈八幡宫 + 小町通","鶴岡八幡宮","从镰仓站步行 10 分钟，小町通有手工杂货和和果子店"]]},
-  {t:"11:30",p:"shamoji",n:"定食屋 しゃもじ",kind:"银鱼饭",r:[["Google","4.3 · 569"]],note:"长谷站 3 分钟，镰仓特产银鱼饭，不接受预约。",lines:["enoden"],
-   alt:[["鎌倉 松原庵（荞麦老宅）","鎌倉 松原庵","Google 4.3 · 1,626 条，Tabelog 3.7，由比滨站 3 分钟"]]},
-  {t:"13:00",p:"daibutsu",n:"镰仓大佛（高德院）",kind:"寺院",note:"10 月 8:00–17:00，门票 ¥300。",lines:["walk"]},
-  {t:"13:45",p:"hasedera",n:"长谷寺",kind:"寺院",note:"山腰观景台俯瞰由比滨，坐下喝杯茶。",lines:["walk"]},
-  {t:"15:00",p:"hotel",k:"move",n:"回酒店休息",lines:["enoden","yokosuka","jr"],note:"江之电回镰仓，JR 回滨松町，16:30 左右到。"},
-  {t:"17:30",p:"sarashina",n:"总本家 更科堀井 麻布十番本店",kind:"荞麦",r:[["Google","4.2 · 1,907"],["Tabelog","3.66"]],note:"230 年荞麦老店。周末单点不接受订位，17:30 早点到直接进；只有订约 ¥10,000 的套餐才能预约。",meta:["周末 11:00–20:00 · 03-3403-3401"],lines:["oedo"],
+  {t:"11:00",p:"matsubara",k:"key",n:"鎌倉 松原庵",kind:"荞麦 · Tabelog 百名店",r:[["Tabelog","3.68"],["Google","4.3 · 1,626"]],book:"https://tabelog.com/kanagawa/A1404/A140402/14001599/",bookN:"Tabelog / 电话预约",note:"荞麦百名店 2024，由比滨站 3 分钟的昭和老宅，有庭院座；季节天妇罗和生银鱼（しらす）小菜。三连休中午不订会排 1 小时以上。",meta:["午餐只有 11:00 这一场能预约 · 0467-61-3838","从稻村崎坐江之电 2 站到由比滨"],lines:["enoden"],
+   alt:[["订不到：11:00 开门前 10 分钟去排","鎌倉 松原庵","第一轮入座最有把握"],["原来的しゃもじ","定食屋 しゃもじ 長谷","周日休，这天去不了"]]},
+  {t:"12:30",p:"daibutsu",n:"镰仓大佛（高德院）",kind:"寺院",note:"10 月 8:00–17:00，门票 ¥300。",lines:["walk"]},
+  {t:"13:15",p:"hasedera",n:"长谷寺",kind:"寺院",note:"山腰观景台俯瞰由比滨，坐下喝杯茶。",lines:["walk"]},
+  {t:"14:30",p:"hotel",k:"move",n:"回酒店休息",lines:["enoden","yokosuka","jr"],note:"江之电回镰仓，JR 回滨松町，16:00 左右到，能睡 1 小时。"},
+  {t:"17:30",p:"sarashina",n:"总本家 更科堀井 麻布十番本店",kind:"荞麦 · Tabelog 百名店",r:[["Google","4.2 · 1,907"],["Tabelog","3.66"]],note:"230 年荞麦老店。周末单点不接受订位，17:30 早点到直接进；只有订约 ¥10,000 的套餐才能预约。",meta:["周末 11:00–20:00 · 03-3403-3401"],lines:["oedo"],
    alt:[["永坂更科 布屋太兵卫","永坂更科 布屋太兵衛 麻布総本店","步行 2 分钟，周末 11:00–20:00"]]},
-  {t:"19:00",p:"confidential",k:"key",n:"Tokyo Confidential",kind:"看塔酒吧 · 9F 露台",r:[["小红书","热门露台"],["Tabelog","3.45"]],book:"https://www.tablecheck.com/en/shops/tokyoconfidentialbar/reserve",bookN:"TableCheck 预约",
+  {t:"19:00",p:"confidential",k:"key",n:"Tokyo Confidential",kind:"看塔酒吧 · Asia 2025 #70",r:[["Asia's 50 Best","2025 第 70"],["小红书","热门露台"]],book:"https://www.tablecheck.com/en/shops/tokyoconfidentialbar/reserve",bookN:"TableCheck 预约",
    note:"猫主题鸡尾酒吧，露台正对东京塔。9.28 按 2 位查，10.11 18:00–22:00 每个时段都有位，订 19:00。东京塔 24:00 关灯。",meta:["周日 18:00–24:00 · 麻布十番 1-6-1 · 预约要绑卡，12 小时内取消收 ¥2,000"],lines:["walk"],
    alt:[["Stellar Garden（王子公园塔 33F）","Sky Bar & Dining Stellar Garden ザ・プリンス パークタワー東京","打车 5 分钟，营业到 01:00"]]},
-  {t:"20:45",p:"trench",k:"key",n:"Bar Trench",kind:"Asia #53 · World #74",r:[["Google","4.7 · 922"]],note:"苦艾酒和药草鸡尾酒。不接受预约，13 个座位，直接去排；2 人比多人容易等到位。",meta:["每天 18:00–02:00 · 惠比寿西 1-5-8 · 03-3780-5291"],lines:["taxi"],
-   alt:[["The SG Club（涩谷）","The SG Club 渋谷","World #88，Google 4.5 · 1,546 条，营业到 02:00"],["AFURI 惠比寿（夜宵）","AFURI 恵比寿","柚子盐拉面本店，Google 4.3 · 4,514 条，营业到 05:00"]]},
+  {t:"20:45",p:"trench",k:"key",n:"Bar Trench",kind:"Asia 2026 #53 · World 2025 #94",r:[["Google","4.7 · 922"]],note:"苦艾酒和药草鸡尾酒。不接受预约，13 个座位，直接去排；2 人比多人容易等到位。",meta:["每天 18:00–02:00 · 惠比寿西 1-5-8 · 03-3780-5291"],lines:["taxi"],
+   alt:[["The SG Club（涩谷）","The SG Club 渋谷","World 2025 #65，Google 4.5 · 1,546 条，营业到 02:00"],["Bar Odin（惠比寿）","Bar Odin 恵比寿","Tabelog 酒吧百名店，惠比寿站 3 分钟，周日营业，小而安静的正统吧台"]]},
   {t:"22:30",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 20 分钟。"}
  ]},
 {id:"12",wd:"周一",color:"--d12",title:"上野看广重浮世绘 + 百年鳗鱼饭 → 浅草手艺老铺 → 合羽桥刀具 → 今半寿喜烧",
  tags:[["","中国上班日"],["","日本体育之日"],["free","上午灵活，19:30 前回"]],
- lead:"东京国立博物馆 10.12 照常开馆（10.13 闭馆），「歌川广重」特展不用预约时段。午饭就在博物馆对面吃 300 年的鳗鱼老店，晚饭吃浅草今半寿喜烧。前一晚喝得晚就跳过博物馆，11:45 直接去吃鳗鱼。",
- work:[["FUGLEN ASAKUSA","FUGLEN ASAKUSA","浅草寺西侧 3 分钟，节假日 8:00–23:00，挪威精品咖啡，建筑师平田晃久设计；有 Wi‑Fi，2 楼有插座。电话去门外接"],["COFFEE BAR 桟敷","COFFEE BAR 桟敷 浅草","浅草寺 5 分钟、去合羽桥顺路，8:00–21:00，每座有插座和免费 Wi‑Fi，沙发座，全面禁烟，很安静"],["WIRED CAFE アトレ上野","WIRED CAFE アトレ上野店","上野站内 B1，8:00–23:00，免费 Wi‑Fi、部分座位有插座；上午看完博物馆在这里处理工作"]],
+ lead:"东京国立博物馆 10.12 照常开馆（10.13 闭馆），「歌川广重」特展不用预约时段。午饭去入谷的鳗鱼百名店のだや（Tabelog 3.97，东京鳗鱼第一梯队），晚饭吃浅草今半寿喜烧。前一晚喝得晚就跳过博物馆，11:45 直接去吃鳗鱼。",
+ work:[["Nui. HOSTEL & BAR LOUNGE（藏前）","Nui. HOSTEL & BAR LOUNGE 蔵前","Tabelog 3.55，旧仓库改的挑高大厅，长木桌、Wi‑Fi、插座，本地自由职业者常驻；浅草坐浅草线 1 站"],["Dandelion Chocolate 藏前","ダンデライオン・チョコレート ファクトリー＆カフェ蔵前","Tabelog 甜品百名店（3.74），2 楼座位安静，热巧克力很出名；适合处理 1 小时以内的事"],["FUGLEN ASAKUSA","FUGLEN ASAKUSA","浅草寺西侧 3 分钟，节假日 8:00–23:00，挪威精品咖啡，有 Wi‑Fi，2 楼有插座。电话去门外接"]],
  stops:[
   {t:"9:30",p:"tnm",n:"东京国立博物馆（可选）",kind:"博物馆",book:"https://www.asoview.com/channel/ticket/WuX1M0a3sG/ticket0000051104/",bookN:"网上购票",note:"广重特展 + 本馆日本艺术展厅，约 2 小时。成人 ¥1,500，网上提前买 ¥1,300。",meta:["9:30–17:00 · 台东区上野公园 13-9"],lines:["taxi"]},
-  {t:"11:45",p:"izuei",n:"鳗割烹 伊豆荣 本店",kind:"鳗鱼饭",note:"上野 300 年老店，就在不忍池对面，步行约 10 分钟。",meta:["每天 11:00–21:00 · 台东区上野 2-12-22 · 03-3831-0954"],book:"https://r.gnavi.co.jp/g063800/",bookN:"Gurunavi 预约",lines:["walk"],
-   alt:[["竹叶亭 / 野田岩","野田岩 麻布飯倉本店","想换鳗鱼店：野田岩在酒店附近，周一 11:00–13:30"]]},
-  {t:"13:15",p:"sensoji",n:"浅草寺",kind:"寺院",note:"打车约 10 分钟。节假日仲见世很挤，走两侧小路；可以在这里求御守。",lines:["taxi"]},
+  {t:"11:45",p:"nodaya",k:"key",n:"入谷鬼子母神門前 のだや",kind:"鳗鱼饭 · Tabelog 百名店",r:[["Tabelog","3.97"]],note:"鳗鱼百名店 2026，Tabelog 近 4 分，是东京评分最高的鳗鱼店之一，比观光向的老店更讲究：蒸得软、酱汁清爽。博物馆打车 5 分钟，入谷站 1 分钟。",meta:["电话 050-5869-5137（可订位）","10.12 是节假日周一，订位时确认营业"],lines:["taxi"],
+   alt:[["鳗割烹 伊豆荣 本店","鰻割烹 伊豆榮 本店 上野","订不到のだや：上野 300 年老店，不忍池对面，每天 11:00–21:00，Gurunavi 可订","https://r.gnavi.co.jp/g063800/"],["並木藪蕎麦（浅草）","並木藪蕎麦","不想吃鳗鱼：荞麦百名店 2025（3.66），10.12 营业，浅草寺旁"]]},
+  {t:"13:15",p:"sensoji",n:"浅草寺",kind:"寺院",note:"从入谷打车约 8 分钟。节假日仲见世很挤，走两侧小路；可以在这里求御守。",lines:["taxi"]},
   {t:"13:45",p:"yonoya",n:"よのや櫛舗",kind:"手艺老铺",note:"1717 年创业，萨摩黄杨木梳和发簪。",meta:["10:30–17:00，周三休"],lines:["walk"]},
   {t:"14:15",p:"fujiya",n:"ふじ屋 手拭",kind:"手艺老铺",note:"手绘手染的手拭巾。只收现金。",meta:["10:00–18:00，周四休"],lines:["walk"]},
   {t:"14:45",p:"leaves",n:"LEAVES COFFEE ROASTERS",kind:"咖啡",r:[["Google","4.5 · 535"]],note:"过吾妻桥约 10 分钟；桥上正好拍晴空塔。",meta:["周五至周一 10:00–17:00"],lines:["walk"]},
   {t:"15:45",p:"kamaasa",n:"釜浅商店",kind:"刀具",note:"手工厨刀可现场刻名；刀具只能托运，别放随身行李。",meta:["11:00–17:30 · 台东区松谷 2-24-1"],lines:["taxi"]},
-  {t:"17:00",p:"imahan",k:"key",n:"浅草今半 国际通本店",kind:"寿喜烧",r:[["Google","4.5 · 2,509"],["Tabelog","3.62"]],book:"https://tabelog.com/tokyo/A1311/A131102/13003649/",bookN:"Tabelog 预约",note:"和牛寿喜烧。午市可能只能排队，所以改成可以预约的早晚饭。",meta:["每天 11:30–21:30 · 西浅草 3-1-12 · 03-3841-1114"],lines:["walk"],
+  {t:"17:00",p:"imahan",k:"key",n:"浅草今半 国际通本店",kind:"寿喜烧 · Tabelog 百名店",r:[["Google","4.5 · 2,509"],["Tabelog","3.62"]],book:"https://tabelog.com/tokyo/A1311/A131102/13003649/",bookN:"Tabelog 预约",note:"和牛寿喜烧。午市可能只能排队，所以改成可以预约的早晚饭。",meta:["每天 11:30–21:30 · 西浅草 3-1-12 · 03-3841-1114"],lines:["walk"],
    alt:[["ちんや（浅草寿喜烧老店）","浅草 ちんや","节假日 11:00–21:30，可网上预约","https://tabelog.com/en/tokyo/A1311/A131102/13268750/"],["おにぎり浅草 宿六","おにぎり 浅草 宿六","不想吃太饱：东京最老的饭团店，周一晚 17:00–20:00，只收现金"]]},
   {t:"18:30",p:"hotel",k:"move",n:"浅草 → 大门",lines:["asakusa"],note:"都营浅草线直达，19:00 到酒店。"},
   {t:"20:00",p:"hotel",k:"move",n:"开会",meeting:1,note:"北京 19:00 起。"}
  ]},
-{id:"13",wd:"周二",color:"--d13",title:"滨离宫抹茶 → 久兵卫寿司午餐 → 筑地本愿寺 → 银座收尾 → 18:00 去成田",
+{id:"13",wd:"周二",color:"--d13",title:"久兵卫寿司午餐 → L'Ambre → 滨离宫抹茶 → 银座收尾 → 18:00 去成田",
  tags:[["","中国上班日"],["free","可玩 12:00–18:00"]],
  lead:"全部在酒店到银座 2 公里内，行李寄存酒店，轻装出门。想要手工纪念品就把银座换成藏前的 Kakimori。",
- work:[["喫茶室ルノアール 銀座マロニエ通り店","喫茶室ルノアール 銀座マロニエ通り店","银座 2-8-12 2F，离伊东屋 2 分钟，8:00–22:00，Wi‑Fi + 插座，昭和摩登装修；在这里谈公事很常见，最适合接电话"],["NAMIKI667（凯悦尚萃银座 3F）","NAMIKI667 Bar & Lounge ハイアットセントリック銀座","银座 6-6-7，11:00–22:00，挑高酒店大堂吧，长吧台适合开电脑；只有部分座位有插座，咖啡 ¥800 + 吧台费 ¥300"],["Starbucks 銀座 EXITMELSA","スターバックス 銀座EXITMELSA店","银座 5-7-10 B1，8:00–22:30，约 100 座，32 个座位带插座；人多，小声打电话不显眼"]],
+ work:[["三十間 銀座","三十間 銀座","Tabelog Café 百名店 2025（3.69），银座 1 丁目地下，和风木质空间，上午到午后很安静，抹茶和手冲都好"],["BUNDOZA（Square Hotel Ginza）","BUNDOZA スクエアホテル銀座","Tabelog 3.53，酒店一楼的咖啡吧，官方欢迎远程办公，Wi‑Fi + 插座，三家里最适合接电话"],["Imperial Lounge Aqua（帝国酒店 17F）","インペリアルラウンジ アクア 帝国ホテル東京","Tabelog 喫茶店百名店 2025（3.68），日比谷公园景观，座位宽、隔音好，谈公事不尴尬；价格偏高"]],
  stops:[
-  {t:"12:10",p:"hamarikyu",n:"滨离宫恩赐庭园 · 中岛御茶屋",kind:"庭园",r:[["Google","4.6 · 975"]],note:"江户将军家庭园，引海水入池；池中茶屋喝抹茶配和果子。门票 ¥300，可刷银联和支付宝。",meta:["9:00–17:00"],lines:["walk"]},
-  {t:"13:00",p:"kyubey",k:"key",n:"银座 久兵卫 本店",kind:"寿司 · 怀石",r:[["Google","4.4 · 2,617"],["小红书","寿司黄埔军校"]],book:"https://restaurant.ikyu.com/107953/plan11539848",bookN:"一休预约（¥16,500/人 午餐）",
-   note:"周日周一休，所以只能排这天。午餐最后点单 13:30。",meta:["午餐 11:30–14:00 · 银座 8-7-6 · +81-3-3571-6523","一休套餐任何取消或改期都收全款；官网规则当天取消每人 ¥5,000"],lines:["walk"],
-   alt:[["梅丘 寿司の美登利 银座店","梅丘 寿司の美登利 銀座店","Google 4.2 · 5,710 条，平日 11:00–15:00，不预约排队，步行 5 分钟"],["鮨 銀座おのでら","鮨 銀座おのでら 本店","想要同级别的：TableCheck 可订","https://www.tablecheck.com/en/shops/sushi-ginza-onodera/reserve"]]},
-  {t:"14:15",p:"lambre",n:"Café de L'Ambre",kind:"喫茶店",r:[["Google","4.3 · 1,924"],["Tabelog","3.77"]],note:"只做咖啡的老牌喫茶店，2026 Tabelog 喫茶店百名店。",meta:["周二 11:00–20:00"],lines:["walk"]},
-  {t:"15:00",p:"hongwanji",n:"筑地本愿寺（可选）",kind:"寺院",note:"印度风格外观的佛教寺院，东银座站步行 5 分钟，进去看 15 分钟就够。",meta:["约 6:00–16:00"],lines:["walk"]},
-  {t:"15:30",p:"dsm",n:"Dover Street Market Ginza",kind:"设计师集合店",note:"川久保玲策划，1–6F。",meta:["11:00–20:00"],lines:["walk"]},
-  {t:"16:15",p:"itoya",n:"银座 伊东屋 本店",kind:"文具",note:"12 层文具店。",meta:["10:00–20:00"],lines:["walk"]},
-  {t:"16:45",p:"mitsukoshi",n:"银座三越 地下食品层",kind:"伴手礼",note:"和果子、茶和点心。",meta:["10:00–20:00"],lines:["walk"],
+  {t:"12:15",p:"kyubey",k:"move",n:"打车去银座 8 丁目",lines:["taxi"],note:"约 8 分钟。"},
+  {t:"12:30",p:"kyubey",k:"key",n:"银座 久兵卫 本店",kind:"寿司",r:[["Google","4.4 · 2,617"],["小红书","寿司黄埔军校"]],book:"https://restaurant.ikyu.com/107953/plan11539848",bookN:"一休（只有 11:30 场）",
+   note:"周日周一休，所以只能排这天。网上午餐只开 11:30 一场，你 12:00 前还在开会，所以不订网上：提前一天打电话问 12:30 能否留 2 位；不行就 12:30 直接去，平日午市后段通常能进吧台。最后点单 13:30。",meta:["午餐 11:30–14:00 · 银座 8-7-6 · +81-3-3571-6523","午餐套餐约 ¥16,500/人起"],lines:["walk"],
+   alt:[["天一 本店（天妇罗）","天ぷら 天一 銀座本店","Tabelog 天妇罗百名店 2023，银座 6 丁目，平日午市可订，¥10,000 起"],["梅丘 寿司の美登利 银座店","梅丘 寿司の美登利 銀座店","Google 4.2 · 5,710 条，平日 11:00–15:00，不预约排队，步行 5 分钟"],["鮨 銀座おのでら","鮨 銀座おのでら 本店","想要同级别的：TableCheck 可订","https://www.tablecheck.com/en/shops/sushi-ginza-onodera/reserve"]]},
+  {t:"13:45",p:"lambre",n:"Café de L'Ambre",kind:"喫茶店 · Tabelog 百名店",r:[["Google","4.3 · 1,924"],["Tabelog","3.77"]],note:"1948 年开业、只做咖啡的老牌喫茶店，2026 Tabelog 喫茶店百名店，久兵卫步行 3 分钟。",meta:["周二 11:00–20:00"],lines:["walk"]},
+  {t:"14:30",p:"hamarikyu",n:"滨离宫恩赐庭园 · 中岛御茶屋",kind:"庭园",r:[["Google","4.6 · 975"]],note:"江户将军家庭园，引海水入池；池中茶屋喝抹茶配和果子。银座 8 丁目步行 10 分钟，门票 ¥300。",meta:["9:00–17:00"],lines:["walk"]},
+  {t:"15:20",p:"hongwanji",n:"筑地本愿寺（可选）",kind:"寺院",note:"印度风格外观的佛教寺院，滨离宫北门步行 12 分钟，进去看 15 分钟就够。",meta:["约 6:00–16:00"],lines:["walk"]},
+  {t:"15:50",p:"dsm",n:"Dover Street Market Ginza",kind:"设计师集合店",note:"川久保玲策划，1–6F。",meta:["11:00–20:00"],lines:["walk"]},
+  {t:"16:30",p:"itoya",n:"银座 伊东屋 本店",kind:"文具",note:"12 层文具店。",meta:["10:00–20:00"],lines:["walk"]},
+  {t:"16:55",p:"mitsukoshi",n:"银座三越 地下食品层",kind:"伴手礼",note:"和果子、茶和点心。",meta:["10:00–20:00"],lines:["walk"],
    alt:[["B 计划：Kakimori（藏前）","カキモリ 蔵前","现场订做笔记本，11:00–18:00，周一及节假日休；大门坐浅草线约 15 分钟"]]},
-  {t:"17:15",p:"hotel",k:"move",n:"打车回酒店取行李",lines:["taxi"],note:"约 10 分钟。"},
+  {t:"17:25",p:"hotel",k:"move",n:"打车回酒店取行李",lines:["taxi"],note:"约 10 分钟。"},
   {t:"18:00",p:"nrt",k:"move",n:"大门 → 成田 T2",lines:["keisei"],note:"京成 Access 特急直达，约 80 分钟，19:30 前到。"},
   {t:"20:00",p:"nrt",k:"move",n:"开会（阿联酋贵宾室）",meeting:1,note:"北京 19:00 起。"},
   {t:"22:30",p:"nrt",k:"key",n:"EK319 起飞",kind:"成田 T2 → 迪拜",note:"下一站：12.18 南极。"}
@@ -499,13 +501,15 @@ document.getElementById("bk").innerHTML=`
 
 /* ---------- 风险 ---------- */
 const RISKS=[
- ["Bar BenFiddich 10.10 已经订满","9.28 查 TableCheck，10.10 所有时段都没位（10.9、10.11、10.13 也满）。已换成柏悦酒店 52F 的 New York Grill + New York Bar。"],
+ ["Bar BenFiddich 10.10 已经订满","9.28 查 TableCheck，10.10 所有时段都没位（10.9、10.11、10.13 也满）。已换成同样在榜的 Punch Room（Asia #23），周六营业。"],
+ ["世邦（Seabourn）赠送的外套和背包要在 11.18 前下单","Seabourn 要求开航前 30 天在官网预订管理里选好赠送的 Helly Hansen 2 合 1 外套和防水背包尺码，过了就只能上船碰运气。防水裤船上不送也不借，必须自己带——10.9 在新宿买。"],
+ ["久兵卫网上只开 11:30 午餐场","你 10.13 12:00 前在开会，赶不上。已改成 12:30 去：提前一天打电话问留位，不行就现场等或换天一。"],
  ["外交部仍有「近期避免前往日本」的提醒","2025.11 起发布，2026.3.26 再次提醒；截至 9.27 我没查到解除通知。出发前再查一次外交部领事服务网，做「海外公民登记」，把 12308 存进手机。"],
  ["10.10–10.12 是日本三连休","周日的镰仓和周一的浅草都会很挤，江之电镰仓站常排队进站。已把镰仓挪到上午，浅草尽量走小路；餐厅都要提前订。"],
  ["去程航班和晨会重叠","HU439 北京 08:00–11:30 在飞机上，正好是会议窗口的最后几小时，提前跟团队打招呼。"],
  ["周末连着两晚都比较晚","10.10 到 21:45、10.11 到 22:30，第二天上午又要早出门。10.12 的博物馆已标成可选；累了就把 10.11 出发推到 10:00。"],
  ["10 月中旬仍可能有台风","大使馆 9.18 刚发过台风提醒。出发前三天看预报；台风天镰仓整天取消，换成室内的银座 / 博物馆。"],
- ["几家店只收现金、有些周二周四休","思出横丁、宿六、ふじ屋、染太郎只收现金；染太郎周二周四休、ふじ屋周四休、Kakimori 周一和节假日都休，都已避开。"],
+ ["几家店只收现金、有些周二周四休","思出横丁、宿六、ふじ屋只收现金；ふじ屋周四休、しゃもじ周日休、Kakimori 周一和节假日都休，都已避开。のだや 10.12 节假日营业要订位时确认。"],
  ["页面若公开，任何拿到链接的人都能看到你住哪、每天几点在哪","只把链接发给需要的人；部署到公开网址时用不好猜的名字。"]
 ];
 document.getElementById("risks").innerHTML=RISKS.map(r=>`<li><b>${esc(r[0])}</b>${esc(r[1])}</li>`).join("");
@@ -547,24 +551,25 @@ DAYS.forEach(d=>{
 const TODO=[
  ["预约（按紧急程度，括号里是预约入口）",[
   ["妆发 Atelier Haruka Echika 表参道店 · 10.10 13:30（两人都做就订 2 个名额）","官网即时预约 wrpcxa.b-merit.jp/y8hkz5/web/，周末满得快；满了订 Felice（Hot Pepper Beauty）"],
-  ["New York Grill · 10.10 19:00 · 2 位","TableCheck tokyo-park-hyatt-nyg，9.28 按 2 位查还有位"],
+  ["銀座バードランド · 10.10 18:30 · 2 位","一休 restaurant.ikyu.com/107602 或 03-5250-1081；订不到订柏悦 New York Grill（9.28 还有位）"],
+  ["Punch Room · 10.10 20:30 · 2 位","TableCheck 或 diningreservation.ginza@editionhotels.com；网上看不到余位，满了去 New York Bar / Virtù（都不用预约）"],
   ["Tokyo Confidential · 10.11 19:00 · 2 位","TableCheck tokyoconfidentialbar，9.28 按 2 位查还有位，要绑卡"],
-  ["银座 久兵卫 · 10.13 13:00 午餐 · 2 位","一休 restaurant.ikyu.com/107953 或电话 +81-3-3571-6523"],
+  ["银座 久兵卫 · 10.13 12:30 午餐 · 2 位","网上只有 11:30 场赶不上：10.12 打电话 +81-3-3571-6523 问 12:30；不行订天一本店"],
   ["浅草今半 · 10.12 17:00 · 2 位","Tabelog 日文页可网上订；订不到订ちんや"],
-  ["つな八 高岛屋店 · 10.9 12:30 · 2 位","官网表单 tunahachi.co.jp/reservation 或 03-5361-1860"],
-  ["伊豆荣 本店 · 10.12 11:45 · 2 位","Gurunavi 或 03-3831-0954"],
+  ["鎌倉 松原庵 · 10.11 11:00 · 2 位","只有 11:00 这场能订：Tabelog 网上预约或 0467-61-3838；订不到就 10:50 去排"],
+  ["入谷 のだや · 10.12 11:45 · 2 位","电话 050-5869-5137，顺便确认节假日营业；订不到订伊豆荣（Gurunavi）"],
   ["Stellar Garden · 10.8 17:00 · 2 位","TableCheck；普通预约不保证靠窗，17:00 开门就到"],
   ["东京国立博物馆门票 · 10.12","asoview 网上买 ¥1,300，不用选时段"]]],
  ["不用预约、直接去",[
-  ["まい泉（周末单点只能排队，12:00 前到）",""],["EDITION Lobby Bar（晚间先到先坐，16:45 到）",""],["更科堀井（周末单点不接受订位，17:30 到）",""],["Bar Trench（不接受预约）",""],["New York Bar（不接受预约）",""],["东京塔 Main Deck（现场买票）",""],["思出横丁、しゃもじ、Leaves、L'Ambre、美登利",""]]],
+  ["とんかつ.jp 表参道（午餐只能排队，11:45 到）",""],["新宿割烹 中嶋（午市排队，12:20 到）",""],["EDITION Lobby Bar（晚间先到先坐，16:45 到）",""],["更科堀井（周末单点不接受订位，17:30 到）",""],["Bar Trench（不接受预约）",""],["New York Bar（不接受预约）",""],["东京塔 Main Deck（现场买票）",""],["麺屋海神、Leaves、L'Ambre、美登利",""]]],
  ["出发前",[
   ["带一副降噪耳机和充电宝","不少咖啡店插座有限"],
   ["发邮件给 mesm 申请 10.13 晚退房 + 行李寄存","reservation@mesm.jp"],["查外交部领事服务网最新提醒，做海外公民登记",""],["手机钱包开一张 Suica；准备 ¥20,000 现金",""],
-  ["10.10 晚看镰仓天气，决定 10.11 上午走稻村崎还是小町通",""],["EK319 网上值机",""],["确认世邦行前文件：防水靴、防水裤是否船上提供",""]]],
+  ["10.10 晚看镰仓天气，决定 10.11 上午走稻村崎还是小町通",""],["EK319 网上值机",""],["11.18 前在 Seabourn 官网预订管理里选赠送外套 + 背包尺码","开航前 30 天截止；靴子、登山杖、望远镜船上免费借，靴子上船后试尺码"],["问医生开晕船药","德雷克海峡往返各约 2 天；东莨菪碱贴片要处方"]]],
  ["南极装备（10.9 新宿一次买齐）",[
-  ["打底层 2 套","羊毛或合成；mont-bell / L-Breath"],["保暖中间层","抓绒或轻羽绒马甲 + 保暖长裤"],["防风防水手套 + 薄内衬，共 2 副","Alpen 滑雪区"],
-  ["护耳抓绒帽 + 围脖套筒",""],["厚羊毛袜 3–4 双 + 薄袜内衬",""],["偏光太阳镜 + 滑雪护目镜","Alpen"],["防水袋几个尺寸","L-Breath"],
-  ["药妆：SPF 50 防水防晒、润唇膏、保湿霜、暖宝宝、晕船药（先问药剂师）、眼罩",""],["防水裤（船上不提供才买）","要宽到能套在靴子外"]]]
+  ["中厚打底层 2 套","羊毛或合成；mont-bell / L-Breath"],["保暖中间层","抓绒或轻羽绒马甲 + 保暖长裤"],["防风防水手套 + 薄内衬，共 2 副","Alpen 滑雪区"],
+  ["护耳抓绒帽 + 围脖套筒 / 头套",""],["过小腿的厚羊毛袜 3–4 双 + 薄袜内衬","长靴里要穿到膝下"],["偏光太阳镜 + 滑雪护目镜","Alpen"],["防水袋几个尺寸","L-Breath"],
+  ["防水冲锋裤 · 必买","Seabourn 不送也不借；要宽到能套在长靴外，裤脚用松紧、纽扣或拉链，不要魔术贴"],["药妆：SPF 50 防水防晒、SPF 润唇膏、保湿霜、暖宝宝、晕船药（先问药剂师）、眼罩",""],["尽量避开魔术贴","南极上岸前要清理衣物上的种子，魔术贴最难清，选拉链、纽扣款"],["不用买","外套 + 防水背包 + 保温瓶船方送；长靴、登山杖、双筒望远镜船上借"]]]
 ];
 document.getElementById("todos").innerHTML=TODO.map(g=>`<h4 class="grp">${esc(g[0])}</h4><div class="panel"><ol class="todo">${g[1].map(x=>`<li>${esc(x[0])}${x[1]?` <span class="w">· ${esc(x[1])}</span>`:""}</li>`).join("")}</ol></div>`).join("");
 
@@ -612,5 +617,4 @@ const links=[...nav.querySelectorAll("a")];
 if("IntersectionObserver" in window){ const io=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting) links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+en.target.id)); }),{rootMargin:"-35% 0px -60% 0px"}); document.querySelectorAll("section.day").forEach(x=>io.observe(x)); }
 })();
 </script>
-</body>
-</html>
+</body></html>
