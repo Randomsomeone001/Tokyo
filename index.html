@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<title>东京十月手帐</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="color-scheme" content="light dark">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<style>
+:root{
+  --paper:#F1F4F3; --grid:#DCE4E2; --surface:#FFFFFF; --ink:#172024; --muted:#5B696E; --line:#D3DCDA;
+  --water:#CFE2E8; --land:#F7F9F8; --soft:#E8EEEC; --warn:#B4441B; --warn-soft:#FBE9E1; --ok:#2A7F62;
+  --d8:#E4572E; --d9:#7E63CF; --d10:#B6007A; --d11:#0067C0; --d12:#D98700; --d13:#0B8F80;
+  --serif:"Songti SC","Noto Serif CJK SC","Source Han Serif SC","STSong",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+  --mono:ui-monospace,"SF Mono","Menlo","Consolas",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E151B; --grid:#1B2830; --surface:#152028; --ink:#E3EBEE; --muted:#93A3AA; --line:#26343D;
+    --water:#15303B; --land:#111B22; --soft:#1B2A33; --warn:#FF8A5C; --warn-soft:#33201A; --ok:#5CC79F;
+    --d8:#FF7248; --d9:#A792F0; --d10:#E4459F; --d11:#4F9BF0; --d12:#F2AE2E; --d13:#2EC2AE;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"], :root.night:not([data-theme="light"]){
+  --paper:#0E151B; --grid:#1B2830; --surface:#152028; --ink:#E3EBEE; --muted:#93A3AA; --line:#26343D;
+  --water:#15303B; --land:#111B22; --soft:#1B2A33; --warn:#FF8A5C; --warn-soft:#33201A; --ok:#5CC79F;
+  --d8:#FF7248; --d9:#A792F0; --d10:#E4459F; --d11:#4F9BF0; --d12:#F2AE2E; --d13:#2EC2AE;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--d8);outline-offset:2px;border-radius:4px}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:20px 72px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+h1{font-family:var(--serif);font-weight:900;font-size:34px;line-height:1.15;margin:0;letter-spacing:.01em;text-wrap:balance}
+.sub{color:var(--muted);margin:6px 0 0;font-size:14px}
+h2.sec{font-family:var(--serif);font-weight:800;font-size:22px;margin:44px 0 10px;text-wrap:balance;display:flex;align-items:baseline;gap:10px}
+h2.sec small{font-family:var(--sans);font-weight:400;font-size:13px;color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px}
+
+/* 此刻关注：车票 */
+.ticket{margin-top:18px;position:relative;background:var(--surface);border:1.5px solid var(--ink);border-radius:14px;overflow:hidden}
+.ticket .top{display:flex;justify-content:space-between;gap:8px;padding:10px 16px;font-size:12px;letter-spacing:.12em;color:var(--muted);border-bottom:1.5px dashed var(--line)}
+.ticket .top b{color:var(--ink);letter-spacing:.12em}
+.ticket .body{padding:14px 16px 16px}
+.ticket .what{font-family:var(--serif);font-weight:800;font-size:21px;line-height:1.35;margin:0;text-wrap:balance}
+.ticket .when{margin-top:4px;font-size:14px;color:var(--muted)}
+.cd{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.cd div{background:var(--soft);border-radius:8px;padding:8px 4px 6px;text-align:center}
+.cd b{display:block;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:clamp(28px,9vw,44px);line-height:1;font-weight:700;color:var(--ink)}
+.cd span{font-size:12px;color:var(--muted)}
+.ticket .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.ticket::before,.ticket::after{content:"";position:absolute;top:34px;width:16px;height:16px;border-radius:50%;background:var(--paper);border:1.5px solid var(--ink)}
+.ticket::before{left:-9px}.ticket::after{right:-9px}
+.after{margin-top:10px;font-size:13px;color:var(--muted)}
+.after b{color:var(--ink);font-weight:600}
+
+.btn{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;text-decoration:none;border-radius:8px;padding:8px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;font-family:inherit}
+.btn.solid{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.chip{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap}
+.chip.book{background:var(--warn-soft);color:var(--warn)}
+.chip.tz{background:var(--soft);color:var(--muted);font-family:var(--mono);font-weight:600}
+
+/* 地图 */
+.mapwrap{padding:10px}
+svg.map{display:block;width:100%;height:auto}
+.maplegend{display:flex;flex-wrap:wrap;gap:6px 12px;padding:4px 6px 6px;font-size:13px}
+.maplegend a{display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.maplegend i{width:18px;height:4px;border-radius:2px;display:inline-block}
+.mapnote{font-size:12px;color:var(--muted);padding:0 6px 4px}
+
+.mapkey{display:flex;flex-wrap:wrap;gap:4px 12px;padding:8px 4px 2px;font-size:13px}
+.mapkey b,.no{display:inline-grid;place-items:center;min-width:18px;height:18px;border-radius:50%;color:#fff;font-size:11px;font-weight:800;margin-right:4px;font-family:var(--mono)}
+.no{background:var(--c);align-self:center}
+/* 已确认 */
+.bk{display:grid;gap:10px}
+.bk .panel{padding:12px 14px}
+.bk h3{margin:0;font-size:16px;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.bk h3 .k{font-size:11px;letter-spacing:.12em;color:var(--muted);font-weight:600}
+.leg{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-top:8px}
+.leg .pt b{display:block;font-family:var(--mono);font-size:24px;line-height:1.1;font-variant-numeric:tabular-nums}
+.leg .pt span{font-size:13px;color:var(--muted)}
+.leg .pt:last-child{text-align:right}
+.leg .ar{color:var(--muted);font-size:13px;text-align:center}
+.kv{display:grid;grid-template-columns:4.6em 1fr;gap:3px 10px;margin:8px 0 0;font-size:14px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;overflow-wrap:anywhere}
+
+/* 风险 */
+ul.risk{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+ul.risk li{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:8px;padding:10px 12px;font-size:14px}
+ul.risk li b{display:block;margin-bottom:2px}
+
+/* 每日 */
+nav.days{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:24px -16px 0;padding:10px 16px;background:var(--paper);border-bottom:1px solid var(--line)}
+nav.days::-webkit-scrollbar{display:none}
+nav.days a{flex:0 0 auto;text-decoration:none;font-size:13px;border-radius:999px;padding:4px 11px;border:1.5px solid var(--c,var(--line));background:var(--surface);white-space:nowrap}
+nav.days a b{font-family:var(--mono);margin-right:3px}
+nav.days a.on{background:var(--c,var(--ink));color:#fff}
+section.day{scroll-margin-top:60px;padding-top:30px}
+.dh{display:flex;gap:12px;align-items:flex-start}
+.dh .dt{font-family:var(--mono);font-weight:800;font-size:30px;line-height:1;color:var(--c);padding-top:4px}
+.dh h3{font-family:var(--serif);font-weight:800;font-size:19px;line-height:1.4;margin:0;text-wrap:balance}
+.dh .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag{font-size:12px;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:0 8px;line-height:22px}
+.tag.free{border-color:transparent;background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.lead{font-size:14px;color:var(--muted);margin:10px 0 0;max-width:64ch}
+.daytools{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+details.daymap{margin-top:10px}
+details.daymap>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 12px}
+details.daymap>summary::-webkit-details-marker{display:none}
+details.daymap>summary::after{content:"＋";color:var(--muted)}
+details.daymap[open]>summary::after{content:"－"}
+details.daymap .panel{margin-top:8px;padding:8px}
+.tl{margin-top:16px;display:grid;gap:0}
+.row{display:grid;grid-template-columns:62px 1fr;gap:0 12px}
+.row .tm{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;font-size:14px;text-align:right;padding-top:12px;color:var(--ink)}
+.row .tm small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
+.row .ct{border-left:2px solid var(--line);padding:8px 0 10px 14px;position:relative}
+.row .ct::before{content:"";position:absolute;left:-7px;top:16px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2.5px solid var(--c)}
+.row.move .ct::before{width:8px;height:8px;left:-5px;top:18px;border:0;background:var(--line)}
+.row.key .ct::before{background:var(--c)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.row.move .card{background:transparent;border:0;padding:4px 0}
+.nm{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}
+.nm a.place{font-weight:700;font-size:16px;text-decoration:none;border-bottom:1.5px solid color-mix(in srgb,var(--c) 55%,transparent)}
+.nm .kind{font-size:11px;color:var(--muted);letter-spacing:.08em}
+.rates{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
+.rate{font-size:12px;background:var(--soft);border-radius:4px;padding:0 6px;line-height:20px;font-variant-numeric:tabular-nums}
+.rate em{font-style:normal;color:var(--muted);margin-right:3px}
+.note{margin:5px 0 0;font-size:14px}
+.row.move .note{margin:0;color:var(--muted)}
+.meta{margin-top:6px;font-size:13px;color:var(--muted);display:grid;gap:2px}
+.links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.lk{font-size:13px;text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:3px 9px;background:var(--paper)}
+.lk.go{border-color:var(--c);color:var(--c);font-weight:700}
+.ln{display:inline-block;font-size:11px;font-weight:700;color:#fff;border-radius:3px;padding:0 5px;line-height:17px;margin-left:4px;vertical-align:1px}
+.alt{margin-top:8px;border-left:3px solid var(--line);padding:4px 0 4px 10px;font-size:13px}
+.alt b{font-size:12px;color:var(--muted);font-weight:600;margin-right:4px}
+
+/* 待办 & 贴士 */
+ol.todo{margin:0;padding:12px 14px 12px 34px;font-size:14px;display:grid;gap:6px}
+ol.todo li::marker{font-family:var(--mono);color:var(--muted)}
+ol.todo .w{color:var(--muted);font-size:13px}
+h4.grp{margin:16px 0 6px;font-size:13px;letter-spacing:.1em;color:var(--muted);font-weight:700}
+.tips{display:grid;gap:10px}
+.tips .panel{padding:12px 14px;font-size:14px}
+.tips b.h{display:block;font-size:15px;margin-bottom:4px}
+.tips ul{margin:4px 0 0;padding-left:18px}
+.tel{font-family:var(--mono);font-variant-numeric:tabular-nums;user-select:all}
+.foot{margin-top:36px;font-size:12px;color:var(--muted)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--surface);font-size:13px;padding:6px 12px;border-radius:6px;z-index:9}
+@media (min-width:640px){ .bk{grid-template-columns:1fr 1fr} .bk .wide{grid-column:1/-1} }
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>东京十月手帐</h1>
+    <p class="sub">10.8 → 10.13 · 5 晚 · 1 人 · 所有时间为 <span class="chip tz">JST 东京</span>，北京时间 = 东京时间 − 1 小时</p>
+  </header>
+
+  <!-- 1 此刻关注 -->
+  <div class="ticket" id="now" aria-live="polite">
+    <div class="top"><b>此刻关注</b><span id="nowClock" class="mono"></span></div>
+    <div class="body">
+      <p class="what" id="nowWhat">正在计算下一件事…</p>
+      <div class="when" id="nowWhen"></div>
+      <div class="cd" id="cd">
+        <div><b id="cdD">--</b><span>天</span></div>
+        <div><b id="cdH">--</b><span>时</span></div>
+        <div><b id="cdM">--</b><span>分</span></div>
+        <div><b id="cdS">--</b><span>秒</span></div>
+      </div>
+      <div class="acts" id="nowActs"></div>
+      <div class="after" id="nowAfter"></div>
+    </div>
+  </div>
+
+  <!-- 2 总览地图 -->
+  <h2 class="sec" id="overview">行程总览 <small>按天上色，房子是每晚住的地方</small></h2>
+  <div class="panel mapwrap">
+    <div class="maplegend" id="legend"></div>
+    <div id="bigmap"></div>
+    <p class="mapnote">手绘示意图，位置按真实经纬度摆放，距离近似。镰仓和成田在图外，见图中箭头。</p>
+  </div>
+
+  <!-- 3 已确认 -->
+  <h2 class="sec" id="booked">已确认 <small>机票 · 酒店</small></h2>
+  <div class="bk" id="bk"></div>
+
+  <!-- 风险 -->
+  <h2 class="sec" id="risk">出发前先看 <small>我发现的冲突和风险</small></h2>
+  <ul class="risk" id="risks"></ul>
+
+  <!-- 4 逐日 -->
+  <h2 class="sec" id="plan">逐日行程 <small><span class="chip book">需预约</span> 表示要提前订</small></h2>
+  <nav class="days" id="nav" aria-label="按天跳转"></nav>
+  <main id="days"></main>
+
+  <!-- 5 待办 -->
+  <h2 class="sec" id="todo">待办 <small>办完一项告诉我，我来改页面</small></h2>
+  <div id="todos"></div>
+
+  <!-- 6 贴士 -->
+  <h2 class="sec" id="tips">实用贴士</h2>
+  <div class="tips" id="tipbox"></div>
+
+  <p class="foot">评分为 2026-09-27 查询：Google 地图（星级 · 评价数）、Tabelog、Hot Pepper Beauty、小红书笔记。营业时间出发前一天请在 Google 地图再确认。</p>
+</div>
+
+<script>
+(function(){
+"use strict";
+/* ---------- 工具 ---------- */
+const TZ = "Asia/Tokyo";
+const J = (d,t) => new Date(`2026-10-${String(d).padStart(2,"0")}T${t.length===4?"0"+t:t}:00+09:00`);
+const enc = encodeURIComponent;
+const G = q => "https://www.google.com/maps/search/?api=1&query=" + enc(q);
+const NAVTO = (q,mode) => "https://www.google.com/maps/dir/?api=1&destination=" + enc(q) + "&travelmode=" + (mode||"transit");
+const MULTI = arr => "https://www.google.com/maps/dir/" + arr.map(enc).join("/");
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = (d,opt) => new Intl.DateTimeFormat("zh-CN",Object.assign({timeZone:TZ,hour12:false},opt)).format(d);
+const bj = d => new Intl.DateTimeFormat("zh-CN",{timeZone:"Asia/Shanghai",hour:"2-digit",minute:"2-digit",hour12:false}).format(d);
+const LINE = {keisei:["京成 Access","#1D4E9E"],oedo:["大江户线","#B6007A"],asakusa:["浅草线","#E85298"],ginza:["银座线","#F39700"],jr:["JR","#1F8A3B"],yokosuka:["横须贺线","#0067C0"],enoden:["江之电","#0C7C59"],taxi:["打车","#5B696E"],walk:["步行","#8A979C"]};
+const ln = ls => (ls||[]).map(l=>`<span class="ln" style="background:${LINE[l][1]}">${LINE[l][0]}</span>`).join("");
+let tt; function toast(m){let t=document.querySelector(".toast"); if(!t){t=document.createElement("div");t.className="toast";t.setAttribute("role","status");document.body.appendChild(t);} t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,1600);}
+function copy(s){const ok=()=>toast("已复制："+s); try{navigator.clipboard.writeText(s).then(ok,()=>fb(s));}catch(e){fb(s);} }
+function fb(s){const ta=document.createElement("textarea");ta.value=s;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("已复制："+s);}catch(e){toast("请长按手动复制");}ta.remove();}
+
+/* ---------- 白天黑夜：跟随系统；系统未设暗色时按东京时间 18:00–06:00 自动夜间 ---------- */
+function tod(){ const h=+fmt(new Date(),{hour:"2-digit"}); document.documentElement.classList.toggle("night", h>=18||h<6); }
+tod(); setInterval(tod,60000);
+
+/* ---------- 地点（经纬度为近似值，用于手绘图） ---------- */
+const HOTEL="mesm Tokyo, Autograph Collection";
+const P = {
+ hotel:{q:HOTEL,ll:[35.6555,139.7610],n:"mesm Tokyo"},
+ nrt:{q:"成田国際空港 第2ターミナル",out:"nrt",n:"成田 T2"},
+ zojoji:{q:"増上寺",ll:[35.6575,139.7483],n:"增上寺"},
+ tower:{q:"東京タワー",ll:[35.6586,139.7454],n:"东京塔"},
+ stellar:{q:"Sky Bar & Dining Stellar Garden ザ・プリンス パークタワー東京",ll:[35.6552,139.7468],n:"Stellar Garden"},
+ maisen:{q:"とんかつ まい泉 青山本店",ll:[35.6680,139.7115],n:"まい泉"},
+ haruka:{q:"アトリエはるか エチカ表参道店",ll:[35.6654,139.7125],n:"Atelier Haruka"},
+ mameya:{q:"KOFFEE MAMEYA 神宮前4-15-3",ll:[35.6690,139.7100],n:"KOFFEE MAMEYA"},
+ mame:{q:"Mame Kurogouchi Aoyama",ll:[35.6660,139.7145],n:"Mame Kurogouchi"},
+ call:{q:"call スパイラル 5F 南青山",ll:[35.6627,139.7154],n:"call"},
+ arts:{q:"Arts & Science 南青山4-23-11",ll:[35.6630,139.7177],n:"Arts & Science"},
+ kaede:{q:"うつわ楓 南青山",ll:[35.6680,139.7215],n:"Utsuwa Kaede"},
+ edition:{q:"The Tokyo EDITION, Toranomon Lobby Bar",ll:[35.6628,139.7437],n:"EDITION 31F"},
+ tsunahachi:{q:"天ぷら新宿つな八 新宿髙島屋",ll:[35.6875,139.7024],n:"つな八"},
+ montbell:{q:"モンベル 新宿南口店",ll:[35.6868,139.6995],n:"mont-bell"},
+ lbreath:{q:"L-Breath 新宿店",ll:[35.6897,139.7036],n:"L-Breath"},
+ alpen:{q:"Alpen TOKYO 新宿",ll:[35.6915,139.7045],n:"Alpen TOKYO"},
+ omoide:{q:"思い出横丁",ll:[35.6932,139.6995],n:"思出横丁"},
+ benfiddich:{q:"BAR BenFiddich 西新宿",ll:[35.6945,139.6982],n:"BenFiddich"},
+ kamakura:{q:"鎌倉駅",km:[35.3192,139.5500],n:"镰仓站"},
+ inamura:{q:"稲村ヶ崎公園",km:[35.3043,139.5262],n:"稻村崎"},
+ shamoji:{q:"定食屋 しゃもじ 長谷",km:[35.3122,139.5352],n:"しゃもじ"},
+ daibutsu:{q:"高徳院 鎌倉大仏",km:[35.3167,139.5358],n:"大佛"},
+ hasedera:{q:"長谷寺 鎌倉",km:[35.3125,139.5330],n:"长谷寺"},
+ sarashina:{q:"総本家 更科堀井 麻布十番本店",ll:[35.6552,139.7338],n:"更科堀井"},
+ confidential:{q:"Tokyo Confidential 麻布十番",ll:[35.6560,139.7370],n:"Tokyo Confidential"},
+ trench:{q:"Bar Trench 恵比寿",ll:[35.6475,139.7082],n:"Bar Trench"},
+ tnm:{q:"東京国立博物館",ll:[35.7188,139.7765],n:"东京国立博物馆"},
+ imahan:{q:"浅草今半 国際通り本店",ll:[35.7132,139.7918],n:"浅草今半"},
+ sensoji:{q:"浅草寺",ll:[35.7148,139.7967],n:"浅草寺"},
+ yonoya:{q:"よのや櫛舗",ll:[35.7118,139.7953],n:"よのや"},
+ fujiya:{q:"ふじ屋 手ぬぐい 浅草",ll:[35.7135,139.7975],n:"ふじ屋"},
+ leaves:{q:"LEAVES COFFEE ROASTERS 本所",ll:[35.7082,139.8012],n:"Leaves"},
+ kamaasa:{q:"釜浅商店",ll:[35.7128,139.7878],n:"釜浅商店"},
+ yadoroku:{q:"おにぎり 浅草 宿六",ll:[35.7175,139.7955],n:"宿六"},
+ hamarikyu:{q:"浜離宮恩賜庭園 中島の御茶屋",ll:[35.6597,139.7634],n:"滨离宫"},
+ kyubey:{q:"銀座 久兵衛 本店",ll:[35.6682,139.7603],n:"久兵卫"},
+ lambre:{q:"カフェ・ド・ランブル 銀座",ll:[35.6676,139.7614],n:"L'Ambre"},
+ dsm:{q:"Dover Street Market Ginza",ll:[35.6693,139.7641],n:"DSM Ginza"},
+ itoya:{q:"銀座 伊東屋 本店",ll:[35.6737,139.7676],n:"伊东屋"},
+ mitsukoshi:{q:"銀座三越",ll:[35.6713,139.7661],n:"三越"}
+};
+
+/* ---------- 行程 ---------- */
+const DAYS=[
+{id:"8",wd:"周四",color:"--d8",title:"落地 → 增上寺 + 东京塔 → 日落时在王子公园塔 33 楼对着东京塔喝一杯",
+ tags:[["","中国上班日"],["free","可玩 15:00–19:30"]],
+ lead:"12:30 落地成田 T2。第一天只在芝公园一带，打车都在 10 分钟内。20:00（北京 19:00）回酒店开会。",
+ stops:[
+  {t:"12:30",p:"nrt",k:"move",n:"成田 T2 → 大门站",lines:["keisei"],note:"T2 地下搭京成 Access 特急（往羽田方向），直达大门站不换乘，约 80 分钟。行李多就打车或预约接机。"},
+  {t:"15:00",p:"hotel",n:"mesm Tokyo 入住",kind:"酒店",note:"跟前台确认 10.13 晚退房和行李寄存；请前台 10.11 下午帮忙打电话给 Bar Trench。",meta:["港区海岸 1-10-30 · +81-3-5777-1111"]},
+  {t:"16:00",p:"zojoji",n:"增上寺",kind:"寺院",note:"德川将军家菩提寺，山门前就是「古寺 + 东京塔」的经典构图。",lines:["walk"]},
+  {t:"16:30",p:"tower",n:"东京塔 Main Deck",kind:"地标",book:"https://ticket.tokyotower.co.jp/en/",bookN:"官网购票",note:"150 米观景台，门票 ¥1,500。白天看城市，夜景留给酒吧。",lines:["walk"]},
+  {t:"17:15",p:"stellar",k:"key",n:"Sky Bar & Dining Stellar Garden",kind:"看塔酒吧 · 33F",r:[["小红书","最热门的看塔机位"]],
+   note:"正对东京塔。这天日落约 17:15，正好看塔亮灯；鸡尾酒 + 餐厅当晚饭。",meta:["酒吧 17:00–01:00 · 餐厅 17:00–22:00","东京塔侧靠窗座位费每人 ¥3,000，其他座 ¥2,000，酒水 ¥2,000 起"],
+   book:"https://www.tablecheck.com/princehotels-parktower-stellargarden/reserve",bookN:"TableCheck",lines:["walk"],
+   alt:[["Bar & Lounge MAJESTIC（汐留 41F）","Bar & Lounge MAJESTIC 汐留","Google 4.3 · 325 条，周一至六 17:30 开，打车 5 分钟"],["Whisk（酒店内）","Whisk mesm Tokyo","太累就不出门，平日 14:00–24:00"]]},
+  {t:"19:15",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 8 分钟。"},
+  {t:"20:00",p:"hotel",k:"move",n:"开会",meeting:1,note:"北京 19:00 起，到次日东京 12:00。"}
+ ]},
+{id:"9",wd:"周五",color:"--d9",title:"表参道做造型 → 青山设计师店 → 虎之门 31 楼对着东京塔拍照",
+ tags:[["","中国上班日"],["free","可玩 12:00–19:30"]],
+ lead:"造型放在这天，把妆发直接带到傍晚的东京塔夜景里。青山的店多数周二休，周五都开。",
+ stops:[
+  {t:"12:05",p:"haruka",k:"move",n:"打车去表参道",lines:["taxi"],note:"约 20 分钟；或大门 → 新桥换银座线，约 25 分钟。"},
+  {t:"12:30",p:"maisen",n:"とんかつ まい泉 青山本店",kind:"猪排",r:[["Google","4.4 · 5,187"],["Tabelog","3.44"]],note:"点黑猪里脊。",meta:["每天 11:00–22:00 · 涩谷区神宫前 4-8-5"],lines:["walk"],
+   alt:[["野田岩 麻布饭仓本店（鳗鱼，米其林一星）","野田岩 麻布飯倉本店","想吃鳗鱼就换这家：Google 4.3 · 1,693 条，平日 11:00–13:30，离酒店打车 10 分钟"]]},
+  {t:"13:30",p:"haruka",k:"key",n:"Atelier Haruka Echika 表参道店",kind:"妆发",r:[["小红书","编发攻略 1,000+ 赞"],["Google","4.2 · 83"]],book:"https://www.haruka.co.jp/salon/",bookN:"官网预约",
+   note:"小红书上中国游客推荐最多的编发连锁，就在表参道站内。带参考图；喜欢高颅顶要提前说。",meta:["平日 / 周六 10:00–20:00 · 港区北青山 3-6-12 Echika 表参道","头发 ¥3,520 + 化妆 ¥3,520"],lines:["walk"],
+   alt:[["Felice（更完整的妆造）","Felice ヘアメイク 南青山6-2-13","Hot Pepper Beauty 4.84 · 351 条，发型 + 全妆 ¥8,900，平日 10:00–18:00"],["SIN DEN（英文沟通）","SIN DEN hair salon 神宮前3-9-3","Google 4.8 · 149 条，10:00–20:00，需付定金"]]},
+  {t:"14:45",p:"mameya",n:"KOFFEE MAMEYA",kind:"咖啡",r:[["Google","4.6 · 1,932"]],note:"豆子专门店的站立吧台，拍照好背景。",meta:["每天 10:00–18:00"],lines:["walk"]},
+  {t:"15:15",p:"mame",n:"Mame Kurogouchi Aoyama",kind:"设计师店",note:"黑河内真衣子旗舰店，织物和工艺感很强的女装、包和首饰。",meta:["13:00–20:00，周二休 · 港区北青山 3-8-3"],lines:["walk"]},
+  {t:"15:45",p:"call",n:"call by minä perhonen",kind:"买手店",note:"皆川明的布料、服饰和世界各地的生活器物。",meta:["周五 11:00–20:00 · Spiral 5F"],lines:["walk"]},
+  {t:"16:15",p:"arts",n:"Arts & Science Aoyama",kind:"买手店",note:"麻、羊绒基础款和手工包袋；周边还有 &SHOP、HIN。",meta:["11:00–19:00，周二休 · 港区南青山 4-23-11"],lines:["walk"]},
+  {t:"16:45",p:"kaede",n:"Utsuwa Kaede",kind:"器物",note:"约 40 位手作艺术家的陶器、漆器和玻璃。",meta:["12:00–19:00，周二休 · 港区南青山 3-5-5"],lines:["walk"]},
+  {t:"17:30",p:"edition",k:"key",n:"The Tokyo EDITION, Toranomon · Lobby Bar",kind:"看塔酒吧 · 31F",r:[["Google","4.0 · 208"]],book:"https://www.tablecheck.com/en/editionhotels-tokyo-lobbybar",bookN:"TableCheck",
+   note:"落地窗正对东京塔和东京湾，日落后亮灯最出片。鸡尾酒 + 小食当晚饭。",meta:["周五 7:30–23:30 · 港区虎之门 4-1-1"],lines:["taxi"],
+   alt:[["Andaz Tokyo Rooftop Bar（52F）","Rooftop Bar Andaz Tokyo","Google 4.2 · 493 条，17:00 起"],["虎之门横丁（吃饭）","虎ノ門横丁","虎之门之丘一层的名店分店集合"]]},
+  {t:"19:10",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 10 分钟。"},
+  {t:"20:00",p:"hotel",k:"move",n:"开会",meeting:1,note:"北京 19:00 起。"}
+ ]},
+{id:"10",wd:"周六",color:"--d10",title:"新宿买齐南极装备 → 思出横丁烧鸟 → 19:00 Bar BenFiddich",
+ tags:[["","中国调休上班日"],["free","12:00 起到深夜，晚上不开会"]],
+ lead:"新宿站南口和东口 800 米内集中了东京最大的户外店，装备清单见「待办」。战利品存车站寄存柜，喝完打车回。",
+ stops:[
+  {t:"12:00",p:"tsunahachi",k:"move",n:"大门 → 新宿",lines:["oedo"],note:"都营大江户线，约 20 分钟不换乘。"},
+  {t:"12:30",p:"tsunahachi",n:"天ぷら新宿つな八 新宿髙岛屋店",kind:"天妇罗",r:[["Tabelog","3.27"]],book:"https://tabelog.com/en/tokyo/A1304/A130401/13017378/",bookN:"网约（只收网约）",note:"1924 年创业的江户前天妇罗；总本店在整修，去高岛屋 13F 分店。",meta:["周六 11:00–23:00"],lines:["walk"]},
+  {t:"13:30",p:"montbell",n:"mont-bell 新宿南口店",kind:"户外",note:"打底、抓绒、轻羽绒。日本码偏小，试大一码。",lines:["walk"]},
+  {t:"14:15",p:"lbreath",n:"L-Breath 新宿",kind:"户外",note:"10 层户外店，3F 有 500+ 款背包，买防水袋。",lines:["walk"]},
+  {t:"15:00",p:"alpen",n:"Alpen TOKYO",kind:"户外",note:"10 层旗舰店，滑雪区买防水手套、护目镜。",meta:["周末 10:00–22:00 · 新宿区新宿 3-23-7"],lines:["walk"]},
+  {t:"16:45",p:"alpen",n:"药妆店 + 寄存",kind:"补货",note:"防晒 SPF 50、润唇膏、暖宝宝、晕船药；大包存新宿站寄存柜。"},
+  {t:"17:30",p:"omoide",n:"思出横丁",kind:"烧鸟",note:"多数店 16:00 左右开门，18:00 后开始挤；人均 ¥2,000–3,000，基本只收现金。",lines:["walk"],
+   alt:[["つな八晚餐","天ぷら新宿つな八 新宿髙島屋","横丁太挤或太烟熏时，营业到 23:00"]]},
+  {t:"19:00",p:"benfiddich",k:"key",n:"Bar BenFiddich",kind:"Asia's 50 Best #62",r:[["Google","4.4 · 942"]],book:"https://benfiddich.tokyo/en/index.html",bookN:"官网 → TableCheck",
+   note:"老板用自家农场的草药现磨调酒。三场制，订 19:00 这场，横丁步行约 5 分钟。",meta:["19:00 / 21:00 / 23:00 三场 · 西新宿 1-13-7 9F"],lines:["walk"],
+   alt:[["订不到：回酒店 Whisk，或改到 10.11 多喝一家","Whisk mesm Tokyo",""]]},
+  {t:"21:00",p:"hotel",k:"move",n:"取寄存，打车回酒店",lines:["taxi"],note:"约 25 分钟。"}
+ ]},
+{id:"11",wd:"周日",color:"--d11",title:"上午稻村崎看富士山 → 大佛 → 回酒店休息 → 麻布十番看塔 → 惠比寿榜单酒吧",
+ tags:[["free","全天休息"],["","日本三连休中间一天，镰仓会很挤"]],
+ lead:"秋天上午空气更通透，富士山露脸概率比下午高。前一晚看天气：阴天就改走小町通和鹤冈八幡宫。",
+ stops:[
+  {t:"9:15",p:"kamakura",k:"move",n:"滨松町 → 品川 → 镰仓",lines:["jr","yokosuka"],note:"约 1 小时；横须贺线坐绿色车厢（刷卡加钱）更舒服。"},
+  {t:"10:30",p:"inamura",k:"key",n:"稻村崎公园",kind:"看富士山",note:"一个画面里有富士山、大海和江之岛。海边风大，带外套。三连休江之电镰仓站会排队进站，预留 20 分钟。",lines:["enoden"],
+   alt:[["阴天改：鹤冈八幡宫 + 小町通","鶴岡八幡宮","从镰仓站步行 10 分钟，小町通有手工杂货和和果子店"]]},
+  {t:"11:30",p:"shamoji",n:"定食屋 しゃもじ",kind:"银鱼饭",r:[["Google","4.3 · 569"]],note:"长谷站 3 分钟，镰仓特产银鱼饭。",lines:["enoden"],
+   alt:[["鎌倉 松原庵（荞麦老宅）","鎌倉 松原庵","Google 4.3 · 1,626 条，Tabelog 3.7，由比滨站 3 分钟"]]},
+  {t:"13:00",p:"daibutsu",n:"镰仓大佛（高德院）",kind:"寺院",note:"10 月 8:00–17:00，门票 ¥300。",lines:["walk"]},
+  {t:"13:45",p:"hasedera",n:"长谷寺",kind:"寺院",note:"山腰观景台俯瞰由比滨，坐下喝杯茶。",lines:["walk"]},
+  {t:"15:00",p:"hotel",k:"move",n:"回酒店休息",lines:["enoden","yokosuka","jr"],note:"江之电回镰仓，JR 回滨松町，16:30 左右到。"},
+  {t:"18:00",p:"sarashina",n:"总本家 更科堀井 麻布十番本店",kind:"荞麦",r:[["Google","4.2 · 1,907"],["Tabelog","3.66"]],note:"230 年荞麦老店，招牌是雪白的更科荞麦。",meta:["周末 11:00–20:00"],lines:["oedo"]},
+  {t:"19:15",p:"confidential",k:"key",n:"Tokyo Confidential",kind:"看塔酒吧 · 9F 露台",r:[["小红书","热门露台"],["Tabelog","3.45"]],book:"https://tabelog.com/en/tokyo/A1307/A130702/13289875/",bookN:"Tabelog 预约",
+   note:"猫主题鸡尾酒吧，露台正对东京塔，要排队。东京塔 24:00 关灯。",meta:["周日 18:00–24:00 · 麻布十番 1-6-1"],lines:["walk"],
+   alt:[["Stellar Garden（王子公园塔 33F）","Sky Bar & Dining Stellar Garden ザ・プリンス パークタワー東京","露台排太久时打车 5 分钟，营业到 01:00"]]},
+  {t:"20:45",p:"trench",k:"key",n:"Bar Trench",kind:"Asia #53 · World #74",r:[["Google","4.7 · 922"]],note:"苦艾酒和药草鸡尾酒。座位少，先让酒店前台打电话。",meta:["每天 18:00–02:00 · 惠比寿西 1-5-8"],lines:["taxi"],
+   alt:[["The SG Club（涩谷）","The SG Club 渋谷","World #88，Google 4.5 · 1,546 条，营业到 02:00"],["AFURI 惠比寿（夜宵）","AFURI 恵比寿","柚子盐拉面本店，Google 4.3 · 4,514 条，营业到 05:00"]]},
+  {t:"22:30",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 20 分钟。"}
+ ]},
+{id:"12",wd:"周一",color:"--d12",title:"（可选）上野看广重浮世绘 → 浅草寿喜烧 + 百年手艺老铺 → 合羽桥刀具",
+ tags:[["","中国上班日"],["","日本体育之日"],["free","上午灵活，19:30 前回"]],
+ lead:"东京国立博物馆在办「歌川广重」特展（9.29–12.20），通常周一闭馆、逢节假日开馆，出发前看官网日历。前一晚喝得晚就跳过，12:00 直接坐浅草线去浅草。",
+ stops:[
+  {t:"9:30",p:"tnm",n:"东京国立博物馆（可选）",kind:"博物馆",book:"https://www.tnm.jp/?lang=en",bookN:"官网日历",note:"广重特展 + 本馆日本艺术展厅，约 2 小时。",meta:["9:30–17:00 · 台东区上野公园 13-9"],lines:["taxi"]},
+  {t:"12:15",p:"imahan",k:"key",n:"浅草今半 国际通本店",kind:"寿喜烧",r:[["Google","4.5 · 2,509"],["Tabelog","3.62"],["小红书","建议吃午市"]],book:"https://tabelog.com/en/tokyo/A1311/A131102/13003649/",bookN:"Tabelog 预约",note:"和牛寿喜烧，午市比晚市划算。",meta:["每天 11:30–21:30 · 西浅草 3-1-12"],lines:["taxi","asakusa"],
+   alt:[["风流お好み焼 染太郎","風流お好み焼 染太郎","1937 年创业、现存最老的大阪烧店，周二周四休，只收现金，步行 5 分钟"]]},
+  {t:"13:30",p:"sensoji",n:"浅草寺",kind:"寺院",note:"节假日仲见世很挤，走两侧小路。",lines:["walk"]},
+  {t:"14:00",p:"yonoya",n:"よのや櫛舗",kind:"手艺老铺",note:"1717 年创业，萨摩黄杨木梳和发簪。",meta:["10:30–17:00，周三休"],lines:["walk"]},
+  {t:"14:30",p:"fujiya",n:"ふじ屋 手拭",kind:"手艺老铺",note:"手绘手染的手拭巾。只收现金。",meta:["10:00–18:00，周四休"],lines:["walk"]},
+  {t:"15:00",p:"leaves",n:"LEAVES COFFEE ROASTERS",kind:"咖啡",r:[["Google","4.5 · 535"]],note:"过吾妻桥约 10 分钟。",meta:["周五至周一 10:00–17:00"],lines:["walk"]},
+  {t:"16:00",p:"kamaasa",n:"釜浅商店",kind:"刀具",note:"手工厨刀可现场刻名；刀具只能托运，别放随身行李。",meta:["11:00–17:30 · 台东区松谷 2-24-1"],lines:["taxi"]},
+  {t:"17:15",p:"yadoroku",n:"おにぎり浅草 宿六",kind:"饭团",r:[["Google","4.2 · 1,034"],["Tabelog","3.49"]],note:"1954 年创业，东京最老的饭团店。卖完即止，不接受预约，只收现金；节假日时间可能调整。",meta:["周一晚 17:00–20:00"],lines:["walk"],
+   alt:[["卖完就回浅草今半","浅草今半 国際通り本店","营业到 21:30"]]},
+  {t:"18:30",p:"hotel",k:"move",n:"浅草 → 大门",lines:["asakusa"],note:"都营浅草线直达，19:00 到酒店。"},
+  {t:"20:00",p:"hotel",k:"move",n:"开会",meeting:1,note:"北京 19:00 起。"}
+ ]},
+{id:"13",wd:"周二",color:"--d13",title:"滨离宫抹茶 → 久兵卫寿司午餐 → 银座收尾 → 18:00 去成田",
+ tags:[["","中国上班日"],["free","可玩 12:00–18:00"]],
+ lead:"全部在酒店到银座 2 公里内，行李寄存酒店，轻装出门。想要手工纪念品就把银座换成藏前的 Kakimori。",
+ stops:[
+  {t:"12:10",p:"hamarikyu",n:"滨离宫恩赐庭园 · 中岛御茶屋",kind:"庭园",r:[["Google","4.6 · 975"]],note:"江户将军家庭园，引海水入池；池中茶屋喝抹茶配和果子。门票 ¥300，可刷银联和支付宝。",meta:["9:00–17:00"],lines:["walk"]},
+  {t:"13:00",p:"kyubey",k:"key",n:"银座 久兵卫 本店",kind:"寿司 · 怀石",r:[["Google","4.4 · 2,617"],["小红书","寿司黄埔军校"]],book:"https://www.kyubey.jp/en/shoplist/ginza/",bookN:"官网预约",
+   note:"周日周一休，所以只能排这天。午间也有怀石套餐。",meta:["午餐 11:30–14:00 · 银座 8-7-6","午餐 ¥8,250 起；当天取消每人 ¥5,000"],lines:["walk"],
+   alt:[["梅丘 寿司の美登利 银座店","梅丘 寿司の美登利 銀座店","Google 4.2 · 5,710 条，平日 11:00–15:00，步行 5 分钟"]]},
+  {t:"14:30",p:"lambre",n:"Café de L'Ambre",kind:"喫茶店",r:[["Google","4.3 · 1,924"],["Tabelog","3.77"]],note:"只做咖啡的老牌喫茶店，2026 Tabelog 喫茶店百名店。",meta:["周二 11:00–20:00"],lines:["walk"]},
+  {t:"15:15",p:"dsm",n:"Dover Street Market Ginza",kind:"设计师集合店",note:"川久保玲策划，1–6F。",meta:["11:00–20:00"],lines:["walk"]},
+  {t:"16:00",p:"itoya",n:"银座 伊东屋 本店",kind:"文具",note:"12 层文具店。",meta:["10:00–20:00"],lines:["walk"]},
+  {t:"16:40",p:"mitsukoshi",n:"银座三越 地下食品层",kind:"伴手礼",note:"和果子、茶和点心。",meta:["10:00–20:00"],lines:["walk"],
+   alt:[["B 计划：Kakimori（藏前）","カキモリ 蔵前","现场订做笔记本，11:00–18:00，周一及节假日休；大门坐浅草线约 15 分钟"]]},
+  {t:"17:15",p:"hotel",k:"move",n:"打车回酒店取行李",lines:["taxi"],note:"约 10 分钟。"},
+  {t:"18:00",p:"nrt",k:"move",n:"大门 → 成田 T2",lines:["keisei"],note:"京成 Access 特急直达，约 80 分钟，19:30 前到。"},
+  {t:"20:00",p:"nrt",k:"move",n:"开会（阿联酋贵宾室）",meeting:1,note:"北京 19:00 起。"},
+  {t:"22:30",p:"nrt",k:"key",n:"EK319 起飞",kind:"成田 T2 → 迪拜",note:"下一站：12.18 南极。"}
+ ]}
+];
+
+const EXTRA_EVENTS=[{at:new Date("2026-10-08T08:00:00+08:00"),n:"HU439 起飞",where:"北京首都 T2 → 成田 T2",q:"北京首都国际机场 T2"}];
+
+/* ---------- 手绘地图 ---------- */
+const X = lng => 18 + (lng-139.690)*90.4*50;
+const Y = lat => 22 + (35.722-lat)*111*50;
+const KX = lng => 14 + (lng-139.518)*90.9*50;
+const KY = lat => 12 + (35.3285-lat)*111*50;
+const col = v => `var(${v})`;
+function pts(day){ return day.stops.map(s=>P[s.p]).filter((p,i,a)=>p&&p.ll&&(i===0||a[i-1]!==p)); }
+function kpts(day){ return day.stops.map(s=>P[s.p]).filter((p,i,a)=>p&&p.km&&(i===0||a[i-1]!==p)); }
+function numbering(day){ const m=new Map(); let n=0; day.stops.forEach(st=>{ const p=P[st.p]; if(st.k==="move"||p===P.hotel||(!p.ll&&!p.km)) return; if(!m.has(p)) m.set(p,++n); }); return m; }
+const path = arr => arr.map((p,i)=>(i?"L":"M")+X(p.ll[1]).toFixed(1)+" "+Y(p.ll[0]).toFixed(1)).join(" ");
+function base(id){
+  const bay=[[35.640,139.745],[35.648,139.757],[35.652,139.764],[35.658,139.769],[35.663,139.775],[35.667,139.783],[35.661,139.796],[35.656,139.815],[35.620,139.815],[35.620,139.745]];
+  const riv=[[35.726,139.812],[35.719,139.806],[35.712,139.8015],[35.703,139.7975],[35.692,139.793],[35.681,139.789],[35.672,139.785],[35.666,139.783]];
+  const bp="M"+bay.map(p=>X(p[1]).toFixed(1)+" "+Y(p[0]).toFixed(1)).join(" L")+" Z";
+  const rp="M"+riv.map(p=>X(p[1]).toFixed(1)+" "+Y(p[0]).toFixed(1)).join(" L");
+  const areas=[["新宿",35.699,139.696],["表参道 · 青山",35.671,139.716],["麻布十番",35.651,139.733],["芝公园",35.662,139.744],["银座",35.676,139.760],["上野",35.722,139.774],["浅草",35.719,139.790],["惠比寿",35.643,139.712],["竹芝",35.652,139.770],["东京湾",35.636,139.785]];
+  return `<defs><filter id="rough${id}" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter></defs>
+  <rect x="-400" y="-400" width="1400" height="1300" fill="var(--land)"/>
+  <g filter="url(#rough${id})"><path d="${bp}" fill="var(--water)" stroke="var(--muted)" stroke-width="1.2" stroke-opacity=".5"/>
+  <path d="${rp}" fill="none" stroke="var(--water)" stroke-width="9" stroke-linecap="round"/>
+  <ellipse cx="228" cy="236" rx="176" ry="228" fill="none" stroke="var(--muted)" stroke-opacity=".45" stroke-width="1.4" stroke-dasharray="7 6"/></g>
+  <text x="${X(139.766)}" y="${Y(35.700)}" font-size="10" fill="var(--muted)" opacity=".8">山手线（示意）</text>
+  <text x="${X(139.804)}" y="${Y(35.690)}" font-size="10" fill="var(--muted)" transform="rotate(62 ${X(139.804)} ${Y(35.690)})">隅田川</text>
+  ${areas.map(a=>`<text x="${X(a[2]).toFixed(0)}" y="${Y(a[1]).toFixed(0)}" font-size="13" font-weight="700" fill="var(--muted)" opacity=".8" text-anchor="middle" letter-spacing="1">${a[0]}</text>`).join("")}`;
+}
+function hotelMark(k){ k=k||1; const x=X(P.hotel.ll[1]),y=Y(P.hotel.ll[0]); return `<g transform="translate(${x} ${y}) scale(${k}) translate(${-x} ${-y})"><path d="M${x-9} ${y+2} L${x} ${y-8} L${x+9} ${y+2} L${x+9} ${y+10} L${x-9} ${y+10} Z" fill="var(--ink)"/><rect x="${x-2.5}" y="${y+3}" width="5" height="7" fill="var(--surface)"/>
+  <text x="${x+13}" y="${y+6}" font-size="12" font-weight="800" fill="var(--ink)">mesm · 5 晚都住这</text></g>`; }
+function arrows(){ return `<g font-size="12" fill="var(--ink)">
+  <g transform="translate(596 150)"><path d="M-44 0 H-2 M-12 -8 L-2 0 L-12 8" fill="none" stroke="var(--d8)" stroke-width="2.6" filter="url(#roughA)"/><text x="-4" y="22" font-weight="700" text-anchor="end">成田 T2 约 60 km</text><text x="-4" y="38" fill="var(--muted)" text-anchor="end">京成 Access 约 80 分</text></g>
+  <g transform="translate(8 492)"><path d="M34 -30 L4 0 M4 -12 L4 0 L16 0" fill="none" stroke="var(--d11)" stroke-width="2.6" filter="url(#roughA)"/><text x="24" y="-2" font-weight="700">镰仓 约 50 km · JR 约 1 小时</text></g></g>`; }
+function routeLayer(days, focus, R){ R=R||7;
+  return days.map(d=>{ const a=pts(d); if(a.length<2) return ""; const faded=focus&&focus!==d.id;
+    return `<path d="${path(a)}" fill="none" stroke="${col(d.color)}" stroke-width="${faded?2:3.4}" stroke-opacity="${faded?.18:.95}" stroke-linecap="round" stroke-linejoin="round" filter="url(#roughA)"/>`; }).join("")
+   + days.map(d=>{ const faded=focus&&focus!==d.id; if(faded) return ""; const num=numbering(d);
+      return pts(d).filter(p=>p!==P.hotel).map(p=>{ const x=X(p.ll[1]).toFixed(1), y=Y(p.ll[0]).toFixed(1);
+        if(!focus) return `<circle cx="${x}" cy="${y}" r="3.6" fill="var(--surface)" stroke="${col(d.color)}" stroke-width="2.2"/>`;
+        return `<circle cx="${x}" cy="${y}" r="${R}" fill="${col(d.color)}" stroke="var(--land)" stroke-width="1.5"/><text x="${x}" y="${(+y+R*0.42).toFixed(1)}" font-size="${(R*1.15).toFixed(1)}" font-weight="800" fill="#fff" text-anchor="middle">${num.get(p)||""}</text>`; }).join(""); }).join("");
+}
+function mainMap(){
+  return `<svg class="map" viewBox="0 0 600 505" role="img" aria-label="东京行程手绘总览图">${base("A")}${routeLayer(DAYS,null)}${hotelMark()}${arrows()}</svg>`;
+}
+function dayMap(d){
+  const a=pts(d); let b=a.filter(p=>p!==P.hotel); if(!b.length) b=a;
+  const xs=b.map(p=>X(p.ll[1])), ys=b.map(p=>Y(p.ll[0]));
+  let x0=Math.min(...xs)-30,x1=Math.max(...xs)+30,y0=Math.min(...ys)-30,y1=Math.max(...ys)+30;
+  let w=Math.max(x1-x0,120),h=Math.max(y1-y0,90); if(w/h<1.3) w=h*1.3; else h=Math.max(h,w/1.8);
+  const cx=(x0+x1)/2, cy=(y0+y1)/2; const R=Math.max(3.2,w/40);
+  const vb=`${(cx-w/2).toFixed(0)} ${(cy-h/2).toFixed(0)} ${w.toFixed(0)} ${h.toFixed(0)}`;
+  let out=`<svg class="map" viewBox="${vb}" role="img" aria-label="10.${d.id} 路线图">${base("A")}${routeLayer(DAYS,d.id,R)}${hotelMark(R/7)}</svg>`;
+  const k=kpts(d); if(k.length) out = kamaMap(k,d) + (a.length>1?out:"");
+  return out;
+}
+function kamaMap(k,d){
+  const coast=[[35.3032,139.518],[35.3040,139.524],[35.3066,139.530],[35.3084,139.538],[35.3094,139.546],[35.3086,139.553],[35.3060,139.560],[35.296,139.560],[35.296,139.518]];
+  const cp="M"+coast.map(p=>KX(p[1]).toFixed(1)+" "+KY(p[0]).toFixed(1)).join(" L")+" Z";
+  const pp=k.map((p,i)=>(i?"L":"M")+KX(p.km[1]).toFixed(1)+" "+KY(p.km[0]).toFixed(1)).join(" ");
+  return `<svg class="map" viewBox="0 0 200 175" role="img" aria-label="镰仓路线图"><defs><filter id="roughK" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter></defs>
+   <rect width="200" height="175" fill="var(--land)"/><path d="${cp}" fill="var(--water)" filter="url(#roughK)"/>
+   <text x="100" y="168" font-size="9" fill="var(--muted)" text-anchor="middle">相模湾 · 镰仓（放大）</text>
+   <path d="${pp}" fill="none" stroke="${col(d.color)}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" filter="url(#roughK)"/>
+   ${k.map(p=>{ const n=numbering(d).get(p); const x=KX(p.km[1]).toFixed(1), y=KY(p.km[0]).toFixed(1); return `<circle cx="${x}" cy="${y}" r="6.5" fill="${col(d.color)}" stroke="var(--land)" stroke-width="1.2"/><text x="${x}" y="${(+y+2.8).toFixed(1)}" font-size="7.5" font-weight="800" fill="#fff" text-anchor="middle">${n||"站"}</text>`; }).join("")}</svg>`;
+}
+
+/* ---------- 渲染：总览 ---------- */
+const lg=document.getElementById("legend");
+lg.innerHTML=DAYS.map(d=>`<a href="#d${d.id}"><i style="background:${col(d.color)}"></i><span class="mono">10.${d.id}</span> ${d.wd}</a>`).join("");
+document.getElementById("bigmap").innerHTML=mainMap();
+
+/* ---------- 已确认 ---------- */
+document.getElementById("bk").innerHTML=`
+ <div class="panel"><h3><span class="k">去程机票</span>海南航空 HU439</h3>
+  <div class="leg"><div class="pt"><b>08:00</b><span>10.8 北京首都 T2 · 北京时间</span></div><div class="ar">约 3.5 小时 →</div><div class="pt"><b>12:30</b><span>成田 T2 · 东京时间</span></div></div>
+  <dl class="kv"><dt>客服</dt><dd class="tel">95339</dd><dt>提醒</dt><dd>时刻按航班号公开时刻表，出发前以电子客票为准</dd></dl></div>
+ <div class="panel"><h3><span class="k">回程机票</span>阿联酋航空 EK319</h3>
+  <div class="leg"><div class="pt"><b>22:30</b><span>10.13 成田 T2 · 东京时间</span></div><div class="ar">A380 →</div><div class="pt"><b>迪拜</b><span>到达时间以客票为准</span></div></div>
+  <dl class="kv"><dt>到机场</dt><dd>19:30 前；A380 值机柜台排队久，建议提前网上值机</dd></dl></div>
+ <div class="panel wide"><h3><span class="k">酒店 · 5 晚</span>mesm Tokyo, Autograph Collection</h3>
+  <dl class="kv"><dt>日期</dt><dd>10.8 入住 → 10.13 退房</dd><dt>地址</dt><dd>东京都港区海岸 1-10-30（竹芝）<button class="lk" type="button" data-copy="東京都港区海岸1-10-30">复制日文地址</button></dd><dt>电话</dt><dd class="tel">+81-3-5777-1111</dd><dt>车站</dt><dd>百合鸥线竹芝站 3 分钟 · JR 滨松町站 6 分钟 · 都营大门站 7 分钟</dd><dt>入退房</dt><dd>15:00 / 12:00；10.13 要到 17:15 才回来取行李，已列入待办：申请晚退房或寄存</dd></dl>
+  <div class="links"><a class="lk go" style="--c:var(--ink)" target="_blank" rel="noopener" href="${NAVTO(HOTEL)}">导航回酒店 ↗</a><a class="lk" target="_blank" rel="noopener" href="https://www.mesm.jp/en/">官网 ↗</a></div></div>
+ <div class="panel wide" style="font-size:14px;color:var(--muted)">门票类都还没订，已放进「待办」。发机票、酒店或预约截图给我，我核对后更新这里（确认号和房间号不会写进页面）。</div>`;
+
+/* ---------- 风险 ---------- */
+const RISKS=[
+ ["外交部仍有「近期避免前往日本」的提醒","2025.11 起发布，2026.3.26 再次提醒；截至 9.27 我没查到解除通知。出发前再查一次外交部领事服务网，做「海外公民登记」，把 12308 存进手机。"],
+ ["10.10–10.12 是日本三连休","周日的镰仓和周一的浅草都会很挤，江之电镰仓站常排队进站。已把镰仓挪到上午，浅草尽量走小路；餐厅都要提前订。"],
+ ["去程航班和晨会重叠","HU439 北京 08:00–11:30 在飞机上，正好是会议窗口的最后几小时，提前跟团队打招呼。"],
+ ["10.11 晚上喝到 22:30，10.12 上午还排了博物馆","跟「不要劳累」有冲突。博物馆已标成可选；想睡懒觉就直接 12:00 去浅草。"],
+ ["10 月中旬仍可能有台风","大使馆 9.18 刚发过台风提醒。出发前三天看预报；台风天镰仓整天取消，换成室内的银座 / 博物馆。"],
+ ["几家店只收现金、有些周二周四休","思出横丁、宿六、ふじ屋、染太郎只收现金；染太郎周二周四休、ふじ屋周四休、Kakimori 周一和节假日都休，都已避开。"],
+ ["页面若公开，任何拿到链接的人都能看到你住哪、每天几点在哪","只把链接发给需要的人；部署到公开网址时用不好猜的名字。"]
+];
+document.getElementById("risks").innerHTML=RISKS.map(r=>`<li><b>${esc(r[0])}</b>${esc(r[1])}</li>`).join("");
+
+/* ---------- 逐日 ---------- */
+const nav=document.getElementById("nav"), main=document.getElementById("days");
+DAYS.forEach(d=>{ const a=document.createElement("a"); a.href="#d"+d.id; a.style.setProperty("--c",col(d.color)); a.innerHTML=`<b>10.${d.id}</b>${d.wd}`; nav.appendChild(a); });
+DAYS.forEach(d=>{
+  const s=document.createElement("section"); s.className="day"; s.id="d"+d.id; s.style.setProperty("--c",col(d.color));
+  const stopsQ=[]; d.stops.forEach(st=>{ const q=P[st.p].q; if(stopsQ[stopsQ.length-1]!==q) stopsQ.push(q); });
+  let h=`<div class="dh"><div class="dt">10.${d.id}</div><div><h3>${esc(d.wd)} · ${esc(d.title)}</h3><div class="tags">${d.tags.map(t=>`<span class="tag ${t[0]}">${esc(t[1])}</span>`).join("")}</div></div></div>
+   <p class="lead">${esc(d.lead)}</p>
+   <details class="daymap"><summary>展开当日路线图</summary><div class="panel">${dayMap(d)}<div class="mapkey">${[...numbering(d)].map(([p,n])=>`<span><b style="background:${col(d.color)}">${n}</b>${esc(p.n)}</span>`).join("")}</div></div></details>
+   <div class="daytools"><a class="btn solid" target="_blank" rel="noopener" href="${MULTI(stopsQ)}">一键打开全天多点导航 ↗</a></div>
+   <div class="tl">`;
+  const NUM=numbering(d);
+  d.stops.forEach(st=>{
+    const p=P[st.p], at=J(d.id,st.t);
+    const cls="row "+(st.k||"");
+    h+=`<div class="${cls}"><div class="tm">${st.t}<small>北京 ${bj(at)}</small></div><div class="ct"><div class="card">`;
+    if(st.k==="move"){
+      h+=`<p class="note">${esc(st.n)}${ln(st.lines)}${st.note?`<br>${esc(st.note)}`:""}</p>`;
+      if(!st.meeting) h+=`<div class="links"><a class="lk" target="_blank" rel="noopener" href="${NAVTO(p.q)}">导航 ↗</a></div>`;
+    } else {
+      h+=`<div class="nm">${NUM.get(p)&&st.k!=="move"?`<span class="no">${NUM.get(p)}</span>`:""}<a class="place" target="_blank" rel="noopener" href="${NAVTO(p.q)}" title="打开 Google 地图导航">${esc(st.n)}</a>${st.kind?`<span class="kind">${esc(st.kind)}</span>`:""}${st.book?`<span class="chip book">需预约</span>`:""}</div>`;
+      if(st.r) h+=`<div class="rates">${st.r.map(r=>`<span class="rate"><em>${esc(r[0])}</em>${esc(r[1])}</span>`).join("")}</div>`;
+      h+=`<p class="note">${esc(st.note)}</p>`;
+      if(st.meta) h+=`<div class="meta">${st.meta.map(m=>`<span>${esc(m)}</span>`).join("")}</div>`;
+      h+=`<div class="links"><a class="lk go" target="_blank" rel="noopener" href="${NAVTO(p.q)}">导航${ln(st.lines)} ↗</a><a class="lk" target="_blank" rel="noopener" href="${G(p.q)}">照片与评价 ↗</a>${st.book?`<a class="lk" target="_blank" rel="noopener" href="${st.book}">${esc(st.bookN||"预约")} ↗</a>`:""}<button class="lk" type="button" data-copy="${esc(p.q)}">复制地名</button></div>`;
+      (st.alt||[]).forEach(a=>{ h+=`<div class="alt"><b>备选</b><a target="_blank" rel="noopener" href="${NAVTO(a[1])}">${esc(a[0])} ↗</a>${a[2]?` · ${esc(a[2])}`:""}</div>`; });
+    }
+    h+=`</div></div></div>`;
+  });
+  h+=`</div>`; s.innerHTML=h; main.appendChild(s);
+});
+
+/* ---------- 待办（纯列表） ---------- */
+const TODO=[
+ ["预约",[
+  ["妆发：Atelier Haruka 或 Felice","10.9 13:30"],["Bar BenFiddich","10.10 19:00 场，TableCheck"],["银座 久兵卫","10.13 13:00 午餐"],
+  ["Stellar Garden 东京塔侧窗边","10.8 17:15，TableCheck"],["EDITION Toranomon Lobby Bar 窗边","10.9 17:30，TableCheck"],
+  ["浅草今半","10.12 12:15"],["つな八 高岛屋店","10.10 12:30，只收网约"],["Tokyo Confidential","10.11 19:15"],["东京塔 Main Deck 门票","10.8 16:30"]]],
+ ["出发前",[
+  ["跟 mesm 申请 10.13 晚退房 + 行李寄存",""],["查外交部领事服务网最新提醒，做海外公民登记",""],["手机钱包开一张 Suica；准备 ¥20,000 现金",""],
+  ["10.7 晚看镰仓天气，决定 10.11 上午走稻村崎还是小町通",""],["EK319 网上值机",""],["确认世邦行前文件：防水靴、防水裤是否船上提供",""]]],
+ ["南极装备（10.10 新宿一次买齐）",[
+  ["打底层 2 套","羊毛或合成；mont-bell / L-Breath"],["保暖中间层","抓绒或轻羽绒马甲 + 保暖长裤"],["防风防水手套 + 薄内衬，共 2 副","Alpen 滑雪区"],
+  ["护耳抓绒帽 + 围脖套筒",""],["厚羊毛袜 3–4 双 + 薄袜内衬",""],["偏光太阳镜 + 滑雪护目镜","Alpen"],["防水袋几个尺寸","L-Breath"],
+  ["药妆：SPF 50 防水防晒、润唇膏、保湿霜、暖宝宝、晕船药（先问药剂师）、眼罩",""],["防水裤（船上不提供才买）","要宽到能套在靴子外"]]]
+];
+document.getElementById("todos").innerHTML=TODO.map(g=>`<h4 class="grp">${esc(g[0])}</h4><div class="panel"><ol class="todo">${g[1].map(x=>`<li>${esc(x[0])}${x[1]?` <span class="w">· ${esc(x[1])}</span>`:""}</li>`).join("")}</ol></div>`).join("");
+
+/* ---------- 贴士 ---------- */
+document.getElementById("tipbox").innerHTML=`
+ <div class="panel"><b class="h">交通</b><ul><li>机场往返：大门站 ⇄ 成田 T2 坐京成 Access 特急，不换乘，约 80 分钟。</li><li>市内：Suica 刷地铁、JR、江之电和便利店；打车用 GO 或 Uber，市内 10–20 分钟约 ¥1,500–4,000。</li><li>酒店最近的站：都营大门站（浅草线、大江户线）、JR 滨松町站。</li></ul></div>
+ <div class="panel"><b class="h">时间</b><ul><li>页面所有时间都是东京时间（JST, UTC+9），北京时间减 1 小时。</li><li>会议窗口：北京 19:00–次日 11:00 = 东京 20:00–次日 12:00。</li><li>10 月中旬日落约 17:15，东京塔 24:00 关灯。</li></ul></div>
+ <div class="panel"><b class="h">钱和退税</b><ul><li>横丁、老铺和小店很多只收现金，便利店 ATM 可取现。</li><li>同一家店当天消费满 ¥5,000（不含税）可免税，带护照原件；南极要用的消耗品注意免税封袋出境前不能拆，结账时跟店员说明。</li><li>刀具只能托运。</li></ul></div>
+ <div class="panel"><b class="h">天气</b><ul><li>白天约 22°C，早晚约 15°C，带一件薄外套；镰仓海边风大。</li></ul></div>
+ <div class="panel"><b class="h">紧急电话</b><ul>
+  <li>日本报警 <span class="tel">110</span> · 急救 / 消防 <span class="tel">119</span></li>
+  <li>日本观光厅游客热线（24 小时，有中文）<span class="tel">050-3816-2787</span></li>
+  <li>外交部全球领保热线 <span class="tel">+86-10-12308</span></li>
+  <li>中国驻日本大使馆（东京）<span class="tel">+81-3-6450-2195</span></li>
+  <li>酒店 <span class="tel">+81-3-5777-1111</span></li></ul></div>`;
+
+/* ---------- 此刻关注 ---------- */
+const EV=[];
+EXTRA_EVENTS.forEach(e=>EV.push(e));
+DAYS.forEach(d=>d.stops.forEach(st=>{ const p=P[st.p]; EV.push({at:J(d.id,st.t),n:st.n,where:st.kind||"",q:p.q,day:d.id,book:st.book,bookN:st.bookN,meeting:st.meeting}); }));
+EV.sort((a,b)=>a.at-b.at);
+const END=J("13","22:30");
+const $=id=>document.getElementById(id);
+function pad(n){return String(n).padStart(2,"0");}
+function tick(){
+  const now=new Date();
+  $("nowClock").textContent="东京 "+fmt(now,{month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"})+" · 北京 "+bj(now);
+  const i=EV.findIndex(e=>e.at>now);
+  if(i<0){ $("nowWhat").textContent="东京之旅结束，下一站南极（12.18）。"; $("nowWhen").textContent=""; ["cdD","cdH","cdM","cdS"].forEach(x=>$(x).textContent="00"); $("nowActs").innerHTML=""; $("nowAfter").textContent=""; return; }
+  const e=EV[i], ms=e.at-now, s=Math.floor(ms/1000);
+  $("cdD").textContent=pad(Math.floor(s/86400)); $("cdH").textContent=pad(Math.floor(s%86400/3600)); $("cdM").textContent=pad(Math.floor(s%3600/60)); $("cdS").textContent=pad(s%60);
+  if($("nowWhat").dataset.i!==String(i)){
+    $("nowWhat").dataset.i=String(i);
+    $("nowWhat").textContent=(e.meeting?"回酒店，":"")+e.n;
+    $("nowWhen").innerHTML=`${fmt(e.at,{month:"numeric",day:"numeric",weekday:"short",hour:"2-digit",minute:"2-digit"})} <span class="chip tz">JST</span> · 北京 ${bj(e.at)}${e.where?" · "+esc(e.where):""}`;
+    $("nowActs").innerHTML=`<a class="btn solid" target="_blank" rel="noopener" href="${NAVTO(e.q)}">导航过去 ↗</a>${e.day?`<a class="btn" href="#d${e.day}">看这一天</a>`:""}${e.book?`<a class="btn" target="_blank" rel="noopener" href="${e.book}">${esc(e.bookN||"预约")} ↗</a>`:""}`;
+    const nx=EV[i+1]; $("nowAfter").innerHTML=nx?`之后：<b>${esc(nx.n)}</b> · ${fmt(nx.at,{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"})} JST`:"";
+  }
+}
+tick(); setInterval(tick,1000);
+
+/* ---------- 交互 ---------- */
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-copy]"); if(b){ copy(b.getAttribute("data-copy")); } });
+const links=[...nav.querySelectorAll("a")];
+if("IntersectionObserver" in window){ const io=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting) links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+en.target.id)); }),{rootMargin:"-35% 0px -60% 0px"}); document.querySelectorAll("section.day").forEach(x=>io.observe(x)); }
+})();
+</script>
+</body>
+</html>
