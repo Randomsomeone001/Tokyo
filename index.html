@@ -826,6 +826,27 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .leaflet-popup-content{font-size:13px;line-height:1.5}
 .leaflet-container{font-family:inherit}
 .rm-tip{font-size:12px;font-weight:600;padding:2px 6px}
+.rmb{color:var(--muted);font-weight:400}
+.pay{font-size:13px;margin:6px 0 2px;color:var(--ink)}
+.pay b{display:inline-block;font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 5px;margin-right:6px}
+.ftabs{display:flex;gap:6px;margin:12px 0 -4px 74px}
+.ftabs button{font:inherit;font-size:12px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:5px 12px;min-height:32px}
+.ftabs button.on{border-color:var(--c);color:var(--c);box-shadow:inset 0 0 0 1px var(--c)}
+.foodall{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0 4px;font-size:13px}
+.foodall button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:8px 12px;display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-height:44px}
+.foodall button b{font-size:13px}
+.foodall button small{font-size:11px;color:var(--muted)}
+.foodall button.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+@media (max-width:600px){.ftabs{margin-left:0}}
+.choice{margin:14px 0 6px;padding:10px 12px;border:1px dashed var(--c);border-radius:10px;background:var(--surface)}
+.choice .chl{font-weight:700;font-size:14px;margin-bottom:8px}
+.choice .chl small{font-weight:400;color:var(--muted);margin-left:6px;font-size:12px}
+.choice .chb{display:flex;flex-wrap:wrap;gap:8px}
+.choice button{font:inherit;font-size:13px;text-align:left;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:8px 12px;display:inline-flex;gap:8px;align-items:baseline;min-height:40px}
+.choice button b{font-family:var(--mono);color:var(--c)}
+.choice button.on{border-color:var(--c);box-shadow:inset 0 0 0 1px var(--c);background:color-mix(in srgb,var(--c) 10%,var(--surface))}
+.choice button.on b{color:var(--c)}
+.tm small.optk{display:inline-block;margin-top:4px;padding:0 5px;border-radius:4px;background:var(--c);color:#fff;font-weight:700}
 </style>
 
 <div class="wrap">
@@ -865,11 +886,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   <!-- 风险 -->
   <h2 class="sec" id="risk">出发前先看 <small>我发现的冲突和风险</small></h2>
-  <ul class="risk" id="risks"></ul>
+  <div id="risks"></div>
 
   <!-- 4 逐日 -->
   <h2 class="sec" id="plan">逐日行程 <small><span class="chip book">需预约</span> 表示要提前订</small></h2>
   <nav class="days" id="nav" aria-label="按天跳转"></nav>
+  <div class="foodall"><span>每顿饭都有两套：</span><button type="button" class="on" data-foodall="q"><b>全部看品质榜单</b><small>米其林 / Tabelog 百名店 / 高分</small></button><button type="button" data-foodall="c"><b>全部看亲民老店</b><small>本地人常去的高分老店，人均 ¥1,000–7,000（约 40–300 元）</small></button></div>
   <main id="days"></main>
 
   <!-- 5 待办 -->
@@ -899,10 +921,13 @@ const enc = encodeURIComponent;
 const G = q => "https://www.google.com/maps/search/?api=1&query=" + enc(q);
 const NAVTO = (q,mode) => "https://www.google.com/maps/dir/?api=1&destination=" + enc(q) + "&travelmode=" + (mode||"transit");
 const MULTI = arr => "https://www.google.com/maps/dir/" + arr.map(enc).join("/");
-const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const RATE=0.0425; /* 100 日元 ≈ 4.25 元，2026.9.28 */
+const cny=v=>{ const n=+String(v).replace(/,/g,"")*RATE; return n>=100?(Math.round(n/10)*10).toLocaleString("en-US"):Math.max(1,Math.round(n)).toString(); };
+const esc0 = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const esc = s => esc0(s).replace(/¥\s?([\d,]+)(?:\s*[–-]\s*¥?([\d,]+))?(?![\d,]*\s*（约)/g,(m,a,b)=>`${m}<span class="rmb">（约 ${cny(a)}${b?"–"+cny(b):""} 元）</span>`);
 const fmt = (d,opt) => new Intl.DateTimeFormat("zh-CN",Object.assign({timeZone:TZ,hour12:false},opt)).format(d);
 const bj = d => new Intl.DateTimeFormat("zh-CN",{timeZone:"Asia/Shanghai",hour:"2-digit",minute:"2-digit",hour12:false}).format(d);
-const LINE = {keisei:["京成 Access","#1D4E9E"],oedo:["大江户线","#B6007A"],asakusa:["浅草线","#E85298"],ginza:["银座线","#F39700"],jr:["JR","#1F8A3B"],yokosuka:["横须贺线","#0067C0"],enoden:["江之电","#0C7C59"],taxi:["打车","#5B696E"],walk:["步行","#8A979C"]};
+const LINE = {keisei:["京成 Access","#1D4E9E"],oedo:["大江户线","#B6007A"],asakusa:["浅草线","#E85298"],ginza:["银座线","#F39700"],jr:["JR","#1F8A3B"],yokosuka:["横须贺线","#0067C0"],enoden:["江之电","#0C7C59"],taxi:["打车","#5B696E"],walk:["步行","#8A979C"],hibiya:["日比谷线","#8F9A9E"]};
 const ln = ls => (ls||[]).map(l=>`<span class="ln" style="background:${LINE[l][1]}">${LINE[l][0]}</span>`).join("");
 let tt; function toast(m){let t=document.querySelector(".toast"); if(!t){t=document.createElement("div");t.className="toast";t.setAttribute("role","status");document.body.appendChild(t);} t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,1600);}
 function copy(s){const ok=()=>toast("已复制："+s); try{navigator.clipboard.writeText(s).then(ok,()=>fb(s));}catch(e){fb(s);} }
@@ -928,7 +953,7 @@ const P = {
  punch:{q:"Punch Room Tokyo EDITION Ginza",ll:[35.67259,139.76747],n:"Punch Room"},
  tower:{q:"東京タワー",ll:[35.65845,139.74554],n:"东京塔"},
  stellar:{q:"Sky Bar & Dining Stellar Garden ザ・プリンス パークタワー東京",ll:[35.65536,139.74709],n:"Stellar Garden"},
- maisen:{q:"とんかつ まい泉 青山本店",ll:[35.6680,139.7115],n:"まい泉"},
+ maisen:{q:"とんかつ まい泉 青山本店",ll:[35.66787,139.71143],n:"まい泉"},
  haruka:{q:"アトリエはるか エチカ表参道店",ll:[35.66523,139.71133],n:"Atelier Haruka"},
  mameya:{q:"KOFFEE MAMEYA 神宮前4-15-3",ll:[35.66837,139.71092],n:"KOFFEE MAMEYA"},
  mame:{q:"Mame Kurogouchi Aoyama",ll:[35.66524,139.71025],n:"Mame Kurogouchi"},
@@ -982,24 +1007,61 @@ const P = {
  fureika:{q:"中国飯店 富麗華 東麻布",ll:[35.65628,139.73845],n:"富丽华"},
  fuglen:{q:"FUGLEN ASAKUSA",ll:[35.71447,139.79398],n:"FUGLEN"},
  ginzasix:{q:"GINZA SIX",ll:[35.66945,139.76335],n:"GINZA SIX"},
+ tenichi:{q:"天ぷら 天一 銀座本店",ll:[35.67085,139.76253],n:"天一"},
+ travelers:{q:"TRAVELER'S FACTORY 中目黒",ll:[35.64472,139.69722],n:"Traveler's Factory"},
+ onibus:{q:"ONIBUS COFFEE 中目黒",ll:[35.64340,139.69824],n:"ONIBUS"},
+ vase:{q:"Vase 中目黒 上目黒1-7-7",ll:[35.64526,139.69974],n:"Vase"},
+ ldk:{q:"1LDK 中目黒",ll:[35.64598,139.70015],n:"1LDK"},
+ sml:{q:"工藝 器と道具 SML 恵比寿西",ll:[35.64753,139.70421],n:"SML"},
+ okura:{q:"OKURA 代官山",ll:[35.64908,139.70122],n:"OKURA"},
+ kamawanu:{q:"かまわぬ 代官山店",ll:[35.64911,139.70175],n:"かまわぬ"},
+ ivy:{q:"代官山 蔦屋書店",ll:[35.64968,139.70033],n:"T-SITE"},
+ ushimitsu:{q:"焼肉 うしみつ 恵比寿本店",ll:[35.64545,139.70654],n:"うしみつ"},
+ sanboa:{q:"浅草サンボア",ll:[35.71189,139.79443],n:"サンボア"},
+ tenkuni:{q:"銀座 天國 本店",ll:[35.66767,139.76289],n:"天國"},
+ abechan:{q:"あべちゃん 麻布十番店",ll:[35.65538,139.73631],n:"あべちゃん"},
+ sanshuya:{q:"大衆割烹 三州屋 銀座本店",ll:[35.67448,139.76636],n:"三州屋"},
+ torigin:{q:"鳥ぎん 銀座本店",ll:[35.67122,139.76366],n:"鳥ぎん"},
+ fukumi:{q:"鎌倉ふくみ",km:[35.32101,139.54964],n:"ふくみ"},
+ akimoto:{q:"秋本 鎌倉 小町",km:[35.31970,139.55139],n:"秋本"},
+ shoutaien:{q:"正泰苑 芝大門店",ll:[35.65800,139.75372],n:"正泰苑"},
+ yabusoba:{q:"上野藪そば",ll:[35.71017,139.77547],n:"上野藪そば"},
+ yonehisa:{q:"米久本店 浅草",ll:[35.71592,139.79375],n:"米久"},
+ tatsuya:{q:"たつや 駅前店 恵比寿",ll:[35.64624,139.70943],n:"たつや"},
+ midori:{q:"梅丘寿司の美登利 銀座店",ll:[35.66896,139.75915],n:"美登利"},
  nodaya:{q:"入谷鬼子母神門前 のだや",ll:[35.72028,139.78302],n:"のだや"}
 };
 
 /* ---------- 行程 ---------- */
 const DAYS=[
-{id:"8",wd:"周四",color:"--d8",title:"打车到酒店休息 → 麻布十番天妇罗早晚饭 → 麻布台之丘随便逛逛",
+{id:"8",wd:"周四",color:"--d8",title:"打车到酒店休息 → 1 先吃顿好的（1.a 15:15 / 1.b 16:30）→ 2 随便逛逛（2.a 增上寺 + 东京塔 / 2.b 麻布台之丘）",
  tags:[["","中国上班日"],["free","可玩 15:00–19:30"]],
- lead:"行李多就不挤电车，落地直接打车到酒店。先休息，16:30 早早吃一顿好的，再去麻布台之丘随便逛逛、看看东京塔，19:45 前回酒店开会。东京塔夜景留给周六和周日的酒吧。",
- work:[["大垣书店 咖啡区","大垣書店 麻布台ヒルズ店","麻布台之丘 Tower Plaza 4F，京都来的选书书店带咖啡座，11:00–20:00，适合回邮件"],["Sky Lobby（森 JP Tower 33F）","麻布台ヒルズ 森JPタワー スカイロビー","点一杯饮料 + ¥500，正对东京塔，到 21:00，座位宽"]],
- stops:[
+ lead:"行李多就不挤电车，落地直接打车到酒店。饭和散步各有两个方案，当天看累不累再点选：想早点吃就选 1.a（15:15 入座），想先躺一会儿就选 1.b（16:30）；每个时段又分品质榜单和亲民老店两家；吃完想看夜景和古寺选 2.a，想逛店选 2.b。页面上的时间、地图和导航会跟着你选的方案变。19:45 前回酒店开会。",
+ work:[["大垣书店 咖啡区","大垣書店 麻布台ヒルズ店","麻布台之丘 Tower Plaza 4F，京都来的选书书店带咖啡座，11:00–20:00，适合回邮件"],["王子公园塔 1F 大堂酒廊","ザ・プリンス パークタワー東京 ロビーラウンジ","就在 Stellar Garden 楼下，平日 10:00–20:00，125 座，可以谈公事，看得到东京塔"]],
+ plan:[
   {t:"12:30",p:"hotel",k:"move",n:"落地成田 T2 → 打车去酒店",lines:["taxi"],note:"入境加取行李约 1 小时。到达大厅外 28 或 31-A 号出租车站排队，上车前说「港区まで定額でお願いします」：港区定额 ¥31,500（走京叶道路）或 ¥32,500（走湾岸线），高速费另付约 ¥3,000，合计约 ¥35,000，车程 70–90 分钟，约 15:00 到酒店。超过两个大箱子就请站务员叫大一点的车；想更省心可以提前订含高速费 ¥37,000 的接机面包车，司机在到达口举牌接。"},
-  {t:"15:00",p:"hotel",n:"mesm Tokyo 入住",kind:"酒店",note:"到了先洗澡躺一会儿。跟前台确认 10.13 晚退房和行李寄存（也可提前发邮件 reservation@mesm.jp）。",meta:["港区海岸 1-10-30 · +81-3-5777-1111"]},
-  {t:"16:15",p:"yokota",k:"move",n:"打车去麻布十番",lines:["taxi"],note:"约 12–15 分钟。"},
-  {t:"16:30",p:"yokota",k:"key",n:"天冨良 よこ田",kind:"天妇罗 · Tabelog 百名店 · 米其林",r:[["Tabelog","3.66 · 百名店 2022/23/25"],["Google","4.1 · 326"]],book:"https://restaurant.ikyu.com/116920/",bookN:"一休预约",
-   note:"麻布十番的天妇罗名店，连续 8 年米其林推荐。先上几道怀石式小菜，再在吧台一道道现炸。16:00 就开门，长途飞行后早早吃一顿好的，不用硬撑到晚上。",meta:["16:00–23:00 · 港区元麻布 3-11-3 Patio 麻布十番 II 3F · 050-5872-2683","人均 ¥15,000–25,000；Tabelog 也能网上订"],lines:["taxi"],
-   alt:[["正泰苑 芝大门店（和牛烧肉）","正泰苑 芝大門店","烧肉百名店连续 8 年（3.68），离酒店打车 3 分钟，17:00 开门，人均 ¥6,000–8,000，Tabelog 可订"],["新桥 いっぱし（海鲜居酒屋）","新橋 いっぱし","居酒屋百名店（3.58），丰洲当天的鱼配清酒，17:00 开门","https://tabelog.com/tokyo/A1301/A130103/13224766/"]]},
-  {t:"18:20",p:"azabudai",n:"麻布台之丘 Azabudai Hills",kind:"随便逛 · 看塔",note:"从よこ田打车 5 分钟（上坡，不建议走）。挑几家逛就好：Tower Plaza 3F 的 The Conran Shop 旗舰店（家具和器物）、4F 大垣书店、2F 的 The Store by C' 和 United Arrows 女装、B1 的 Nicolai Bergmann 花店。Garden Plaza A 靠樱田通一侧的户外台阶可以免费看亮灯的东京塔。",meta:["商店大多 11:00–20:00 · 港区麻布台 1-3-1","想坐着看塔：森 JP Tower 33F Sky Lobby 咖啡（一杯饮料 + ¥500，到 21:00）"],lines:["taxi"]},
-  {t:"19:25",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 10 分钟。"},
+  {t:"15:00",p:"hotel",n:"mesm Tokyo 入住",kind:"酒店",note:"放下行李。跟前台确认 10.13 晚退房和行李寄存（也可提前发邮件 reservation@mesm.jp）。",meta:["港区海岸 1-10-30 · +81-3-5777-1111"]},
+  {choice:"1",label:"1 · 先吃顿好的",opts:[
+   {k:"1.a",name:"早点吃 · 15:15 入座（银座）",stops:[
+    {t:"15:05",p:"tenichi",mk:"8a",k:"move",n:"打车去银座",lines:["taxi"],note:"约 10–12 分钟，放下行李就走。",c:{p:"tenkuni"}},
+    {t:"15:15",p:"tenichi",mk:"8a",k:"key",n:"天ぷら 天一 銀座本店",kind:"天妇罗 · Tabelog 百名店",r:[["Tabelog","3.51 · 百名店 2023"],["Google","4.3 · 379"]],book:"https://www.tablecheck.com/en/shops/tempura-tenichi-ginza/reserve",bookN:"TableCheck 预约",
+     note:"1930 年创业的银座天妇罗老铺，11:30–22:00 中间不休息，落地后最早能坐下吃好东西的一家。订吧台位看师傅现炸；16:00 前点单还是午餐价。",meta:["每天 11:30–22:00 · 银座 6-6-5 · 03-3571-1949","吧台午餐套餐 ¥11,000 / ¥15,400 / ¥19,800，另加 15% 服务费；人均约 ¥13,000–23,000","当天取消收全款"],pay:"刷卡（VISA / Master / JCB / AMEX）；不收电子钱和二维码",lines:["taxi"],
+     c:{p:"tenkuni",n:"銀座 天國 本店",kind:"天妇罗 · 1885 年创业",r:[["Tabelog","3.47 · 286"],["Google","4.0 · 1,083"]],book:"",bookN:"",note:"140 年的江户前天妇罗老铺，中午到晚上不休息。招牌是大虾天丼，本地上班族和老东京人常来。15:00 后按晚餐菜单点。",meta:["11:30–22:00（21:00 最后点单）· 银座 8-11-3 · 03-3571-1092","人均 ¥3,000–5,000；可电话订 15:00 以后的位"],pay:"刷卡、Suica、PayPay",alt:[["銀座 梅林 本店（炸猪排，1927）","銀座 梅林 本店","「炸猪排盖饭发源地」，11:30–21:00 不休息，人均 ¥2,000–3,000；周六已有猪排"]]}}]},
+   {k:"1.b",name:"先歇一会儿 · 16:30（麻布十番）",stops:[
+    {t:"16:15",p:"yokota",mk:"8b",k:"move",n:"打车去麻布十番",lines:["taxi"],note:"约 12–15 分钟。",c:{p:"abechan"}},
+    {t:"16:30",p:"yokota",mk:"8b",k:"key",n:"天冨良 よこ田",kind:"天妇罗 · Tabelog 百名店 · 米其林",r:[["Tabelog","3.66 · 百名店 2022/23/25"],["Google","4.1 · 326"]],book:"https://restaurant.ikyu.com/116920/",bookN:"一休预约",
+     note:"麻布十番的天妇罗名店，连续 8 年米其林推荐。先上几道怀石式小菜，再在吧台一道道现炸。16:00 开门。",meta:["16:00–23:00 · 港区元麻布 3-11-3 Patio 麻布十番 II 3F · 050-5872-2683","人均 ¥15,000–25,000；Tabelog 也能网上订"],pay:"刷卡（VISA / Master / JCB / AMEX）；不收电子钱和二维码",lines:["taxi"],
+     alt:[["正泰苑 芝大门店（和牛烧肉）","正泰苑 芝大門店","烧肉百名店连续 8 年（3.68），17:00 开门，人均约 ¥10,000；周日晚上已经安排"]],
+     c:{p:"abechan",n:"あべちゃん 麻布十番店",kind:"烤串 · 炖杂碎 · 1933 年创业",r:[["Tabelog","3.49 · 961"]],book:"",bookN:"",note:"麻布十番开了 90 多年的烤串老店，招牌是用传了几代的酱汁炖的牛杂（煮込み）和酱烤鸡肉串。下午 14:45 就开门，50 个座位，不能预约，16:30 基本不用等。",meta:["14:45–22:30 · 港区麻布十番 2-1-1","人均 ¥3,000–4,500"],pay:"不收信用卡；可用电子钱和二维码（品牌未确认），最好带现金",alt:[["永坂更科 布屋太兵卫（荞麦，1789）","永坂更科 布屋太兵衛 麻布総本店","16:30 开门，人均 ¥2,000–3,000，可刷卡和扫码"]]}}]}]},
+  {choice:"2",label:"2 · 吃完随便逛逛",opts:[
+   {k:"2.a",name:"增上寺 → 东京塔 → Stellar Garden",stops:[
+    {t:"16:40",tIf:{"1.b":"18:20"},p:"zojoji",n:"增上寺",kind:"寺院 · 看塔",note:"德川将军家的菩提寺，山门前就是「古寺 + 东京塔」的经典构图。大殿开到 17:30，这天 17:16 日落，正好看着天色暗下来、东京塔亮灯。选了 1.b 就是晚上来：大殿关了，但院子可以走，大殿和背后的东京塔都亮着灯。",meta:["大殿 6:00–17:30 · 港区芝公园 4-7-35"],lines:["taxi"]},
+    {t:"17:30",tIf:{"1.b":"18:40"},p:"tower",n:"东京塔 Main Deck",kind:"地标 · 150 米",note:"穿过芝公园走 7 分钟。现场买票不用预约，蓝调时刻上去看城市慢慢亮起来。",meta:["9:00–23:00（22:30 停止入场）· 成人 ¥1,500"],lines:["walk"]},
+    {t:"18:30",skipIf:["1.b"],p:"stellar",n:"Sky Bar & Dining Stellar Garden（33F）",kind:"看塔酒吧",r:[["小红书","最热门的看塔机位"]],book:"https://www.tablecheck.com/en/princehotels-parktower-stellargarden/reserve",bookN:"TableCheck 预约",note:"步行 8–10 分钟到王子公园塔。坐酒吧区靠窗位，正对东京塔喝一杯。选了 1.b 就跳过这站，时间不够。",meta:["酒吧 17:00–01:00 · 17:00 后座位费每人 ¥2,000，靠窗 ¥3,000，另收服务费","两杯鸡尾酒加座位费和 15% 服务费，人均约 ¥8,000–9,500"],pay:"刷卡、Suica、PayPay",lines:["walk"]},
+    {t:"19:25",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 8–10 分钟。"}]},
+   {k:"2.b",name:"麻布台之丘逛店",stops:[
+    {t:"16:45",tIf:{"1.b":"18:20"},p:"azabudai",n:"麻布台之丘 Azabudai Hills",kind:"随便逛 · 看塔",note:"打车过去（从麻布十番过去是上坡，不建议走）。挑几家逛就好：Tower Plaza 3F 的 The Conran Shop 旗舰店（家具和器物）、4F 大垣书店、2F 的 The Store by C' 和 United Arrows 女装、B1 的 Nicolai Bergmann 花店。Garden Plaza A 靠樱田通一侧的户外台阶可以免费看亮灯的东京塔。",meta:["商店大多 11:00–20:00 · 港区麻布台 1-3-1","想坐着看塔：森 JP Tower 33F Sky Lobby 咖啡（一杯饮料 + ¥500，到 21:00）"],lines:["taxi"]},
+    {t:"19:25",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 10 分钟。"}]}]},
   {t:"20:00",p:"hotel",k:"move",n:"开会",meeting:1,note:"北京 19:00 起，到次日东京 12:00。"}
  ]},
 {id:"9",wd:"周五",color:"--d9",title:"新宿割烹午饭 → BEAMS JAPAN、伊势丹选品 + 一次买齐南极装备 → 银座六雁怀石 + Virtù",
@@ -1007,22 +1069,24 @@ const DAYS=[
  lead:"晚上不开会了，所以白天在新宿三丁目按一条线逛：午饭隔壁就是 BEAMS JAPAN，然后伊势丹和咖啡，最后才买体积大的户外装备（全程步行约 1.5 km）。17:40 打车回酒店放下东西、歇一会儿，再出门吃晚饭喝酒。只想一家买齐装备的话，mont-bell 东京京桥店也行（京桥站直通，11:00–21:00）。",
  work:[["珈琲貴族エジンバラ","珈琲貴族エジンバラ 新宿","Tabelog 喫茶店百名店 2026（3.71 · 1,769 条），新宿 3-2-4 2F，24 小时营业，130 座，水晶灯老派喫茶，开电脑的人很多；吸烟区没完全隔开，坐禁烟区里侧"],["ALL SEASONS COFFEE","ALL SEASONS COFFEE 新宿","Tabelog Café 百名店 2025（3.68），新宿御苑前，小而精的精品咖啡，适合回邮件处理半小时"],["Brooklyn Parlor 新宿","BROOKLYN PARLOR SHINJUKU","新宿三丁目 B1，评分一般（3.49）但座位多、音乐大，最适合长时间开电脑和小声接电话"]],
  stops:[
-  {t:"12:00",p:"nakajima",k:"move",n:"大门 → 新宿三丁目",lines:["oedo"],note:"都营大江户线到新宿西口或新宿三丁目换乘，约 20 分钟。"},
-  {t:"12:20",p:"nakajima",n:"新宿割烹 中嶋",kind:"沙丁鱼定食 · 米其林一星割烹",r:[["Tabelog","3.67"]],note:"晚上是米其林星级割烹，午市只做沙丁鱼定食（炸、煮、生拌、柳川锅），¥1,000 出头吃到星级厨房。本地上班族排队的地下小店，吧台座。",meta:["午餐 11:30–14:00 · 新宿 3-32-5 日原大楼 B1 · 03-3356-4534","午市一般不接受预约，12:20 到大约排 15–30 分钟；周日及节假日休"],lines:["walk"],
-   alt:[["Katsu プリポー（歌舞伎町）","かつ プリポー 新宿","Tabelog 3.85，炸猪排百名店 2026，周五午市 12:00–15:00；周六已经安排了猪排"],["麺屋海神（鱼汤拉面）","麺屋海神 新宿店","拉面百名店（3.73），步行 5 分钟，不能预约，只收现金"]]},
+  {t:"12:00",p:"nakajima",mk:"9L",k:"move",n:"大门 → 新宿三丁目",lines:["oedo"],note:"都营大江户线到新宿西口或新宿三丁目换乘，约 20 分钟。",c:{p:"kaijin"}},
+  {t:"12:20",p:"nakajima",mk:"9L",n:"新宿割烹 中嶋",kind:"沙丁鱼定食 · 米其林一星割烹",r:[["Tabelog","3.67"]],note:"晚上是米其林星级割烹，午市只做沙丁鱼定食（炸、煮、生拌、柳川锅），一千多日元吃到星级厨房。本地上班族排队的地下小店，吧台座。",meta:["午餐 11:30–14:00 · 新宿 3-32-5 日原大楼 B1 · 03-3356-4534","人均 ¥1,000–2,000；午市一般不接受预约，12:20 到大约排 15–30 分钟"],pay:"午餐只收现金（刷卡只限晚餐）",lines:["walk"],
+   alt:[["Katsu プリポー（歌舞伎町）","かつ プリポー 新宿","Tabelog 3.85，炸猪排百名店 2026，周五午市 12:00–15:00；周六已经安排了猪排"]],
+   c:{p:"kaijin",n:"麺屋海神 新宿店",kind:"鱼汤盐拉面 · Tabelog 百名店",r:[["Tabelog","3.73 · 4,254"]],note:"每天用进货的鲜鱼骨熬汤的盐味拉面，汤清鲜甜，配鱼丸。新宿三丁目，吃完走 3 分钟到 BEAMS JAPAN。16 个座位，不能预约。",meta:["平日 11:00–15:00、16:30–22:00 · 新宿 3-35-7 2F · 03-3356-5658","人均 ¥1,000–1,500"],pay:"只收现金（先在门口买餐券）",alt:[["王ろじ（1921 年创业的炸猪排）","王ろじ 新宿","招牌「とん丼」炸猪排咖喱饭，百名店，11:15–14:00，人均 ¥1,500–2,000，只收现金"]]}},
   {t:"13:30",p:"beamsjapan",n:"BEAMS JAPAN 新宿",kind:"日本手艺选品",note:"中嶋隔壁。6 层楼全是日本制造：各地手工器物、食品、服饰和工艺，可以退税。",meta:["11:00–20:00 · 新宿 3-32-6"],lines:["walk"]},
   {t:"14:00",p:"isetan",k:"key",n:"伊势丹新宿店 本馆",kind:"百货 · 设计师选品",note:"日本最好逛的百货。3F 是重点：国际设计师品牌、Re-Style 买手区（70 多个品牌）和 Mame Kurogouchi 新季；2F TOKYO Closet 是东京年轻设计师；5F 日本器物、漆器和茶具；B1 食品层买伴手礼。",meta:["10:00–20:00 · 新宿 3-14-1","同一家店当天满 ¥5,000（不含税）可退税，带护照原件"],lines:["walk"]},
-  {t:"15:30",p:"aaliya",n:"CAFE AALIYA",kind:"咖啡 · Tabelog Café 百名店",r:[["Tabelog","Café 百名店 2025"]],note:"做了 30 多年的法式吐司，地下室里的老派喫茶店，逛累了坐一会儿。可能要等 15–30 分钟；不想等就去 Lumine Est B1 的站立咖啡 BERG（也是百名店）。",meta:["平日 9:00–20:30 · 新宿 3-15-15 B1"],lines:["walk"]},
+  {t:"15:30",p:"aaliya",n:"CAFE AALIYA",kind:"咖啡 · Tabelog Café 百名店",r:[["Tabelog","Café 百名店 2025"]],note:"做了 30 多年的法式吐司，地下室里的老派喫茶店，逛累了坐一会儿。可能要等 15–30 分钟；不想等就去 Lumine Est B1 的站立咖啡 BERG（也是百名店）。",meta:["平日 9:00–20:30 · 新宿 3-15-15 B1","人均 ¥1,000–2,000"],pay:"刷卡（含银联）、Suica、PayPay",lines:["walk"]},
   {t:"16:10",p:"alpen",n:"Alpen TOKYO",kind:"南极装备",note:"装备清单见「待办」。3–5F 户外区，防水裤和防水手套款式最多。",meta:["平日 11:00–22:00 · 新宿 3-23-7"],lines:["walk"]},
   {t:"16:45",p:"lbreath",n:"L-Breath 新宿",kind:"南极装备",note:"Salomon 等品牌，可退税，裤子可以当场改裤长。",meta:["平日 11:00–22:00 · 新宿 4-1-11"],lines:["walk"]},
   {t:"17:10",p:"montbell",n:"mont-bell 新宿南口",kind:"南极装备",note:"打底层和轻羽绒最好买，日本码偏小，试大一码。药妆（防晒、润唇膏、暖宝宝）在南口一带顺手买。",meta:["10:00–21:00 · 涩谷区代代木 2-4-9"],lines:["walk"]},
   {t:"17:40",p:"hotel",k:"move",n:"带着装备打车回酒店",lines:["taxi"],note:"约 25–30 分钟，放下东西歇一会儿。"},
-  {t:"18:45",p:"mutsukari",k:"move",n:"打车去银座",lines:["taxi"],note:"约 10 分钟。"},
-  {t:"19:00",p:"mutsukari",k:"key",n:"六雁 Mutsukari",kind:"怀石 · Tabelog 百名店",r:[["Tabelog","3.80 · 日本料理百名店"]],book:"https://www.tablecheck.com/en/shops/mutsukari/reserve",bookN:"TableCheck 预约",
-   note:"以蔬菜为主角的现代江户怀石，吧台看厨师做菜，拿过两次 Tabelog 铜奖。这趟唯一一顿正式怀石。",meta:["17:30–23:00（20:00 最后点单），周日休 · 银座 5-5-19 6–7F","套餐 ¥25,000 / ¥33,000；只接受网上预约，店家请客人不要喷浓香水"],lines:["taxi"],
-   alt:[["赤坂 菊乃井（京都怀石）","赤坂 菊乃井","米其林二星，最后入座 19:00，只能电话 03-3568-6055 或邮件订"],["天ぷら あらたみかわ（虎之门）","天ぷら あらたみかわ","天妇罗百名店 2025（4.02），18:00 起 8 个吧台座；周四已经吃过天妇罗","https://www.tablecheck.com/en/tempura-aratamikawa"]]},
+  {t:"18:45",p:"mutsukari",mk:"9D",k:"move",n:"打车去银座",lines:["taxi"],note:"约 10 分钟。",c:{p:"sanshuya"}},
+  {t:"19:00",p:"mutsukari",mk:"9D",k:"key",n:"六雁 Mutsukari",kind:"怀石 · Tabelog 百名店",r:[["Tabelog","3.80 · 日本料理百名店"]],book:"https://www.tablecheck.com/en/shops/mutsukari/reserve",bookN:"TableCheck 预约",
+   note:"以蔬菜为主角的现代江户怀石，吧台看厨师做菜，拿过两次 Tabelog 铜奖。这趟唯一一顿正式怀石。",meta:["17:30–23:00（20:00 最后点单），周日休 · 银座 5-5-19 6–7F","套餐 ¥25,000 / ¥33,000，另收 10% 服务费；含酒水人均约 ¥30,000–40,000","只接受网上预约，店家请客人不要喷浓香水"],pay:"刷卡（VISA / Master / JCB / AMEX）、d払い",lines:["taxi"],
+   alt:[["赤坂 菊乃井（京都怀石）","赤坂 菊乃井","米其林二星，最后入座 19:00，只能电话 03-3568-6055 或邮件订"],["天ぷら あらたみかわ（虎之门）","天ぷら あらたみかわ","天妇罗百名店 2025（4.02），18:00 起 8 个吧台座；周四已经吃过天妇罗","https://www.tablecheck.com/en/tempura-aratamikawa"]],
+   c:{p:"sanshuya",n:"大衆割烹 三州屋 銀座本店",kind:"大众割烹 · 定食百名店",r:[["Tabelog","3.50 · 定食百名店 2021"]],book:"",bookN:"",note:"1968 年开的银座老牌大众割烹，藏在小巷里，银座上班族下班喝一杯的地方。点炸牡蛎、鸡肉豆腐锅（とり豆腐）、刺身配清酒，一桌下来很便宜。",meta:["10:30–22:30 · 银座 2-3-4","人均 ¥3,000–4,000；可以电话订位"],pay:"刷卡、Suica、PayPay",alt:[["鳥ぎん 银座本店（烤串 + 釜饭）","鳥ぎん 銀座本店","1951 年创业，人均 ¥2,500–4,000，只收现金；周六晚上的亲民版也是它"]]}},
   {t:"21:15",p:"virtu",k:"key",n:"Virtù（四季大手町 39F）",kind:"Asia's 50 Best 2026 #26",r:[["Asia's 50 Best","2026 #26"],["World's 50 Best","2025 #45"]],book:"https://www.tablecheck.com/en/shops/four-seasons-hotel-tokyo-otemachi-virtu/reserve",bookN:"TableCheck（可不订）",
-   note:"东京排名最高的酒吧之一，39 楼看皇居和东京站夜景，法式优雅的鸡尾酒。官方说不用预约，打车 10 分钟。",meta:["周五 17:00–00:30 · 千代田区大手町 1-2-1 Otemachi One 39F"],lines:["taxi"],
+   note:"东京排名最高的酒吧之一，39 楼看皇居和东京站夜景，法式优雅的鸡尾酒。官方说不用预约，打车 10 分钟。",meta:["周五 17:00–00:30 · 千代田区大手町 1-2-1 Otemachi One 39F","鸡尾酒 ¥3,400 起，另收 15% 服务费，两杯人均约 ¥8,000–9,000"],pay:"刷卡（VISA / Master / JCB / AMEX）；不收电子钱和二维码",lines:["taxi"],
    alt:[["Gold Bar at EDITION（虎之门）","Gold Bar at EDITION Tokyo Toranomon","Asia 51–100（2025 #67），周五 20:30 起有 DJ，离酒店近"]]},
   {t:"23:00",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 15 分钟。"}
  ]},
@@ -1030,87 +1094,111 @@ const DAYS=[
  tags:[["","中国调休上班日"],["free","12:00 起到深夜，晚上不开会"]],
  lead:"造型放在晚上不开会的这天，妆发一直用到深夜：傍晚在 31 楼对着东京塔拍照，晚上在银座吃烧鸟名店，再去东京排名最高的榜单酒吧 Punch Room，两处步行 5 分钟、离酒店打车 10 分钟。原定的 Bar BenFiddich 10.10 已经全部订满。",
  stops:[
-  {t:"11:45",p:"tonkatsujp",n:"とんかつ.jp 表参道",kind:"猪排 · Tabelog 百名店",r:[["Tabelog","3.70"]],note:"炸猪排百名店 2024 / 2026 双榜，低温慢炸的厚切里脊，粉红切面，配盐和芥末吃。比观光客多的まい泉更本地、更好吃。11:45 到排队，赶得上 13:30 做造型。",meta:["周末 11:00–15:00（14:30 最后点单），周一周二休 · 港区北青山 3-9-9 FN 大楼 1F · 03-6427-4910","午餐不接受预约，只能排队；表参道站 B2 出口步行 3 分钟"],lines:["taxi"],
-   alt:[["まい泉 青山本店（排不上时）","とんかつ まい泉 青山本店","Google 4.4 · 5,187 条，Tabelog 3.44，座位多翻台快"],["排太久：先做造型再吃","表参道ヒルズ","表参道之丘里有多家餐厅"]]},
+  {t:"11:45",p:"tonkatsujp",mk:"10L",n:"とんかつ.jp 表参道",kind:"猪排 · Tabelog 百名店",r:[["Tabelog","3.70"]],note:"炸猪排百名店 2024 / 2026 双榜，低温慢炸的厚切里脊，粉红切面，配盐和芥末吃。11:45 到排队，赶得上 13:30 做造型。",meta:["周末 11:00–15:00（14:30 最后点单），周一周二休 · 港区北青山 3-9-9 FN 大楼 1F · 03-6427-4910","午餐人均 ¥2,000–3,000；午餐不接受预约，只能排队，用餐限时 1 小时"],pay:"刷卡、Suica、PayPay、支付宝、微信支付",lines:["taxi"],
+   c:{p:"maisen",n:"とんかつ まい泉 青山本店",kind:"猪排 · 1965 年创业",r:[["Tabelog","3.44 · 百名店 2017/18"],["Google","4.4 · 5,000+"]],note:"东京人从小吃到大的炸猪排老店，旧澡堂改建的本店，座位多翻台快。点黑猪里脊（黒豚ロース）。",meta:["11:00–22:00 · 涩谷区神宫前 4-8-5","人均 ¥2,000–3,500；可以网上预约"],pay:"刷卡、Suica、PayPay"}},
   {t:"13:30",p:"haruka",k:"key",n:"Atelier Haruka Echika 表参道店",kind:"妆发",r:[["小红书","编发攻略 1,000+ 赞"],["Google","4.2 · 83"]],book:"https://wrpcxa.b-merit.jp/y8hkz5/web/",bookN:"官网即时预约",
-   note:"小红书上中国游客推荐最多的编发连锁，就在表参道站内。带参考图；喜欢高颅顶要提前说。",meta:["周六 10:00–20:00 · 港区北青山 3-6-12 Echika 表参道 · 03-3796-3301","每人头发 ¥3,520 + 化妆 ¥3,520 起；两人都做要订 2 个名额，同一时段不够就一前一后；也可用 LINE 预约"],lines:["walk"],
+   note:"小红书上中国游客推荐最多的编发连锁，就在表参道站内。带参考图；喜欢高颅顶要提前说。",meta:["周六 10:00–20:00 · 港区北青山 3-6-12 Echika 表参道 · 03-3796-3301","每人头发 ¥3,520 + 化妆 ¥3,520 起；两人都做要订 2 个名额，同一时段不够就一前一后；也可用 LINE 预约"],pay:"刷卡（含银联）、Suica、PayPay；不收支付宝和微信",lines:["walk"],
    alt:[["Felice（更完整的妆造）","Felice ヘアメイク 南青山6-2-13","Hot Pepper Beauty 4.84 · 351 条，发型 + 全妆 ¥8,900，周末 7:00–18:00；当天取消收全款","https://beauty.hotpepper.jp/CSP/bt/reserve/?storeId=H000343022"],["想剪发染发：LONESS 表参道","LONESS 表参道 南青山3-15-6","Hot Pepper Beauty 4.78 · 715 条，周六 10:30–20:00，剪 + 染 ¥11,800 起（新客），约 2.5–3 小时","https://beauty.hotpepper.jp/slnH000344908/"]]},
-  {t:"14:45",p:"mameya",n:"KOFFEE MAMEYA",kind:"咖啡",r:[["Google","4.6 · 1,932"]],note:"豆子专门店的站立吧台，做完造型第一张照片在这里拍。它的姐妹店 KOFFEE MAMEYA Kakeru（清澄白河）是东京唯一进「世界 100 佳咖啡店」的（2026 #28），要预约品鉴套餐 ¥8,500 起，这次时间不够就先打卡表参道本店。",meta:["每天 10:00–18:00"],lines:["walk"]},
+  {t:"14:45",p:"mameya",n:"KOFFEE MAMEYA",kind:"咖啡",r:[["Google","4.6 · 1,932"]],note:"豆子专门店的站立吧台，做完造型第一张照片在这里拍。它的姐妹店 KOFFEE MAMEYA Kakeru（清澄白河）是东京唯一进「世界 100 佳咖啡店」的（2026 #28），要预约品鉴套餐 ¥8,500 起，这次时间不够就先打卡表参道本店。",meta:["每天 10:00–18:00","人均 ¥1,000–2,000"],pay:"刷卡、电子钱、二维码",lines:["walk"]},
   {t:"15:15",p:"mame",n:"Mame Kurogouchi Aoyama",kind:"设计师店",note:"黑河内真衣子旗舰店，织物和工艺感很强的女装、包和首饰。",meta:["13:00–20:00，周二休 · 港区北青山 3-8-3"],lines:["walk"]},
   {t:"15:45",p:"call",n:"call by minä perhonen",kind:"买手店",note:"皆川明的布料、服饰和世界各地的生活器物。",meta:["周六 11:00–20:00 · Spiral 5F"],lines:["walk"]},
   {t:"16:15",p:"auralee",n:"AURALEE TOKYO",kind:"设计师店",note:"面料和剪裁见长的日本品牌，低调无 Logo，针织、衬衫、裤装都值得试。",meta:["12:00–20:00，不定休 · 港区南青山 6-3-2 QC cube 1F"],lines:["walk"],
    alt:[["Arts & Science Aoyama","Arts & Science 南青山4-23-11","麻、羊绒基础款和手工包袋，11:00–19:00"],["SHIHARA TOKYO（几何感首饰）","SHIHARA TOKYO 北青山","北青山 3-12-13，周六 12:00–20:00，可以网上约店内时段"]]},
   {t:"16:45",p:"edition",k:"key",n:"The Tokyo EDITION, Toranomon · Lobby Bar",kind:"看塔酒吧 · 31F",r:[["Google","4.0 · 208"]],
-   note:"打车约 15 分钟。晚间不接受预约，先到先坐，16:45 到挑窗边位。这天日落约 17:13，带着妆发拍日落和东京塔亮灯。大堂吧本身没上榜；同楼的 Gold Bar 进过 Asia's 50 Best 51–100（2025 #67），想喝榜单酒就下楼去那里。",meta:["周六 7:30–23:30 · 港区虎之门 4-1-1","网上只能订下午茶；要保证看塔位得订 ¥11,520 的香槟下午茶（12:00–17:00）"],book:"https://www.tablecheck.com/en/shops/editionhotels-tokyo-lobbybar/reserve",bookN:"TableCheck（下午茶）",lines:["taxi"],
+   note:"打车约 15 分钟。晚间不接受预约，先到先坐，16:45 到挑窗边位。这天日落约 17:13，带着妆发拍日落和东京塔亮灯。大堂吧本身没上榜；同楼的 Gold Bar 进过 Asia's 50 Best 51–100（2025 #67），想喝榜单酒就下楼去那里。",meta:["周六 7:30–23:30 · 港区虎之门 4-1-1","网上只能订下午茶；要保证看塔位得订 ¥11,520 的香槟下午茶（12:00–17:00）","不收座位费；鸡尾酒约 ¥2,400–2,900，两杯人均约 ¥5,000–7,000"],book:"https://www.tablecheck.com/en/shops/editionhotels-tokyo-lobbybar/reserve",bookN:"TableCheck（下午茶）",pay:"刷卡（VISA / Master / JCB / AMEX）；不收二维码",lines:["taxi"],
    alt:[["Gold Bar at EDITION（同一栋楼）","Gold Bar at EDITION Tokyo Toranomon","Asia's 50 Best 51–100（2025 #67），金色吧台，适合拍照；看不到塔"],["Andaz Tokyo Rooftop Bar（52F）","Rooftop Bar Andaz Tokyo","步行 5 分钟，可预约，17:00–20:00 露台免座位费","https://www.tablecheck.com/en/andaz-tokyo-rooftop-bar/reserve/message"]]},
-  {t:"18:15",p:"birdland",k:"move",n:"打车去银座",lines:["taxi"],note:"约 10 分钟。"},
-  {t:"18:30",p:"birdland",k:"key",n:"銀座バードランド",kind:"烧鸟 · Tabelog 百名店 2023–2025",r:[["Tabelog","3.60 · 517"]],book:"https://restaurant.ikyu.com/107602/plan11534186/",bookN:"一休（只订座位）",
-   note:"用奥久慈军鸡在备长炭上烤的烧鸟名店，吧台座。和周五的拉面、周二的寿司都不重样。",meta:["周六 17:00–21:30 · 银座 4-2-15 塚本素山大楼 B1 · 03-5250-1081","人均 ¥12,000–15,000；座位限 2 小时；当天 17:00 后取消每人 ¥11,000"],lines:["taxi"],
-   alt:[["New York Grill（柏悦 52F）","Park Hyatt Tokyo New York Grill","9.28 按 2 位查 10.10 19:00 还有位；去这家就把下一站换成同层 New York Bar","https://www.tablecheck.com/en/shops/tokyo-park-hyatt-nyg/reserve"]]},
+  {t:"18:15",p:"birdland",mk:"10D",k:"move",n:"打车去银座",lines:["taxi"],note:"约 10 分钟。",c:{p:"torigin"}},
+  {t:"18:30",p:"birdland",mk:"10D",k:"key",n:"銀座バードランド",kind:"烧鸟 · Tabelog 百名店 2023–2025",r:[["Tabelog","3.60 · 517"]],book:"https://restaurant.ikyu.com/107602/plan11534186/",bookN:"一休（只订座位）",
+   note:"用奥久慈军鸡在备长炭上烤的烧鸟名店，吧台座。",meta:["周六 17:00–21:30 · 银座 4-2-15 塚本素山大楼 B1 · 03-5250-1081","人均 ¥12,000–15,000；座位限 2 小时；当天 17:00 后取消每人 ¥11,000"],pay:"刷卡（VISA / Master / JCB / AMEX）；不收电子钱和二维码",lines:["taxi"],
+   c:{p:"torigin",n:"鳥ぎん 銀座本店",kind:"烤串 · 釜饭 · 1951 年创业",r:[["Tabelog","3.41 · 1,011"],["Google","4.2 · 1,946"]],book:"",bookN:"",note:"银座小巷地下室里 70 多年的烤串老店，烤串配现煮的鸡肉釜饭（とり釜めし），热闹、便宜、很有昭和感。不能预约，高峰大约等 20 分钟。走到 Punch Room 5 分钟。",meta:["11:30–22:00（21:00 最后点单）· 银座 5-5-7 New Ginza 6 号馆 B1","人均 ¥2,500–4,000"],pay:"只收现金",alt:[["もつやき 登运とん（有乐町高架桥下，1953）","もつやき 登運とん 有楽町","12:00–22:30，人均 ¥3,000–4,500，可刷卡"]]}},
   {t:"20:30",p:"punch",k:"key",n:"Punch Room Tokyo",kind:"Asia's 50 Best #23",r:[["Google","4.6 · 145"]],book:"https://www.tablecheck.com/en/editionhotels-ginza-punchroom/reserve",bookN:"TableCheck",
-   note:"东京排名最高的榜单酒吧，用日本食材做潘趣酒，可以一杯杯点，也可以整碗分享。离 Birdland 步行 5 分钟，周六营业。",meta:["周五周六 18:00–02:00，周日周一休 · 银座 2-8-13 东京 EDITION 银座 · +81-3-6228-7400"],lines:["walk"],
+   note:"东京排名最高的榜单酒吧，用日本食材做潘趣酒，可以一杯杯点，也可以整碗分享。离 Birdland 步行 5 分钟，周六营业。",meta:["周五周六 18:00–02:00，周日周一休 · 银座 2-8-13 东京 EDITION 银座 · +81-3-6228-7400","鸡尾酒约 ¥2,600，另收 15% 服务费，两杯人均约 ¥5,500–6,500；限时 2 小时"],pay:"刷卡、电子钱；不收二维码",lines:["walk"],
    alt:[["New York Bar（柏悦 52F）","Park Hyatt Tokyo New York Bar","不接受预约，现场爵士，座位费 ¥3,300"],["Virtù（四季大手町 39F）","Virtù Four Seasons Otemachi","Asia 2026 #26 · World 2025 #45，不用预约，17:00 开门，打车 10 分钟"],["Star Bar Ginza","スタアバー 銀座","Tabelog 酒吧百名店（3.77），岸久的经典日式调酒，步行 5 分钟"]]},
   {t:"22:00",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 10 分钟。第二天 10:30 才出门，可以睡个懒觉。"}
  ]},
-{id:"11",wd:"周日",color:"--d11",title:"睡到自然醒 → 镰仓西班牙菜午饭 → 由比滨通走到长谷逛器物小店 → 稻村崎看日落 → 富丽华 + Tokyo Confidential",
+{id:"11",wd:"周日",color:"--d11",title:"睡到自然醒 → 镰仓午饭 → 由比滨通走到长谷逛器物小店 → 稻村崎看日落 → 和牛烧肉（或百年荞麦）+ Tokyo Confidential",
  tags:[["free","全天休息"],["","三连休中间一天，江之电很挤"]],
- lead:"10:30 才出门。到镰仓不挤江之电，从御成町沿由比滨通走到长谷（约 2 km），一路是器物和生活杂货小店，顺路看大佛和长谷寺，最后到稻村崎看 17:12 的日落：太阳落在江之岛后面，空气通透的话富士山剪影就在右边。回东京吃中餐名店，再去露台看东京塔。阴天就把稻村崎换成小町通和鹤冈八幡宫。",
+ lead:"10:30 才出门。到镰仓不挤江之电，从御成町沿由比滨通走到长谷（约 2 km），一路是器物和生活杂货小店，顺路看大佛和长谷寺，最后到稻村崎看 17:12 的日落：太阳落在江之岛后面，空气通透的话富士山剪影就在右边。回东京吃和牛烧肉名店（亲民版是 230 年的荞麦老铺），再去露台看东京塔。阴天就把稻村崎换成小町通和鹤冈八幡宫。",
  stops:[
   {t:"10:30",p:"kamakura",k:"move",n:"滨松町 → 品川 → 镰仓",lines:["jr","yokosuka"],note:"约 1 小时 10 分，11:40 到；横须贺线坐绿色车厢更舒服（刷 Suica 加钱）。"},
-  {t:"12:00",p:"anchoa",k:"key",n:"anchoa",kind:"西班牙菜 · Tabelog 百名店",r:[["Tabelog","3.98 · 铜奖 2026"]],book:"https://tabelog.com/kanagawa/A1404/A140402/14083796/",bookN:"Tabelog 预约",
-   note:"镰仓评分最高的餐厅之一，用湘南海鲜做的西班牙菜，西班牙菜百名店 2024 和 2026。镰仓站西口出来 3 分钟，12:00 必须入座，10:30 出门刚好赶上。",meta:["午餐 12:00–15:00，周一休 · 镰仓市御成町 2-14-3 · 070-1314-0406","人均约 ¥6,000–8,000"],lines:["walk"],
-   alt:[["Arashida（长谷，西班牙菜）","Arashida 鎌倉 長谷","西班牙菜百名店 2026，午餐只有 ¥9,000 套餐，就在长谷；从镰仓站走过去 25 分钟，订 12:30","https://tabelog.com/kanagawa/A1404/A140402/14082481/"],["华正楼 镰仓店（粤菜老宅）","華正樓 鎌倉店","大佛附近的旧华族别墅带庭院，120 座最好订，11:00–20:00"]]},
+  {t:"12:00",p:"fukumi",mk:"11L",k:"key",n:"鎌倉ふくみ",kind:"日本料理套餐",r:[["Tabelog","3.64"],["一休","4.82 · 33"]],book:"https://restaurant.ikyu.com/112288",bookN:"一休预约",
+   note:"镰仓站西口 3–5 分钟，用镰仓当地蔬菜和相模湾的鱼做的季节怀石式午餐，小店很安静。午餐最晚 12:00 入座，10:30 出门刚好。",meta:["午餐 11:30–15:00（最晚 12:00 入座），周一及节假日休 · 镰仓市扇ガ谷 1-1-29 2F · 0467-39-5567","午餐套餐 ¥8,600 / ¥11,000（含税，不收服务费），每人至少点一杯饮料","3 天内取消收 50%，当天收全款"],pay:"刷卡（VISA / Master / JCB / AMEX）；不收二维码",lines:["walk"],
+   alt:[["割烹・荞麦 波と風（长谷）","割烹・蕎麦 波と風","Tabelog 3.58，周末 12:00–14:00，omakase ¥7,000 + 10% 服务费，一休可订","https://restaurant.ikyu.com/106355"],["鎌倉 松原庵（荞麦老宅）","鎌倉 松原庵","荞麦百名店，午餐只能订 11:00；节假日现场登记排队 45–90 分钟"]],
+   c:{p:"akimoto",n:"秋本",kind:"银鱼盖饭 · 日本料理百名店",r:[["Tabelog","3.53 · 百名店 2021"],["Google","4.0 · 436"]],book:"",bookN:"",note:"镰仓站东口 3 分钟的老字号，吃镰仓特产生 / 煮银鱼盖饭（しらす丼），也有天妇罗和鳗鱼。不能预约，三连休 11:30 前去排。吃完穿过车站去西口开始逛。",meta:["11:00–15:30（15:00 最后点单），周四休 · 镰仓市小町 1-6-15 Aiza 镰仓 3F","人均 ¥2,000–3,000"],pay:"只收 VISA / Master 卡，建议带现金"}},
   {t:"13:30",p:"onari",n:"うつわ祥見 onari NEAR",kind:"器物",note:"日本陶艺家作品的小店。从这里开始沿由比滨通往长谷方向慢慢走。",meta:["12:00–18:00，周二休 · 御成町 5-28"],lines:["walk"]},
   {t:"14:00",p:"wabian",n:"WABIAN",kind:"生活杂货",note:"天然材料的篮子、布和手工器物。",meta:["10:00–18:00 · 由比滨 1-10-1"],lines:["walk"]},
   {t:"14:40",p:"daibutsu",n:"镰仓大佛（高德院）",kind:"寺院",note:"10 月 8:00–17:00，门票 ¥300。",lines:["walk"]},
   {t:"15:15",p:"hasedera",n:"长谷寺",kind:"寺院",note:"山腰观景台俯瞰由比滨，坐下喝杯茶。",meta:["8:00–16:30 停止入寺"],lines:["walk"]},
   {t:"15:50",p:"vuori",n:"vuori",kind:"咖啡 · 艺廊",note:"一楼咖啡，二楼是陶艺、木工和书的小艺廊。附近 90 年老宅里的 Belluria（手作首饰、YAECA、北欧家具）营业日不固定，看它官网日历再决定去不去。",meta:["12:00–17:30，不定休 · 长谷 1-15-1"],lines:["walk"]},
-  {t:"16:15",p:"chikaramochi",n:"力餅家",kind:"和果子老铺",note:"300 多年的和果子铺，买一盒権五郎力饼路上吃。",meta:["9:00–18:00，周三和第 3 个周二休 · 坂ノ下 18-18"],lines:["walk"]},
+  {t:"16:15",p:"chikaramochi",n:"力餅家",kind:"和果子老铺",note:"300 多年的和果子铺，买一盒権五郎力饼路上吃。",meta:["9:00–18:00，周三和第 3 个周二休 · 坂ノ下 18-18","一盒 10 个力饼 ¥850"],pay:"不收信用卡；可用 Suica、PayPay",lines:["walk"]},
   {t:"16:45",p:"inamura",k:"key",n:"稻村崎公园 · 日落",kind:"看日落和富士山",note:"从力饼家走过去约 20 分钟，累了就在长谷坐江之电。17:12 日落，太阳落在江之岛后面；空气通透时富士山剪影在右边（10 月雾气多，看到的概率大约一半，当天可以查 isitvisible.com/fuji）。晚霞到 17:40 左右，海边风大带外套。",meta:["想先坐坐：车站旁 ヨリドコロ 老宅咖啡在江之电轨道边，营业到 18:00，周二休"],lines:["walk"],
    alt:[["阴天：鹤冈八幡宫 + 小町通","鶴岡八幡宮","从镰仓站步行 10 分钟，小町通有手工杂货和和果子店"]]},
-  {t:"17:40",p:"fureika",k:"move",n:"稻村崎 → 镰仓 → 新桥 → 麻布十番",lines:["enoden","yokosuka","oedo"],note:"江之电到镰仓 11 分钟，JR 横须贺线到新桥，换大江户线，约 1 小时 15 分，19:15 左右到。日落后回程车会很挤，排不上就打车到镰仓站。"},
-  {t:"19:30",p:"fureika",k:"key",n:"中国饭店 富丽华",kind:"粤菜 · Tabelog 银奖",r:[["Tabelog","4.30 · 银奖 2019–2026"]],book:"https://restaurant.ikyu.com/121950/",bookN:"一休预约",
-   note:"东京评分最高的中餐厅之一，中餐百名店 2026，米其林星级。这趟唯一一顿中餐，走了一下午，吃点热乎的。",meta:["晚餐 17:30–22:00（21:30 最后点单），周日营业 · 港区东麻布 3-7-5 · 03-5561-7788","人均 ¥15,000–20,000；TableCheck 也能订"],lines:["walk"],
-   alt:[["Pizza Strada（麻布十番）","Pizza Strada 麻布十番","披萨百名店 6 次，周末营业到 22:30，吃得轻松"],["总本家 更科堀井（荞麦）","総本家 更科堀井 麻布十番本店","荞麦百名店，但周末 20:00 就关、不能预约，赶不上"]]},
+  {t:"17:40",p:"shoutaien",mk:"11D",k:"move",n:"稻村崎 → 镰仓 → 新桥 → 大门",lines:["enoden","yokosuka","asakusa"],note:"江之电到镰仓 11 分钟，JR 横须贺线到新桥，换都营浅草线 1 站到大门，约 1 小时 15 分，19:15 左右到，离酒店也近，可以先回去放下东西。日落后回程车会很挤，排不上就打车到镰仓站。",c:{p:"sarashina",lines:["enoden","yokosuka","oedo"],n:"稻村崎 → 镰仓 → 新桥 → 麻布十番",note:"江之电到镰仓 11 分钟，JR 横须贺线到新桥，换大江户线到麻布十番，约 1 小时 15 分，19:10 左右到。更科堀井周末 20:00 就关，下车直接去。"}},
+  {t:"19:30",p:"shoutaien",mk:"11D",k:"key",n:"正泰苑 芝大门店",kind:"和牛烧肉 · Tabelog 百名店",r:[["Tabelog","3.67 · 烧肉百名店 2018–2025"]],book:"https://r.gnavi.co.jp/30fspehv0000/",bookN:"Gurunavi 预约 / 电话",
+   note:"连续 8 年的烧肉百名店，招牌是能生吃的上等里脊（上ロース）和各种新鲜内脏，订位时就把上ロース一起点上，去晚了会卖完。热闹、烟火气足的本地名店。",meta:["周日 17:00–23:00（22:30 最后点单）· 港区芝大门 1-7-4 · 03-5733-5025（15:00 后接电话）","人均约 ¥10,000（含酒水），晚餐另收 5% 服务费"],pay:"刷卡（VISA / Master / JCB / AMEX）；不收电子钱和二维码",lines:["walk"],
+   alt:[["三幸园（麻布十番，烧肉老店）","三幸園 麻布十番","烧肉百名店 2020/21，每天 11:30–23:00，人均 ¥10,000–15,000，可网上订"]],
+   c:{p:"sarashina",t:"19:15",n:"总本家 更科堀井 本店",kind:"荞麦 · 1789 年创业 · 百名店",r:[["Tabelog","3.66 · 荞麦百名店 2021/24"],["Google","4.2 · 1,892"]],book:"",bookN:"",note:"230 多年的荞麦老铺，招牌是只用荞麦芯磨的雪白「更科荞麦」，配一份天妇罗。周末不接受预约，但 70 个座位基本不用久等。周末营业时间各家写法不一，最晚 19:15 进门。",meta:["周末 11:00–20:00 前后 · 港区元麻布 3-11-4 · 03-3403-3401","人均 ¥2,000–3,000"],pay:"刷卡、Suica、PayPay",alt:[["麻布 やきとん ふじ嶋","麻布 やきとん ふじ嶋","猪肉串居酒屋，每天 17:00–23:00，人均 ¥4,000–5,000，可网上订"]]}},
   {t:"21:30",p:"confidential",k:"key",n:"Tokyo Confidential",kind:"看塔酒吧 · Asia 2025 #70",r:[["Asia's 50 Best","2025 第 70"],["小红书","热门露台"]],book:"https://www.tablecheck.com/en/shops/tokyoconfidentialbar/reserve",bookN:"TableCheck 预约",
-   note:"猫主题鸡尾酒吧，9 楼露台正对东京塔。10.11 各时段都还有位（10.10 已满），订 21:30。从富丽华步行约 10 分钟。东京塔 24:00 关灯。",meta:["周日 18:00–24:00 · 麻布十番 1-6-1 · 预约要绑卡，12 小时内取消收 ¥2,000"],lines:["walk"],
+   note:"猫主题鸡尾酒吧，9 楼露台正对东京塔。10.11 各时段都还有位（10.10 已满），订 21:30。从正泰苑打车约 8 分钟；吃更科堀井的话步行 3 分钟，早到就先去喝。东京塔 24:00 关灯。",meta:["周日 18:00–24:00 · 麻布十番 1-6-1 · 预约要绑卡，12 小时内取消收 ¥2,000","网上预约每人最低消费 ¥5,500；招牌鸡尾酒 ¥2,000，另收 10% 服务费"],pay:"刷卡、电子钱、二维码都可以（品牌未确认）",lines:["taxi"],
    alt:[["Bar Trench（惠比寿）","Bar Trench 恵比寿","Asia 2026 #53，不接受预约，营业到 02:00；精力还够再打车去"],["天のや（喫茶百名店）","天のや 麻布十番","晚间 18:30–20:30，只收现金，饭后来一份甜品"]]},
   {t:"23:00",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 10 分钟。"}
  ]},
-{id:"12",wd:"周一",color:"--d12",title:"（可选）上野看广重 → 入谷鳗鱼百名店 → 浅草传法院通老铺 → FUGLEN → 合羽桥道具街 → 今半寿喜烧",
- tags:[["","中国上班日"],["","日本体育之日"],["free","上午灵活，19:30 前回"]],
- lead:"东京国立博物馆 10.12 照常开馆（10.13 闭馆），「歌川广重」特展不用预约时段。午饭去入谷的鳗鱼百名店のだや（Tabelog 3.97，东京鳗鱼第一梯队），晚饭吃浅草今半寿喜烧。前一晚喝得晚就睡到自然醒，跳过博物馆，12:00 直接去吃鳗鱼。下午是一条步行线：浅草寺 → 传法院通的老铺 → FUGLEN 咖啡 → 合羽桥道具街（刀、器物、厨房用品店一整条街）→ 国际通的今半，全程约 2 km。",
- work:[["Nui. HOSTEL & BAR LOUNGE（藏前）","Nui. HOSTEL & BAR LOUNGE 蔵前","Tabelog 3.55，旧仓库改的挑高大厅，长木桌、Wi‑Fi、插座，本地自由职业者常驻；浅草坐浅草线 1 站"],["Dandelion Chocolate 藏前","ダンデライオン・チョコレート ファクトリー＆カフェ蔵前","Tabelog 甜品百名店（3.74），2 楼座位安静，热巧克力很出名；适合处理 1 小时以内的事"],["FUGLEN ASAKUSA","FUGLEN ASAKUSA","浅草寺西侧 3 分钟，节假日 8:00–23:00，挪威精品咖啡，有 Wi‑Fi，2 楼有插座。电话去门外接"]],
- stops:[
+{id:"12",wd:"周一",color:"--d12",title:"（可选）上野看广重 → 入谷鳗鱼百名店 → 下午二选一：路线 1 浅草 → 合羽桥 → 今半 / 路线 2 中目黑 → 代官山 → 惠比寿",
+ tags:[["","中国上班日"],["","日本体育之日 · 巴西圣母显灵节"],["free","晚上不开会，10.13 上午也空"]],
+ lead:"10.12 是巴西公共假日。巴西（UTC−3）比东京慢 12 小时，巴西 10.12 全天 = 东京 10.12 中午 12:00 到 10.13 中午 12:00，所以今晚不用开会，明天上午也空；中国这边是正常工作日，零星的会还是要留意。上午睡够了再去博物馆，12:00 在入谷吃鳗鱼，下午两条路线二选一，都能一路逛到晚上喝一杯。",
+ work:[["FUGLEN ASAKUSA","FUGLEN ASAKUSA","路线 1：浅草寺西侧，节假日 8:00–23:00，2 楼有插座。电话去门外接"],["ONIBUS COFFEE 中目黑","ONIBUS COFFEE 中目黒","路线 2：中目黑站旁，9:00–18:00，窗外就是电车，适合处理半小时"],["IVY PLACE（代官山 T-SITE）","IVY PLACE 代官山","路线 2：Tabelog Café 百名店 2025（3.69），座位多，全年无休"]],
+ plan:[
   {t:"10:30",p:"tnm",n:"东京国立博物馆（可选）",kind:"博物馆",book:"https://www.asoview.com/channel/ticket/WuX1M0a3sG/ticket0000051104/",bookN:"网上购票",note:"睡够了再去。广重特展 + 本馆日本艺术展厅，看 1 小时 15 分就好。成人 ¥1,500，网上提前买 ¥1,300。",meta:["9:30–17:00 · 台东区上野公园 13-9"],lines:["taxi"]},
-  {t:"12:00",p:"nodaya",k:"key",n:"入谷鬼子母神門前 のだや",kind:"鳗鱼饭 · Tabelog 百名店",r:[["Tabelog","3.97"]],note:"鳗鱼百名店 2026，Tabelog 近 4 分，是东京评分最高的鳗鱼店之一，比观光向的老店更讲究：蒸得软、酱汁清爽。博物馆打车 5 分钟，入谷站 1 分钟。",book:"https://restaurant.ikyu.com/117583",bookN:"一休预约（午餐 11:00–13:00 每半小时一场）",meta:["午餐 11:00–14:00 · 台东区下谷 2-3-1 · 050-5869-5137","平时周一休，但节假日的周一营业（改休周二），10.12 正好开门；鳗鱼卖完就提早收"],lines:["taxi"],
-   alt:[["鳗割烹 伊豆荣 本店","鰻割烹 伊豆榮 本店 上野","订不到のだや：上野 300 年老店，不忍池对面，每天 11:00–21:00，Gurunavi 可订","https://r.gnavi.co.jp/g063800/"],["並木藪蕎麦（浅草）","並木藪蕎麦","不想吃鳗鱼：荞麦百名店 2025（3.66），10.12 营业，浅草寺旁"]]},
-  {t:"13:15",p:"sensoji",n:"浅草寺",kind:"寺院",note:"从入谷打车约 8 分钟。节假日仲见世很挤，走两侧小路；可以在这里求御守。",lines:["taxi"]},
-  {t:"13:45",p:"yonoya",n:"よのや櫛舗",kind:"手艺老铺",note:"1717 年创业，萨摩黄杨木梳和发簪。",meta:["10:30–17:00，周三休"],lines:["walk"]},
-  {t:"14:15",p:"fujiya",n:"ふじ屋 手拭",kind:"手艺老铺",note:"手绘手染的手拭巾。只收现金。",meta:["10:00–18:00，周四休"],lines:["walk"]},
-  {t:"14:45",p:"fuglen",n:"FUGLEN ASAKUSA",kind:"咖啡",note:"挪威精品咖啡，浅草寺西侧，正好在去合羽桥的路上。2 楼有插座，要处理工作就在这里。",meta:["节假日 8:00–23:00 · 台东区浅草 2-6-15"],lines:["walk"],
-   alt:[["LEAVES COFFEE ROASTERS（本所）","LEAVES COFFEE ROASTERS 本所","Google 4.5 · 535 条，要过吾妻桥往反方向走 10 分钟，10:00–17:00"]]},
-  {t:"15:30",p:"kamaasa",n:"合羽桥道具街 · 釜浅商店",kind:"刀具 · 器物",note:"步行约 12 分钟。釜浅的手工厨刀可以现场刻名；沿街还有很多器物和厨房用品店，节假日部分小店休息，看到开着的就进去。刀具只能托运，别放随身行李。",meta:["釜浅 11:00–17:30 · 台东区松谷 2-24-1"],lines:["walk"]},
-  {t:"17:00",p:"imahan",k:"key",n:"浅草今半 国际通本店",kind:"寿喜烧 · Tabelog 百名店",r:[["Google","4.5 · 2,509"],["Tabelog","3.62"]],book:"https://tabelog.com/tokyo/A1311/A131102/13003649/",bookN:"Tabelog 预约",note:"和牛寿喜烧。午市可能只能排队，所以改成可以预约的早晚饭。",meta:["每天 11:30–21:30 · 西浅草 3-1-12 · 03-3841-1114"],lines:["walk"],
-   alt:[["ちんや（浅草寿喜烧老店）","浅草 ちんや","节假日 11:00–21:30，可网上预约","https://tabelog.com/en/tokyo/A1311/A131102/13268750/"],["おにぎり浅草 宿六","おにぎり 浅草 宿六","不想吃太饱：东京最老的饭团店，周一晚 17:00–20:00，只收现金"]]},
-  {t:"18:30",p:"hotel",k:"move",n:"浅草 → 大门",lines:["asakusa"],note:"都营浅草线直达，19:00 到酒店。"},
-  {t:"20:00",p:"hotel",k:"move",n:"开会",meeting:1,note:"北京 19:00 起。"}
+  {t:"12:00",p:"nodaya",mk:"12L",k:"key",n:"入谷鬼子母神門前 のだや",kind:"鳗鱼饭 · Tabelog 百名店",r:[["Tabelog","3.97"]],note:"鳗鱼百名店 2026，Tabelog 近 4 分，是东京评分最高的鳗鱼店之一：蒸得软、酱汁清爽。博物馆打车 5 分钟，入谷站 1 分钟。",book:"https://restaurant.ikyu.com/117583",bookN:"一休预约（午餐 11:00–13:00 每半小时一场）",meta:["午餐 11:00–14:00 · 台东区下谷 2-3-1 · 050-5869-5137","人均 ¥8,000–15,000；点酒另收小菜费 ¥330","平时周一休，但节假日的周一营业（改休周二），每月另有 1–2 天临时休，出发前看一眼官网日历"],pay:"刷卡（VISA / Master / JCB / AMEX）、PayPay",lines:["taxi"],
+   alt:[["鳗割烹 伊豆荣 本店","鰻割烹 伊豆榮 本店 上野","订不到のだや：上野 300 年老店，不忍池对面，每天 11:00–21:00，Gurunavi 可订","https://r.gnavi.co.jp/g063800/"]],
+   c:{p:"yabusoba",n:"上野藪そば",kind:"荞麦 · 1892 年创业 · 百名店",r:[["Tabelog","3.50 · 荞麦百名店 2021"],["Google","4.1 · 2,057"]],book:"",bookN:"",note:"上野阿美横町旁 130 年的荞麦老店，点天妇罗荞麦（天せいろ）或鸭南蛮。从博物馆走过去 12 分钟。午市不能预约，要排一会儿。吃完走路线 2 就从上野站坐日比谷线。",meta:["11:30–21:00，周三及第 2、4 个周二休 · 台东区上野 6-9-16","人均 ¥1,500–2,500"],pay:"刷卡（VISA / Master / JCB）、二维码"}},
+  {choice:"R",label:"下午到晚上 · 二选一",opts:[
+   {k:"路线 1",name:"浅草 → 合羽桥 → 今半 + 浅草サンボア",stops:[
+    {t:"13:20",p:"sensoji",n:"浅草寺",kind:"寺院",note:"从入谷打车约 8 分钟。节假日仲见世很挤，走两侧小路；可以在这里求御守。",lines:["taxi"]},
+    {t:"13:50",p:"yonoya",n:"よのや櫛舗",kind:"手艺老铺",note:"1717 年创业，萨摩黄杨木梳和发簪。",meta:["10:30–17:00，周三休"],lines:["walk"]},
+    {t:"14:20",p:"fujiya",n:"ふじ屋 手拭",kind:"手艺老铺",note:"手绘手染的手拭巾。只收现金。",meta:["10:00–18:00，周四休"],lines:["walk"]},
+    {t:"14:50",p:"fuglen",n:"FUGLEN ASAKUSA",kind:"咖啡",note:"挪威精品咖啡，浅草寺西侧，正好在去合羽桥的路上，坐久一点。",meta:["节假日 8:00–23:00 · 台东区浅草 2-6-15","咖啡约 ¥390–790"],pay:"刷卡、Suica；不收二维码",lines:["walk"],
+     alt:[["LEAVES COFFEE ROASTERS（本所）","LEAVES COFFEE ROASTERS 本所","Google 4.5 · 535 条，要过吾妻桥往反方向走 10 分钟，10:00–17:00"]]},
+    {t:"16:00",p:"kamaasa",n:"合羽桥道具街 · 釜浅商店",kind:"刀具 · 器物",note:"步行约 12 分钟。釜浅的手工厨刀可以现场刻名；沿街还有很多器物和厨房用品店，节假日部分小店休息，看到开着的就进去。刀具只能托运，别放随身行李。",meta:["釜浅 11:00–17:30 · 台东区松谷 2-24-1"],lines:["walk"]},
+    {t:"18:00",p:"imahan",mk:"12D1",k:"key",n:"浅草今半 国际通本店",kind:"寿喜烧 · Tabelog 百名店",r:[["Google","4.5 · 2,378"],["Tabelog","3.62"]],book:"https://tabelog.com/tokyo/A1311/A131102/13003649/",bookN:"Tabelog / 电话预约",note:"1895 年创业的和牛寿喜烧，从合羽桥步行 5 分钟。服务员在桌边帮你煮，蘸生鸡蛋吃。今晚不开会，可以吃得从容一点。",meta:["全年无休 · 晚餐 16:00 起（20:30 最后点单）· 西浅草 3-1-12 · 03-3841-1114","套餐约 ¥15,400 起，人均 ¥15,000–20,000"],pay:"刷卡（VISA / Master / JCB / AMEX）、PayPay",lines:["walk"],
+     alt:[["ちんや（浅草寿喜烧老店）","浅草 ちんや","节假日 11:00–21:30，可网上预约","https://tabelog.com/en/tokyo/A1311/A131102/13268750/"]],
+     c:{p:"yonehisa",n:"米久本店",kind:"牛锅 · 1886 年创业 · 百名店",r:[["Tabelog","3.65 · 寿喜烧百名店 2024"]],book:"",bookN:"",note:"明治时代开到现在的牛锅（寿喜烧的前身）老铺，木造老楼，进门会敲太鼓迎客。和牛一锅一锅煮，价格是今半的三分之一。10 人以下不接受预约，直接去。",meta:["12:00–21:00（20:00 最后点单），周三休 · 台东区浅草 2-17-10","人均 ¥5,000–7,000"],pay:"只收现金"}},
+    {t:"20:00",p:"sanboa",n:"浅草サンボア",kind:"酒吧 · Tabelog 酒吧百名店",r:[["Tabelog","3.77 · Bar 百名店 2022"]],note:"关西老牌站吧 Sanboa 的浅草店，招牌是冰块不加的 Highball。节假日不接受预约，直接去。",meta:["周一 14:00–23:00，周三休 · 浅草 1-16-8","Highball 约 ¥1,000 起，两杯人均约 ¥2,000–3,000"],pay:"刷卡、PayPay",lines:["walk"],
+     alt:[["Star Bar Ginza","スタアバー 銀座","Tabelog 酒吧百名店（3.77），节假日 17:00–23:30 营业，要预约 03-3535-8005；银座线 20 分钟"]]},
+    {t:"21:30",p:"hotel",k:"move",n:"浅草 → 大门",lines:["asakusa"],note:"都营浅草线直达，约 20 分钟。"}]},
+   {k:"路线 2",name:"中目黑 → 代官山 → 惠比寿",stops:[
+    {t:"13:05",p:"travelers",k:"move",n:"入谷 / 上野 → 中目黑",lines:["hibiya"],note:"日比谷线直达不换乘（入谷站或上野站都在这条线上），约 38 分钟，¥252（IC 卡）。13:45 到。"},
+    {t:"13:50",p:"travelers",n:"TRAVELER'S FACTORY",kind:"文具",note:"Traveler's Notebook 的旗舰店，楼上有小咖啡角。",meta:["12:00–20:00，周二休 · 上目黑 3-13-10"],lines:["walk"]},
+    {t:"14:15",p:"onibus",n:"ONIBUS COFFEE 中目黑",kind:"咖啡",r:[["Tabelog","3.58"]],note:"中目黑评价最高的咖啡馆之一，老房子改的，窗外就是电车。想要更精致的甜点就换 CAFE FAÇON（Café 百名店 2025）。",meta:["9:00–18:00，不定休 · 上目黑 2-14-1","人均 ¥1,000 以内"],pay:"部分信用卡、二维码",lines:["walk"]},
+    {t:"14:50",p:"vase",n:"Vase",kind:"设计师买手店",note:"目黑川边的小楼，前卫建筑感的服装（Henrik Vibskov 等），二楼有陶器。",meta:["12:00–20:00，不定休 · 上目黑 1-7-7"],lines:["walk"]},
+    {t:"15:15",p:"ldk",n:"1LDK 中目黑",kind:"买手店",note:"1LDK 的起家店，AURALEE、Margiela 这类安静有质感的衣服。",meta:["周末节假日 12:00–19:00 · 上目黑 1-8-28"],lines:["walk"]},
+    {t:"15:50",p:"sml",n:"工藝 器と道具 SML",kind:"器物",note:"日本各地的陶瓷、玻璃和木器，这条线上的手艺店。上一段是缓坡上代官山。",meta:["12:00–19:00 · 惠比寿西 1-33-3 #310"],lines:["walk"]},
+    {t:"16:15",p:"okura",n:"OKURA",kind:"蓝染 · 买手店",note:"仓库风老建筑里的蓝染服装（Blue Blue Japan、Porter Classic）。",meta:["周末节假日 11:00–20:30 · 猿乐町 20-11"],lines:["walk"]},
+    {t:"16:40",p:"kamawanu",n:"かまわぬ 代官山",kind:"手拭",note:"开了 38 年的手拭巾店，花色比浅草的更现代。",meta:["11:00–19:00，周二休 · 猿乐町 23-1"],lines:["walk"]},
+    {t:"17:00",p:"ivy",n:"代官山 T-SITE · 茑屋书店 + IVY PLACE",kind:"书店 · Café 百名店",r:[["Tabelog","IVY PLACE 3.69 · 4,212"]],note:"最后在 T-SITE 慢慢翻书，累了去 IVY PLACE 坐一下（Café 百名店 2025）。",meta:["茑屋 9:00–22:00 · 猿乐町 16-15","IVY PLACE 下午茶人均 ¥2,000–3,000"],pay:"刷卡；不收电子钱和二维码",lines:["walk"]},
+    {t:"18:30",p:"ushimitsu",mk:"12D2",k:"key",n:"焼肉 うしみつ 恵比寿本店",kind:"和牛烧肉",r:[["Tabelog","3.58 · Hot Restaurant 2026"]],book:"https://www.tablecheck.com/en/shops/ushimitsu-ebisuhonten/reserve",bookN:"TableCheck 预约",note:"代官山走到惠比寿方向 10 分钟。姐妹店是烧肉百名店，9.28 按 2 位查 10.12 18:30 还有位（19:00 已满）。周日已经吃过正泰苑，想换口味就用下面的备选。",meta:["每天 17:00–23:30 · 惠比寿南 3-1-8","套餐 ¥6,600–21,000，另收 10% 服务费；人均约 ¥10,000–15,000"],pay:"刷卡（含银联）、PayPay、支付宝、微信支付",lines:["walk"],
+     alt:[["ビーフキッチン 中目黑本店（烧肉百名店 6 年）","ビーフキッチン 中目黒本店","节假日 12:00–23:00，人均 ¥8,000–10,000，Tabelog 可订"],["肴场 あおもん（惠比寿，鱼料理居酒屋）","肴場あおもん 恵比寿","Tabelog 3.58，招牌炸竹荚鱼，节假日 17:30 起，人均 ¥5,000–6,000"]],
+     c:{p:"tatsuya",n:"たつや 駅前店",kind:"烤杂碎 · 1976 年创业",r:[["Tabelog","3.49 · 730"],["Google","3.8 · 621"]],book:"",bookN:"",note:"惠比寿站前开了快 50 年的站着吃的烤猪杂串（もつ焼き）老店，招牌黑 Hoppy。非常本地、非常便宜，吃完走 5 分钟到 Bar Trench。",meta:["周日节假日 8:00–22:00，不定休 · 涩谷区惠比寿南 1-8-1 1F","人均 ¥2,000–4,000；不能预约"],pay:"只收现金"}},
+    {t:"20:30",p:"trench",k:"key",n:"Bar Trench",kind:"Asia 2026 #53",r:[["Google","4.7 · 922"]],note:"苦艾酒和药草鸡尾酒。不接受预约，13 个座位，直接去；满了就去 50 米外的姐妹店 Bar Tram。",meta:["每天 18:00–02:00 · 惠比寿西 1-5-8","不收座位费，另收 10% 服务费，两杯人均约 ¥4,000–6,000"],pay:"刷卡、Suica；不收二维码",lines:["walk"],
+     alt:[["Bar Tram（Trench 姐妹店）","Bar Tram 恵比寿","节假日 13:00–02:00，步行 1 分钟"],["The SG Club（涩谷）","The SG Club 渋谷","World 2026 #88，10.12 营业到 01:00，打车 10 分钟"]]},
+    {t:"22:30",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 20 分钟。明天上午也不用开会。"}]}]}
  ]},
 {id:"13",wd:"周二",color:"--d13",title:"久兵卫寿司午餐 → L'Ambre → 沿中央通往北逛 GINZA SIX、DSM、伊东屋、三越 → 打车去成田",
- tags:[["","中国上班日"],["free","可玩 12:00–18:00"]],
- lead:"行李寄存酒店，轻装出门。从银座 8 丁目沿中央通一路往北走到 4 丁目，一条直线逛完，全程约 1.5 km。最后带着南极装备和行李打车去成田，不用拖着箱子坐电车。",
+ tags:[["","中国上班日"],["free","巴西还在放假，上午也空"]],
+ lead:"巴西 10.12 假日到东京今天中午 12:00 才结束，所以上午不用开会，久兵卫可以直接在网上订 11:30。行李寄存酒店，轻装出门。从银座 8 丁目沿中央通一路往北走到 4 丁目，一条直线逛完，全程约 1.5 km。最后带着南极装备和行李打车去成田，不用拖着箱子坐电车。",
  work:[["三十間 銀座","三十間 銀座","Tabelog Café 百名店 2025（3.69），银座 1 丁目地下，和风木质空间，上午到午后很安静，抹茶和手冲都好"],["BUNDOZA（Square Hotel Ginza）","BUNDOZA スクエアホテル銀座","Tabelog 3.53，酒店一楼的咖啡吧，官方欢迎远程办公，Wi‑Fi + 插座，三家里最适合接电话"],["Imperial Lounge Aqua（帝国酒店 17F）","インペリアルラウンジ アクア 帝国ホテル東京","Tabelog 喫茶店百名店 2025（3.68），日比谷公园景观，座位宽、隔音好，谈公事不尴尬；价格偏高"]],
  stops:[
-  {t:"12:15",p:"kyubey",k:"move",n:"打车去银座 8 丁目",lines:["taxi"],note:"约 8 分钟。"},
-  {t:"12:30",p:"kyubey",k:"key",n:"银座 久兵卫 本店",kind:"寿司",r:[["Google","4.4 · 2,617"],["小红书","寿司黄埔军校"]],book:"https://restaurant.ikyu.com/107953/plan11539848",bookN:"一休（只有 11:30 场）",
-   note:"周日周一休，所以只能排这天。网上午餐只开 11:30 一场，你 12:00 前还在开会，所以不订网上：提前一天打电话问 12:30 能否留 2 位；不行就 12:30 直接去，平日午市后段通常能进吧台。最后点单 13:30。",meta:["午餐 11:30–14:00 · 银座 8-7-6 · +81-3-3571-6523","午餐套餐约 ¥16,500/人起"],lines:["walk"],
-   alt:[["天一 本店（天妇罗）","天ぷら 天一 銀座本店","Tabelog 天妇罗百名店 2023，银座 6 丁目，平日午市可订，¥10,000 起"],["梅丘 寿司の美登利 银座店","梅丘 寿司の美登利 銀座店","Google 4.2 · 5,710 条，平日 11:00–15:00，不预约排队，步行 5 分钟"],["鮨 銀座おのでら","鮨 銀座おのでら 本店","想要同级别的：TableCheck 可订","https://www.tablecheck.com/en/shops/sushi-ginza-onodera/reserve"]]},
-  {t:"13:45",p:"lambre",n:"Café de L'Ambre",kind:"喫茶店 · Tabelog 百名店",r:[["Google","4.3 · 1,924"],["Tabelog","3.77"]],note:"1948 年开业、只做咖啡的老牌喫茶店，2026 Tabelog 喫茶店百名店，久兵卫步行 3 分钟。",meta:["周二 11:00–20:00"],lines:["walk"]},
-  {t:"14:30",p:"ginzasix",n:"GINZA SIX",kind:"设计师选品 · 书店",note:"6F 银座茑屋书店（艺术书和日本工艺）很值得逛，还有很多日本设计师品牌。L'Ambre 往北步行 8 分钟。",meta:["10:30–20:30 · 银座 6-10-1"],lines:["walk"],
+  {t:"11:15",p:"kyubey",mk:"13L",k:"move",n:"退房寄存行李，打车去银座 8 丁目",lines:["taxi"],note:"约 8 分钟。",c:{p:"midori",t:"10:40",n:"退房寄存行李，打车去银座",note:"约 8 分钟。美登利 10:00 起在门口机器取号，越早越好。"}},
+  {t:"11:30",p:"kyubey",mk:"13L",k:"key",n:"银座 久兵卫 本店",kind:"寿司",r:[["Google","4.4 · 2,617"],["小红书","寿司黄埔军校"]],book:"https://restaurant.ikyu.com/107953/plan11539848",bookN:"一休预约（11:30 场）",
+   note:"周日周一休，所以只能排这天。网上午餐只开 11:30 一场，这天上午正好不开会，直接在一休订。推荐吧台的「久兵卫」套餐：前菜加 16 贯握寿司，由师傅按当天的鱼配好（接近 omakase）。",meta:["午餐 11:30–14:00 · 银座 8-7-6 · +81-3-3571-6523","午餐套餐 ¥8,250 / ¥11,000 / ¥16,500（含税和服务费）","当天取消收全款"],pay:"刷卡（VISA / Master / JCB / AMEX）；不收二维码",lines:["walk"],
+   alt:[["天一 本店（天妇罗）","天ぷら 天一 銀座本店","Tabelog 天妇罗百名店 2023，银座 6 丁目，平日午市可订，¥10,000 起"],["鮨 銀座おのでら","鮨 銀座おのでら 本店","想要同级别的：TableCheck 可订","https://www.tablecheck.com/en/shops/sushi-ginza-onodera/reserve"]],
+   c:{p:"midori",t:"11:00",n:"梅丘寿司の美登利 銀座店",kind:"寿司 · 人气老牌",r:[["Tabelog","3.51 · 963"],["Google","4.2 · 5,710"]],book:"",bookN:"",note:"东京人排队也要吃的平价寿司，分量大、鱼新鲜。10:00 起在门口机器取号，11:00 开门，取号越早等得越短（有人等过近 2 小时）。点「特上」握寿司。",meta:["11:00–15:00（14:00 最后点单）· 银座 7-2 东京高速道路山下大楼 1F","人均 ¥2,500–4,000"],pay:"刷卡（含银联）、Suica、PayPay",alt:[["竹叶亭 本店（鲷鱼茶泡饭，江户老铺）","竹葉亭 本店","银座 8-14-7，11:30–15:00，人均 ¥3,000–4,000，可刷卡"]]}},
+  {t:"12:45",p:"lambre",n:"Café de L'Ambre",kind:"喫茶店 · Tabelog 百名店",r:[["Google","4.3 · 1,924"],["Tabelog","3.77"]],note:"1948 年开业、只做咖啡的老牌喫茶店，2026 Tabelog 喫茶店百名店，久兵卫步行 3 分钟。",meta:["周二 11:00–20:00","人均 ¥1,000–2,000，不收座位费"],pay:"不收信用卡；可用 iD、PayPay，最好带现金",lines:["walk"]},
+  {t:"13:30",p:"ginzasix",n:"GINZA SIX",kind:"设计师选品 · 书店",note:"6F 银座茑屋书店（艺术书和日本工艺）很值得逛，还有很多日本设计师品牌。L'Ambre 往北步行 8 分钟。",meta:["10:30–20:30 · 银座 6-10-1"],lines:["walk"],
    alt:[["想坐下喝抹茶：滨离宫 中岛御茶屋","浜離宮恩賜庭園 中島の御茶屋","银座 8 丁目往南步行 10 分钟，9:00–17:00，门票 ¥300"]]},
-  {t:"15:30",p:"dsm",n:"Dover Street Market Ginza",kind:"设计师集合店",note:"川久保玲策划，1–6F，GINZA SIX 斜对面。",meta:["11:00–20:00"],lines:["walk"]},
-  {t:"16:15",p:"itoya",n:"银座 伊东屋 本店",kind:"文具",note:"12 层文具店。",meta:["10:00–20:00"],lines:["walk"]},
-  {t:"16:45",p:"mitsukoshi",n:"银座三越 地下食品层",kind:"伴手礼",note:"和果子、茶和点心。",meta:["10:00–20:00"],lines:["walk"],
+  {t:"14:30",p:"dsm",n:"Dover Street Market Ginza",kind:"设计师集合店",note:"川久保玲策划，1–6F，GINZA SIX 斜对面。",meta:["11:00–20:00"],lines:["walk"]},
+  {t:"15:15",p:"itoya",n:"银座 伊东屋 本店",kind:"文具",note:"12 层文具店。",meta:["10:00–20:00"],lines:["walk"]},
+  {t:"16:00",p:"mitsukoshi",n:"银座三越 地下食品层",kind:"伴手礼",note:"和果子、茶和点心。",meta:["10:00–20:00"],lines:["walk"],
    alt:[["B 计划：Kakimori（藏前）","カキモリ 蔵前","现场订做笔记本，11:00–18:00，周一及节假日休；大门坐浅草线约 15 分钟"]]},
   {t:"17:15",p:"hotel",k:"move",n:"打车回酒店取行李",lines:["taxi"],note:"约 10 分钟。"},
   {t:"17:45",p:"nrt",k:"move",n:"打车去成田 T2",lines:["taxi"],note:"行李多就打车：用 GO app 提前约「机场定额」（去机场方向可以用），或在酒店门口叫车说「成田空港まで定額で」，费用和来时差不多（约 ¥35,000 含高速费），70–90 分钟，19:15 左右到。想省钱就坐京成 Access 特急（大门直达，约 80 分钟）。"},
@@ -1119,6 +1207,17 @@ const DAYS=[
  ]}
 ];
 
+/* ---------- 方案切换（1.a / 1.b、路线 1 / 路线 2） ---------- */
+const CH={};
+function expand(d){ if(!d.plan){ d.plan=d.stops; } const sel=CH[d.id]||(CH[d.id]={}); const picked=new Set();
+  d.plan.forEach(it=>{ if(it.choice){ if(!sel[it.choice]) sel[it.choice]=it.opts[0].k; picked.add(sel[it.choice]); } });
+  const out=[]; d.plan.forEach(it=>{ if(!it.choice){ out.push(it); return; } const o=it.opts.find(x=>x.k===sel[it.choice]);
+    let first=true; o.stops.forEach(st=>{ if(st.skipIf&&st.skipIf.some(k=>picked.has(k))) return;
+      const tt=st.tIf?Object.keys(st.tIf).filter(k=>picked.has(k)).map(k=>st.tIf[k])[0]:null;
+      out.push({...st,t:tt||st.t,head:first?it:null,optK:o.k}); first=false; }); });
+  d.stops=out.map(st=>(st.c&&FOOD[st.mk]==="c")?{...st,...st.c,tier:"c"}:(st.mk?{...st,tier:"q"}:st)); }
+const FOOD={};
+DAYS.forEach(expand);
 const EXTRA_EVENTS=[{at:new Date("2026-10-08T08:00:00+08:00"),n:"HU439 起飞",where:"北京首都 T2 → 成田 T2",q:"北京首都国际机场 T2"}];
 
 /* ---------- 手绘地图 ---------- */
@@ -1204,24 +1303,31 @@ document.getElementById("bk").innerHTML=`
 
 /* ---------- 风险 ---------- */
 const RISKS=[
- ["Bar BenFiddich 10.10 已经订满","9.28 查 TableCheck，10.10 所有时段都没位（10.9、10.11、10.13 也满）。已换成同样在榜的 Punch Room（Asia #23），周六营业。"],
- ["世邦（Seabourn）赠送的外套和背包要在 11.18 前下单","Seabourn 要求开航前 30 天在官网预订管理里选好赠送的 Helly Hansen 2 合 1 外套和防水背包尺码，过了就只能上船碰运气。防水裤船上不送也不借，必须自己带——10.9 在新宿买。"],
- ["久兵卫网上只开 11:30 午餐场","你 10.13 12:00 前在开会，赶不上。已改成 12:30 去：提前一天打电话问留位，不行就现场等或换天一。"],
- ["外交部仍有「近期避免前往日本」的提醒","2025.11 起发布，2026.3.26 再次提醒；截至 9.27 我没查到解除通知。出发前再查一次外交部领事服务网，做「海外公民登记」，把 12308 存进手机。"],
- ["10.10–10.12 是日本三连休","周日的镰仓和周一的浅草都会很挤，江之电镰仓站常排队 30–60 分钟。已改成镰仓站到长谷步行（沿途就是要逛的小店），浅草尽量走小路；餐厅都要提前订。"],
- ["去程航班和晨会重叠","HU439 北京 08:00–11:30 在飞机上，正好是会议窗口的最后几小时，提前跟团队打招呼。"],
- ["周五到周日连着三晚都比较晚","10.9、10.10 约 23:00 回酒店，10.11 约 23:00。第二天都不用早起：周日 10:30 出门，周一的博物馆是可选。"],
- ["六雁、富丽华、よこ田都要尽早订","三家都能网上订，但都是热门店；六雁只接受网上预约。订不到就用每站下面的备选。"],
- ["10 月中旬仍可能有台风","大使馆 9.18 刚发过台风提醒。出发前三天看预报；台风天镰仓整天取消，换成室内的银座 / 博物馆。"],
- ["几家店只收现金、有些周二周四休","宿六、ふじ屋、天のや只收现金；ふじ屋周四休、六雁周日休、anchoa 周一休、Kakimori 周一和节假日都休，都已避开。のだや 平时周一休，10.12 是节假日所以营业。"],
- ["页面若公开，任何拿到链接的人都能看到你住哪、每天几点在哪","只把链接发给需要的人；部署到公开网址时用不好猜的名字。"]
+ ["天气",[
+  ["10 月中旬仍可能有台风","大使馆 9.18 刚发过台风提醒。出发前三天看预报；台风天镰仓整天取消，改成室内的银座、伊势丹或博物馆。"],
+  ["富士山能不能看到要碰运气","10.11 在稻村崎，太阳落在江之岛后面，富士山剪影在右边；10 月雾气多，大约一半概率。当天查 isitvisible.com/fuji，阴天就改小町通和鹤冈八幡宫。"],
+  ["早晚温差和海风","10 月东京白天约 20–24°C，傍晚在海边和高楼露台会凉，带一件薄外套。"]]],
+ ["行程规划",[
+  ["会议窗口：东京 20:00–次日 12:00","巴西（UTC−3）比东京慢 12 小时，会议集中在巴西白天。10.9、10.10 晚不开会；巴西 10.12 放假，所以东京 10.12 中午到 10.13 中午都空，只剩 10.8 和 10.13 晚上要开。中国那边照常上班，零星的会还要留意。"],
+  ["去程航班和晨会重叠","HU439 北京 08:00–11:30 在飞机上，正好是会议窗口的最后几小时，提前跟团队打招呼。"],
+  ["10.10–10.12 是日本三连休","镰仓和浅草都会很挤，江之电镰仓站常排队 30–60 分钟。已改成镰仓站到长谷步行（沿途就是要逛的小店），浅草走小路。"],
+  ["连着几晚都比较晚","10.9 到 10.12 每晚约 22:30–23:00 回酒店，但第二天都不用早起：最早 10:30 出门。"],
+  ["店铺休息日和现金","已避开：ふじ屋周四休、六雁周日休、秋本周四休、Kakimori 周一和节假日休；のだや平时周一休，但 10.12 是节假日照常营业。只收现金的有：中嶋午餐、麺屋海神、鳥ぎん、米久、たつや、L'Ambre、力餅家、ふじ屋、天のや，带 ¥20,000 现金。"]]],
+ ["预订",[
+  ["热门店尽早订","品质版要订：天一或よこ田、六雁、ふくみ、正泰苑、久兵卫、Tokyo Confidential，走路线 2 还有うしみつ。六雁只接受网上预约；ふくみ最晚 12:00 入座。亲民版基本都不用订，排队即可。"],
+  ["Bar BenFiddich 已订满","9.28 查 TableCheck，10.9–10.13 都没位，已换成同样在榜的 Punch Room（周六）和 Virtù（周五）。"],
+  ["每顿饭有两套","每一顿都能在「品质榜单」和「亲民老店」之间切换（每站上方，或逐日行程顶部一键全切）。已覆盖天妇罗、怀石、猪排、烧鸟、银鱼、和牛烧肉、鳗鱼、寿喜烧、寿司，没有西餐和中餐。"],
+  ["世邦（Seabourn）装备 11.18 前下单","开航前 30 天要在 Seabourn 预订管理里选好赠送的外套和防水背包尺码。防水裤船上不送也不借，10.9 在新宿买。"]]],
+ ["其他",[
+  ["外交部仍有「近期避免前往日本」的提醒","2025.11 起发布，2026.3.26 再次提醒；截至 9.27 没查到解除通知。出发前再查一次领事服务网，做「海外公民登记」，把 12308 存进手机。"],
+  ["页面公开后，拿到链接的人都能看到你的行程","只把链接发给需要的人；页面上没有写确认号和房间号。"]]]
 ];
-document.getElementById("risks").innerHTML=RISKS.map(r=>`<li><b>${esc(r[0])}</b>${esc(r[1])}</li>`).join("");
+document.getElementById("risks").innerHTML=RISKS.map(g=>`<h4 class="grp">${esc(g[0])}</h4><ul class="risk">${g[1].map(r=>`<li><b>${esc(r[0])}</b>${esc(r[1])}</li>`).join("")}</ul>`).join("");
 
 /* ---------- 逐日 ---------- */
 const nav=document.getElementById("nav"), main=document.getElementById("days");
 DAYS.forEach(d=>{ const a=document.createElement("a"); a.href="#d"+d.id; a.style.setProperty("--c",col(d.color)); a.innerHTML=`<b>10.${d.id}</b>${d.wd}`; nav.appendChild(a); });
-DAYS.forEach(d=>{
+function renderDay(d){
   const s=document.createElement("section"); s.className="day"; s.id="d"+d.id; s.style.setProperty("--c",col(d.color));
   const stopsQ=[]; d.stops.forEach(st=>{ const q=P[st.p].q; if(stopsQ[stopsQ.length-1]!==q) stopsQ.push(q); });
   let h=`<div class="dh"><div class="dt">10.${d.id}</div><div><h3>${esc(d.wd)} · ${esc(d.title)}</h3><div class="tags">${d.tags.map(t=>`<span class="tag ${t[0]}">${esc(t[1])}</span>`).join("")}</div></div></div>
@@ -1233,8 +1339,10 @@ DAYS.forEach(d=>{
   const NUM=numbering(d);
   d.stops.forEach(st=>{
     const p=P[st.p], at=J(d.id,st.t);
-    const cls="row "+(st.k||"");
-    h+=`<div class="${cls}"><div class="tm">${st.t}<small>北京 ${bj(at)}</small></div><div class="ct"><div class="card">`;
+    const cls="row "+(st.k||"")+(st.optK?" opt":"");
+    if(st.head) h+=`<div class="choice"><div class="chl">${esc(st.head.label)} <small>点选一个，时间、地图和导航会跟着变</small></div><div class="chb">${st.head.opts.map(o=>`<button type="button" class="${o.k===st.optK?"on":""}" data-ch="${d.id}|${st.head.choice}|${o.k}"><b>${esc(o.k)}</b>${esc(o.name)}</button>`).join("")}</div></div>`;
+    if(st.mk&&st.k!=="move"&&st.c) h+=`<div class="ftabs" role="tablist"><button type="button" class="${st.tier==="q"?"on":""}" data-food="${d.id}|${st.mk}|q"><b>品质榜单</b></button><button type="button" class="${st.tier==="c"?"on":""}" data-food="${d.id}|${st.mk}|c"><b>亲民老店</b></button></div>`;
+    h+=`<div class="${cls}"><div class="tm">${st.t}<small>北京 ${bj(at)}</small>${st.optK?`<small class="optk">${esc(st.optK)}</small>`:""}</div><div class="ct"><div class="card">`;
     if(st.k==="move"){
       h+=`<p class="note">${esc(st.n)}${ln(st.lines)}${st.note?`<br>${esc(st.note)}`:""}</p>`;
       if(!st.meeting) h+=`<div class="links"><a class="lk" target="_blank" rel="noopener" href="${NAVTO(p.q)}">导航 ↗</a></div>`;
@@ -1243,31 +1351,34 @@ DAYS.forEach(d=>{
       if(st.r) h+=`<div class="rates">${st.r.map(r=>`<span class="rate"><em>${esc(r[0])}</em>${esc(r[1])}</span>`).join("")}</div>`;
       h+=`<p class="note">${esc(st.note)}</p>`;
       if(st.meta) h+=`<div class="meta">${st.meta.map(m=>`<span>${esc(m)}</span>`).join("")}</div>`;
+      if(st.pay) h+=`<div class="pay"><b>支付</b>${esc(st.pay)}</div>`;
       h+=`<div class="links"><a class="lk go" target="_blank" rel="noopener" href="${NAVTO(p.q)}">导航${ln(st.lines)} ↗</a><a class="lk" target="_blank" rel="noopener" href="${G(p.q)}">照片与评价 ↗</a>${st.book?`<a class="lk" target="_blank" rel="noopener" href="${st.book}">${esc(st.bookN||"预约")} ↗</a>`:""}<button class="lk" type="button" data-copy="${esc(p.q)}">复制地名</button></div>`;
       (st.alt||[]).forEach(a=>{ h+=`<div class="alt"><b>备选</b><a target="_blank" rel="noopener" href="${NAVTO(a[1])}">${esc(a[0])} ↗</a>${a[2]?` · ${esc(a[2])}`:""}${a[3]?` · <a target="_blank" rel="noopener" href="${a[3]}">预约 ↗</a>`:""}</div>`; });
     }
     h+=`</div></div></div>`;
   });
-  h+=`</div>`; s.innerHTML=h; main.appendChild(s);
-});
+  h+=`</div>`; s.innerHTML=h; return s;
+}
+DAYS.forEach(d=>main.appendChild(renderDay(d)));
 
 /* ---------- 待办（纯列表） ---------- */
 const TODO=[
  ["预约（按紧急程度，括号里是预约入口）",[
   ["妆发 Atelier Haruka Echika 表参道店 · 10.10 13:30（两人都做就订 2 个名额）","官网即时预约 wrpcxa.b-merit.jp/y8hkz5/web/，周末满得快；满了订 Felice（Hot Pepper Beauty）"],
-  ["銀座バードランド · 10.10 18:30 · 2 位","一休 restaurant.ikyu.com/107602 或 03-5250-1081；订不到订柏悦 New York Grill（9.28 还有位）"],
+  ["銀座バードランド · 10.10 18:30 · 2 位","一休 restaurant.ikyu.com/107602 或 03-5250-1081；订不到就选亲民版鳥ぎん（不用订）"],
   ["Punch Room · 10.10 20:30 · 2 位","TableCheck 或 diningreservation.ginza@editionhotels.com；网上看不到余位，满了去 New York Bar / Virtù（都不用预约）"],
-  ["天冨良 よこ田 · 10.8 16:30 · 2 位","一休 restaurant.ikyu.com/116920 或 Tabelog；订不到订正泰苑芝大门（Tabelog）"],
+  ["10.8 晚饭二选一：1.a 天一 15:15 或 1.b よこ田 16:30 · 2 位","天一 TableCheck 或 03-3571-1949（当天取消收全款）；よこ田 一休 restaurant.ikyu.com/116920"],
+  ["（选 2.a 的话）Stellar Garden · 10.8 18:30 靠窗 · 2 位","TableCheck；靠窗每人座位费 ¥3,000"],
   ["六雁 · 10.9 19:00 · 2 位","只能网上订：TableCheck mutsukari；订不到订赤坂菊乃井（电话 03-3568-6055）"],
-  ["anchoa · 10.11 12:00 · 2 位","Tabelog 网上预约或 070-1314-0406；12:00 必须入座；订不到订长谷的 Arashida 12:30"],
-  ["中国饭店 富丽华 · 10.11 19:30 · 2 位","一休 restaurant.ikyu.com/121950 或 TableCheck；订不到去 Pizza Strada"],
+  ["鎌倉ふくみ · 10.11 12:00 · 2 位（亲民版秋本不用订）","一休 restaurant.ikyu.com/112288 或 0467-39-5567；最晚 12:00 入座"],
+  ["正泰苑 芝大门 · 10.11 19:30 · 2 位（亲民版更科堀井不用订）","电话 03-5733-5025（15:00 后）或 Gurunavi；订位时一起点上ロース"],
+  ["10.12 晚饭看路线：路线 1 浅草今半 18:00 / 路线 2 うしみつ 18:30 · 2 位","今半电话 03-3841-1114 或 Tabelog；うしみつ TableCheck（9.28 查 18:30 有位）"],
   ["Tokyo Confidential · 10.11 21:30 · 2 位","TableCheck tokyoconfidentialbar，10.11 各时段都有位，要绑卡"],
-  ["银座 久兵卫 · 10.13 12:30 午餐 · 2 位","网上只有 11:30 场赶不上：10.12 打电话 +81-3-3571-6523 问 12:30；不行订天一本店"],
-  ["浅草今半 · 10.12 17:00 · 2 位","Tabelog 日文页可网上订；订不到订ちんや"],
+  ["银座 久兵卫 · 10.13 11:30 午餐 · 2 位","一休 restaurant.ikyu.com/107953（11:30 场）；巴西假日上午不开会，赶得上"],
   ["入谷 のだや · 10.12 12:00 · 2 位","一休 restaurant.ikyu.com/117583 或 050-5869-5137；订不到订伊豆荣（Gurunavi）"],
   ["东京国立博物馆门票 · 10.12","asoview 网上买 ¥1,300，不用选时段"]]],
  ["不用预约、直接去",[
-  ["とんかつ.jp 表参道（午餐只能排队，11:45 到）",""],["新宿割烹 中嶋（午市排队，12:20 到）",""],["EDITION Lobby Bar（晚间先到先坐，16:45 到）",""],["Virtù（10.9，不用预约）",""],["CAFE AALIYA、L'Ambre、FUGLEN、美登利",""]]],
+  ["とんかつ.jp 表参道（午餐只能排队，11:45 到）",""],["新宿割烹 中嶋（午市排队，12:20 到）",""],["EDITION Lobby Bar（晚间先到先坐，16:45 到）",""],["Virtù（10.9，不用预约）",""],["浅草サンボア / Bar Trench（10.12，不接受预约）",""],["CAFE AALIYA、L'Ambre、FUGLEN、美登利",""]]],
  ["出发前",[
   ["带一副降噪耳机和充电宝","不少咖啡店插座有限"],
   ["发邮件给 mesm 申请 10.13 晚退房 + 行李寄存","reservation@mesm.jp"],["查外交部领事服务网最新提醒，做海外公民登记",""],["手机钱包开一张 Suica；准备 ¥20,000 现金",""],
@@ -1283,7 +1394,7 @@ document.getElementById("todos").innerHTML=TODO.map(g=>`<h4 class="grp">${esc(g[
 document.getElementById("tipbox").innerHTML=`
  <div class="panel"><b class="h">交通</b><ul><li>机场往返：大门站 ⇄ 成田 T2 坐京成 Access 特急，不换乘，约 80 分钟。</li><li>市内：Suica 刷地铁、JR、江之电和便利店；打车用 GO 或 Uber，市内 10–20 分钟约 ¥1,500–4,000。</li><li>酒店最近的站：都营大门站（浅草线、大江户线）、JR 滨松町站。</li></ul></div>
  <div class="panel"><b class="h">时间</b><ul><li>页面所有时间都是东京时间（JST, UTC+9），北京时间减 1 小时。</li><li>会议窗口：北京 19:00–次日 11:00 = 东京 20:00–次日 12:00。</li><li>10 月中旬日落约 17:15，东京塔 24:00 关灯。</li></ul></div>
- <div class="panel"><b class="h">钱和退税</b><ul><li>横丁、老铺和小店很多只收现金，便利店 ATM 可取现。</li><li>同一家店当天消费满 ¥5,000（不含税）可免税，带护照原件；南极要用的消耗品注意免税封袋出境前不能拆，结账时跟店员说明。</li><li>刀具只能托运。</li></ul></div>
+ <div class="panel"><b class="h">钱和退税</b><ul><li>页面里的人民币按 100 日元 ≈ 4.25 元（9.28 市场汇率）换算，刷卡实际会略高一点。</li><li>支付方式写在每家店的「支付」一栏。「只收现金」的店不少，身上常备 ¥20,000 现金，便利店 ATM 可以用银联卡取现。</li><li>支付宝、微信支付：出租车（大公司基本都能扫）、伊势丹、银座三越、BEAMS 可用；餐厅里只有少数能用。</li><li>同一家店当天消费满 ¥5,000（不含税）可免税，带护照原件；南极要用的消耗品注意免税封袋出境前不能拆，结账时跟店员说明。</li><li>刀具只能托运。</li></ul></div>
  <div class="panel"><b class="h">天气</b><ul><li>白天约 22°C，早晚约 15°C，带一件薄外套；镰仓海边风大。</li></ul></div>
  <div class="panel"><b class="h">紧急电话</b><ul>
   <li>日本报警 <span class="tel">110</span> · 急救 / 消防 <span class="tel">119</span></li>
@@ -1294,9 +1405,10 @@ document.getElementById("tipbox").innerHTML=`
 
 /* ---------- 此刻关注 ---------- */
 const EV=[];
-EXTRA_EVENTS.forEach(e=>EV.push(e));
-DAYS.forEach(d=>d.stops.forEach(st=>{ const p=P[st.p]; EV.push({at:J(d.id,st.t),n:st.n,where:st.kind||"",q:p.q,day:d.id,book:st.book,bookN:st.bookN,meeting:st.meeting}); }));
-EV.sort((a,b)=>a.at-b.at);
+function buildEV(){ EV.length=0; EXTRA_EVENTS.forEach(e=>EV.push(e));
+ DAYS.forEach(d=>d.stops.forEach(st=>{ const p=P[st.p]; EV.push({at:J(d.id,st.t),n:(st.optK?st.optK+" · ":"")+st.n,where:st.kind||"",q:p.q,day:d.id,book:st.book,bookN:st.bookN,meeting:st.meeting}); }));
+ EV.sort((a,b)=>a.at-b.at); const w=document.getElementById("nowWhat"); if(w) w.dataset.i=""; }
+buildEV();
 const END=J("13","22:30");
 const $=id=>document.getElementById(id);
 function pad(n){return String(n).padStart(2,"0");}
@@ -1319,9 +1431,30 @@ tick(); setInterval(tick,1000);
 
 /* ---------- 交互 ---------- */
 document.addEventListener("click",e=>{ const b=e.target.closest("[data-copy]"); if(b){ copy(b.getAttribute("data-copy")); } });
+function refreshDay(d,anchorSel,y){ expand(d); const old=document.getElementById("d"+d.id), wasOpen=old.querySelector("details.daymap").open;
+  const nw=renderDay(d); old.replaceWith(nw); if(wasOpen) nw.querySelector("details.daymap").open=true;
+  if(window.__real) hookDay(nw,d);
+  if(anchorSel){ const nb=nw.querySelector(anchorSel); if(nb) window.scrollBy(0,nb.getBoundingClientRect().top-y); } }
+function refreshAll(){ document.getElementById("bigmap").innerHTML=mainMap(); buildEV(); tick(); if(window.__real) initOverview(); }
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-food]"); if(!b) return;
+  const [id,mk,t]=b.dataset.food.split("|"); if((FOOD[mk]||"q")===t) return; FOOD[mk]=t; const y=b.getBoundingClientRect().top;
+  refreshDay(DAYS.find(x=>x.id===id),`[data-food="${b.dataset.food}"]`,y); refreshAll(); syncGlobal(); });
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-foodall]"); if(!b) return; const t=b.dataset.foodall;
+  DAYS.forEach(d=>d.plan.forEach(function walk(it){ if(it.choice) it.opts.forEach(o=>o.stops.forEach(walk)); else if(it.mk&&it.c) FOOD[it.mk]=t; }));
+  DAYS.forEach(d=>refreshDay(d)); refreshAll(); syncGlobal(); });
+function syncGlobal(){ const ks=[]; DAYS.forEach(d=>d.plan.forEach(function walk(it){ if(it.choice) it.opts.forEach(o=>o.stops.forEach(walk)); else if(it.mk&&it.c) ks.push(it.mk); }));
+  const all=t=>ks.every(k=>(FOOD[k]||"q")===t); document.querySelectorAll("[data-foodall]").forEach(b=>b.classList.toggle("on",all(b.dataset.foodall))); }
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-ch]"); if(!b) return;
+  const [id,c,k]=b.dataset.ch.split("|"); const d=DAYS.find(x=>x.id===id); if(CH[id][c]===k) return; CH[id][c]=k; expand(d);
+  const old=document.getElementById("d"+id), y=b.getBoundingClientRect().top, wasOpen=old.querySelector("details.daymap").open;
+  const nw=renderDay(d); old.replaceWith(nw); if(wasOpen) nw.querySelector("details.daymap").open=true;
+  document.getElementById("bigmap").innerHTML=mainMap(); buildEV(); tick();
+  if(window.__real){ initOverview(); hookDay(nw,d); }
+  const nb=nw.querySelector(`[data-ch="${b.dataset.ch}"]`); if(nb) window.scrollBy(0,nb.getBoundingClientRect().top-y);
+});
 const links=[...nav.querySelectorAll("a")];
 if("IntersectionObserver" in window){ const io=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting) links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+en.target.id)); }),{rootMargin:"-35% 0px -60% 0px"}); document.querySelectorAll("section.day").forEach(x=>io.observe(x)); }
-const ROUTES={"8:hotel>kyushiba":{"p":"ehsxEsg`tYg@bABBbBnABBOZCDg@bAg@`AEDH?b@AJ?DBF@tDAAJCXE\\CP@FADUzB]`DEZNDTDEVH@PBJDF@D@D???FIHIJEVBBBBB@@H@XJHBJHDADEFEF@H?FB@CDAD?DDHBHC@?DERCFMFO@CAA?C?C?CEMCWAA[e@??","m":822},"8:kyushiba>zojoji":{"p":"gzrxEur_tY??Zd@@@BVDL?B?B?B@@ABGNGLSBEDA?IBICEEE?E@ABGCI?GAGDEDE@KIICYKIAAACCCCWCKDIHGH??E?EAGAKEQCIACXEb@KlA?HADAPAD?HAL?BAL?B?@AJIbBCVANAN?D?DALCr@AHAD?LEl@?DAB?B?FCZCf@HJ?F?FCd@AJ?DMHEv@Cr@APANIxACz@@JAJCLILUlEOnD@D?JGbAF@ANARAPSCADAP?PAB?BEx@EfACj@AVC^N@AXH?","m":1157},"8:zojoji>tower":{"p":"{hsxEss}sYI?@YOAB_@{AQCd@[E??A?Eh@WxDBjA@\\E?C?C?A??@C@UCALAT?FCDKBa@~AENEJRVNDXTPTh@f@F@JCWj@_@f@","m":542},"8:tower>stellar":{"p":"{nsxE}~|sY^g@Vk@FDFBLARCfAYREv@OVEHDJBBODUBSj@PPDV@J?Z@P?^@h@[NSPCNA\\Kf@QCGO?O@GACEGIBABGB_@@Y@YIA??","m":503},"8:stellar>hotel":{"p":"e{rxE_j}sY@UFGn@HNJh@RLDDMLu@Fk@Bc@@S@UPwCDy@NmC@YYCy@Gu@G_AGeESe@AoBS{@GIAUCUC}AQkD]KAQAOCa@Ek@Kw@U_G{B[K]MkAc@a@Oo@Uo@UiCcAQIQGaA_@mAa@qAg@sAe@DWDMNo@Ps@TaARw@DUDOJ_@Nq@@CR{@HYBKBMZsAn@kCBKBGLk@P{@FWKI]YOM[UYU?M?MAMAa@Cu@Aq@AQ?K?U@U?U@SBW@UHm@Fk@Dc@BW?S?q@?_@C_@E_@Ga@a@oCGe@Gg@AQAW?i@@S@UBQDSDSVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":3549},"9:nakajima>montbell":{"p":"cwyxEe|tsYbAn@F?@J@@@B?DDb@ALBDDH@A@@?@@@Fl@Fh@Hn@Lv@b@tCRvARlB?FBLd@IF?D\\BTBNDZH^BFHV^hAFTH?DNBPJGPIPEJEpA[d@M","m":638},"9:montbell>lbreath":{"p":"{eyxEu_tsYe@LqAZKDQDQHKFCQEOI?GUQBWBG@I@GO]aAGQ?CKe@AGE]Is@e@}ECQK@E@AEAK?CAKQ[MUCCFGRUr@M?SAK","m":519},"9:lbreath>alpen":{"p":"kqyxEqrtsY@J?Rs@LSTGFBBGH?HEBKBsAf@mA\\IBIFQ@G@C@e@BQ@iBLGDK@G?Bf@K@C?]BO@[BKBABEDA@MFUJ??C@A@EFGHGDMD[JI@m@JO@GAICCAAA","m":526},"9:alpen>kaijin":{"p":"wjzxEegtsY@@B@HBF@NAl@KHAZKLEFEFIDG@ABA??TKLG@ADE@CJCZCNA\\CB?JACg@F?JAFEhBMPAd@CBAFAPAHGHCCMAQF@`DaALMDE@ECC?G@IE?","m":485},"9:kaijin>hotel":{"p":"_tyxEgqtsYA?{AKICeAMSCG|ACd@LZHCfDgADADEFGFGRUAMU{AQcBASFGBI@I?IEk@Ew@AMC[ASC]?SCm@?e@@a@Ba@Fa@H_@Je@Pe@Xq@jBoDdD}Jt@sCn@uDx@gGNoBFgBCmBWyFW_CEUE_@Ke@E_@OsBEk@OaDAQA_@KgCMyCKeC?OC[ASA]OmCEs@Cs@@k@@k@Bk@RsABKNgAFc@\\yB\\{BDWBOFYDUZmARs@DIJ_@fBwGBIH[H_@DOx@mD^_BBOF]Fe@D_@NmBJsA@SHm@Fe@DQDQj@_Cd@kBJc@Po@Tq@DGFQLWFOlAkC@EBGNa@FUDYFe@Dk@LuC@Q?SFeB@}@?w@?[AQAa@EuA?MAYSkDAc@A[AQKwBEk@Ak@Am@@aB?K?W@c@RyD?I@U@STkE@O@]NY\\BZ@z@Av@Gv@Kd@K`@I\\KVMd@UFEZOjBaAnAo@jCsAFGZUHMHKDOJYh@gCDSFUHSHSHOLQX_@Z]p@s@b@_@t@i@hA}@`@a@FGJQR[LWFUDOBQBSB]@OBu@HkA@]?YEs@Em@Ky@[cB]uAUmACMAE?EAG?E?G?G?O?G?E?C@EDWH[dCyH^kARo@BKBIJYbEgNn@{AR_@BIT[DIRWXY\\c@`@o@j@_A\\i@JO?AXc@FMd@w@JSh@aAFKLUXi@hAuBv@uAFKPWJOPYVc@^m@JQFMt@iA^g@h@y@HKNUHKNSz@qAlAaBbAsARUh@s@PU^_@NLXVrBjCPTNR`@j@`@f@lA|AtAtBbAtAhAlC^`@HTNTTJN@P@RCdAe@x@Y\\GNC^Eb@Cf@EF?p@CRAR?R@NBPFLFVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":8947},"10:tonkatsujp>haruka":{"p":"_ytxEgavsY[f@WUSQcAcAy@w@GE@AL]Na@@A@CLYVs@Zw@BI@AJFAB??","m":273},"10:haruka>mameya":{"p":"w{txEwkvsYOICCQPWl@I@IGGE[x@KJENECELABELADCFCHk@|AIC]Q}@[Yb@_@p@_Aw@uBmBe@a@","m":459},"10:mameya>mame":{"p":"enuxEmhvsYd@`@tBlB~@v@^q@Xc@|@Z\\PHBj@}ABIBGLJBJBHPLFDx@v@bAbARPBEb@}@","m":501},"10:mame>call":{"p":"kytxEybvsYh@gARa@L[n@gAd@cAPNDB^ZrAxALQPYHMq@o@[[IIg@e@v@kA??","m":424},"10:call>auralee":{"p":"{ptxEcovsYw@jAf@d@HHZZp@n@TTH?Va@vAqC?IDI|@mBd@gADMFMz@sBr@iB@EbAmC@G@E@GDCr@aC?E?GEIDKDMC?CAGCi@YVy@","m":748},"10:auralee>edition":{"p":"q_txEyiwsYWx@CJv@`@TJFWj@sB@Ef@mBDS`@yAVaA`@yAJ]FYToAImB?aCQuGKwCE_A[sDYyBMo@c@cB_@}Aq@cCKg@WeAsAoFK]a@eAIWCGSi@_ByDoAiDOc@cAwC?k@Yu@GQGSO_@ACCMBS@GNa@z@wBTo@r@cBV}@DMZ}ABIF]FYv@{DDSPu@Hc@Z{A^cBHe@DSDUHYDMZeATw@t@cCDKbAkDLc@v@iCv@eCH]BW?k@CUEOCKSa@c@AE?OA_@G]G]Ic@OYKc@Ua@Yy@m@OKYSYUo@g@IIKIOMc@]eBaBk@i@]YUSgBaBqAoA_@[UMYMs@YSGSGENWpAALELCJOv@KZKTQLMF","m":3607},"10:edition>birdland":{"p":"w}txEu_}sYLGPMJUJ[Nw@BKDM@MVqADOy@YiBo@iBk@w@YOESIa@MqBq@SIUI]MSICAi@SmAc@QKSKcBy@iCsAICa@KUK[KoBq@y@UWGgCu@sBm@YK_@O[O_Ak@q@_@uAy@i@Y_@Sc@W}@g@}BsAq@_@cCuAcBaAo@]IGg@YSa@H[dCyH^kARo@BKBIJYbEgNn@{AR_@BIT[DIRWXY\\c@`@o@j@_A\\i@JO?AXc@FMd@w@JSh@aAFKLUXi@hAuBv@uAFKPWY[GIkAaCGKKKJQJNHL`@z@NX","m":2926},"10:birdland>punch":{"p":"wivxEsr`tYIOGKGKc@{@AIl@cAAACEEECA?A@ABEBC@E@?BAd@y@@ABEBC@Ab@q@@C@CBE@Ah@}@CCBEDEDKBEBCyCeDEEAAEECEAAp@eADGDGDG","m":455},"10:punch>hotel":{"p":"mhvxEkiatYKNo@`AGJGJLNpCxCFFJLJJpBtBFHVTNSz@qAlAaBbAsARUh@s@PU^_@NLXVrBjCPTNR`@j@`@f@lA|AtAtBbAtAhAlC^`@HTNTTJN@P@RCdAe@x@Y\\GNC^Eb@Cf@EF?p@CRAR?R@NBPFLFVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":2360},"11:matsubara>daibutsu":{"p":"wwovEyburYSNZ^}@?s@F]NSTWVg@Zc@XCBSLIBG?W|AAF[vBKj@CRHd@F^Hz@H|@@BJtBJfBDj@Dn@@J_@L_@Pi@l@y@r@QHODo@Ta@@UAsAOi@OKn@q@Gm@@?QA?A?E?A??OAEEGAECCECKEe@K","m":1006},"11:daibutsu>hasedera":{"p":"ctpvEm`trYd@JJDDBBB@DDF@D?N@?D?@?@??Pl@Ap@FJo@h@NrANT@`@An@UDr@~AMbAIBbA\\E^GTlBJz@@B?FBLBLTH?J?JI?I@@H?V?F?HWDA@KFA@@D?D@@BDF?@?T@N?J?L@D??M","m":700},"11:sarashina>confidential":{"p":"gfsxEyqzsYd@k@CAACCCAABE?CGEBC@C@C@AA?s@q@CI@IXuA@K@GFe@@GHB","m":181},"11:confidential>trench":{"p":"mesxEi{zsYvA^B@ELOh@EAoAa@AACAKCIh@Kj@AHGRQb@S^U^UZeAz@WN]LYFM?U@eDt@YD[JC@EHoA^[Pa@^SVQXKVIRYlAm@`CERFNEPq@tC[jACDMRN\\n@nBV|@z@fD\\tALf@j@bCL`@Hb@b@`CLr@X~BRrBFv@LrCDlARtGBb@L`B@dA@\\@VF~ALdCRfFDv@LrC@VTANBZNt@`@z@f@b@TvAt@DBTLXNFBbAj@VLx@ZXH\\FXDr@H|@LR@PBLBTBL@L@L?L?L?b@CRCP?P?P@P@z@Lt@JfBPTBXBZD`@DXFXHXJVLj@Xj@ZtFzCpEdC\\RNJBHFJ`@~@?@FLDFLZFLb@bAJTTJ?@\\l@RVf@h@LNMPMNm@p@s@t@_@^CBDFVj@DJe@`@","m":3756},"11:trench>hotel":{"p":"{qqxE}uusYd@a@^x@x@[JGd@U\\MNUd@q@BEHKWWUSUSi@c@OOMMi@k@KMKQWi@AAEYKUc@cAGMM[EGGM?Aa@_AGKCIOK]SqEeCuF{Ck@[k@YWMYKYIYGa@E[EYCUCgBQu@K{@MQAQAQ?Q?SBc@BM?M?M?MAMAUCMCQCSA}@Ms@IYE]GYIy@[WMcAk@GCYOUMECwAu@c@U{@g@u@a@[OOCU@S?Q@GoAQiDUmFKuBGgBImBIaCMgFEqCAwBEk@I_AE_@Ec@McAKu@Mq@Mq@_DoM{@eDQm@O_@GQaAaCiAsCqAqDgDmJcBeEiCkGkBwEoBqEa@w@e@y@yBmDk@_Ak@{@i@m@gAeAiAgAiBaBwAoAyAqAiAkAcCmC}BeC[YWYUWKQMOOWK[KWGYI[Ge@OcASyAQwAIg@Me@Oe@O]Q[SYWWuByB]]_@[e@]GC]?a@UYOwF_Da@WKIOMGEGEw@c@o@]k@]SKUOKKQMUi@ESEa@Ck@AO@]?YEs@Em@Ky@[cB]uAUmACMAE?EAG?E?G?G?O?G?E?C@EDWH[dCyH^kARo@BKBIJYbEgNn@{AR_@BIT[DIRWXY\\c@`@o@j@_A\\i@JO?AXc@FMd@w@JSh@aAFKLUXi@hAuBv@uAFKPWJOPYVc@^m@JQFMt@iA^g@h@y@HKNUHKNSz@qAlAaBbAsARUh@s@PU^_@NLXVrBjCPTNR`@j@`@f@lA|AtAtBbAtAhAlC^`@HTNTTJN@P@RCdAe@x@Y\\GNC^Eb@Cf@EF?p@CRAR?R@NBPFLFVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":9302},"12:tnm>nodaya":{"p":"cr_yEcectYm@nAGGMM[Yd@_AzBwE\\q@Rc@LYBIsAcAMKKIMI_BmAGEMOs@_As@_AKQMUZWXWHMZg@LSR[L[HUFWRiADQn@qC","m":821},"12:nodaya>sensoji":{"p":"ir_yEsjdtYVgAPw@BKF]BKDSH_@XgAd@{BDSFUZ{AH]F[d@qBFWXoA^_B?AHc@F[RaANm@f@}BH_@Hc@t@wEPgADWDWZmBb@qCF]DWL?X?X?bBDbABV@N?lCH?S?IA[?QAOCaAC_@Ac@CULsANuAJeA@O@OLmA@M","m":1454},"12:sensoji>yonoya":{"p":"gp~xE__gtY???@?B?FF?P@^B?IBy@d@Bf@DH?^BH@J?^B@?r@D`@@T@Z@F@?F?N?dA","m":291},"12:yonoya>fujiya":{"p":"id~xEo|ftY?eA?O?G@S?CG?@EHwA?Eg@E","m":126},"12:fujiya>leaves":{"p":"ke~xEocgtYf@DF@@EF?`AFB?D@p@DN@r@D`AD\\@jAFIrAD?B@L@F@D?APFHN@vCPB@D?F@fBNFAFSH@D@JDBCBGJOBG@CHA@ABBPPDMBGR@@GJU@AhCwGFEHWDINHRg@BBDB?AB?B@BMBOBMJDbBf@fA\\B@D@D@ZJr@Tv@TDBD@dBh@B?FBD@B@jDdAhA\\LKPDPD?e@f@AX??e@t@Cj@CC{@","m":1426},"12:leaves>kamaasa":{"p":"ee|xEkggtY?Q_BH[@e@@O@?j@?`A?R?J?J?JAHCNKCWG_Bi@qC{@KCKEkBk@qBo@KCUIICwDiAICg@Ya@~@CFkAzCiArCELGNCHCFELA^ANAHARAT?HQzBI|@KrAAJCTCZUfCMdAKn@APSrAEZ[bCETCLALEZ]pCYbCCPCPUrBY|BEd@KAG?]CeBM[AmBIu@Iw@KQCOCo@Ig@Gw@KKAGAsASCRUtCo@ETgC","m":2203},"12:kamaasa>imahan":{"p":"ak~xEcnetYBQi@Ck@CIA@S?Q?ACCAEBURkB@E@GXmCEAGA@EAE@E@IBIPyAXmCNsAACAAG?","m":401},"13:kyubey>lambre":{"p":"wnuxEec`tYkAoABEBC?Aj@{@BBBEDIFI@CBCAEb@s@DIr@|@","m":201},"13:lambre>hamarikyu":{"p":"wkuxEai`tYvAhBBGNw@BM@GBET]DGDCTULM@ABABABC@BB@b@QBA?I?G??A[v@g@BCHFHB??FAFBH?`@KFC\\MJGr@YHCHApAS~@INAnAGn@LLEDAPHVLDBPJ@Q@OJSBB`AjATVV]HM\\e@??@AXYVWPMJKfA~@XBPHVRVR`@XPPJFDK?CDGLBPDP?LALEDANAHAJIBKp@TtAbADo@DKJC","m":1163},"13:hamarikyu>hongwanji":{"p":"wwsxEao`tYKBEJEn@uAcAq@UCJKHI@O@E@MDM@Q?QEMCEF?BEJKGQQa@YWSWSQIYCgA_AKJQLWVYXA@??]d@ILW\\UWaAkACCTc@PYZm@N}@l@eE@a@@OAi@Cc@CWCSCKEQAICOGOUa@W]aCgC}@aAKKSUaCoCeAkAMMGM?AGIKOGCgBgCACCCU[CEAEAEAE@EIEIMMSCECKE@E?EAIKMOBCNSCEa@i@EG\\a@@?B?@?B?BABABA@AX]KOMQQU","m":1558},"13:hongwanji>dsm":{"p":"mcuxEsfbtYPTLPJNY\\A@C@C@C@C?A?C?A?]`@DF`@h@BDORCBLNHJCDEDMRGHM@@NAHeArAi@p@@BFHLPFHBBCDCDEFCBEDIJs@z@ADABCDE@}@jAABAHGDEBGDo@x@A@CDEJCDC?GB{@hAEBCBCDEBe@h@CBCDa@d@ADAD?J@DrBjCABED[b@EDCD@@@B?BABo@z@E?A@CDEDAB?@c@l@CDABY`@A?ADADEDE@?@ABm@bAA@ABCDCBq@hA@@DDILGHINDD@@i@z@ABCBABABe@r@CDp@r@","m":1171},"13:dsm>itoya":{"p":"_|uxEwm`tYq@s@GGEIDG`@q@@A}CiDBCBE@CHKRYDECCGGOSGGEECQUY_BgBEECCEECCCCBEDEDKBEBCyCeDEEAAEECEAACA]]","m":554},"13:itoya>mitsukoshi":{"p":"ykvxEugatY\\\\B@@@BDDD@@DDxCdDD@BBBBBB@BDDTVv@|@","m":229},"13:mitsukoshi>hotel":{"p":"gbvxEa}`tY^`@FHVTNSz@qAlAaBbAsARUh@s@PU^_@NLXVrBjCPTNR`@j@`@f@lA|AtAtBbAtAhAlC^`@HTNTTJN@P@RCdAe@x@Y\\GNC^Eb@Cf@EF?p@CRAR?R@NBPFLFVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":2095},"10:hotel>tonkatsujp":{"p":"wdsxEsd`tYHQd@y@TYPQNMZUVORKRGNEd@G^A\\?NZ@TAH?NAFAFCHEJIRMVEHmAfCGJw@`BENGXKv@U?iF?o@?S@OBOBODODOFOHuAx@ULMDMDMBOBM@O?OAOCOEOEMGUOWQwF_EUQ{BaBiHoF[Wk@c@i@a@a@YYSICICMASAE?U?a@@e@Be@Ba@DYDWHUJi@Vg@Va@R]NSHS?]KCw@E_@K[O]q@}A]u@KQw@cAQUoAaBcAuAi@u@]g@QSQQOQeB{BYUQRc@j@}ApBoA`Bs@fAGJORGJQVo@~@_@j@y@hAGJKPYd@Yb@EFOXKLQXYl@eB~CcBjCkAvBuExHc@hA[`AaBlFYTsAvECFITCHELu@vB}A|E[dAMd@K`@CX?TBN@LTdAZ~A^jBL`ALdAF~@@hB?z@?V?TAB?FADCFCDk@|@aB~AoAbAu@h@]Z{@z@QT[^KPINGNIVGV[xAI\\AJAPALAHE~@AL?L@P?PBNBVD`@z@|HBPD\\Hv@nAhL@NJ|@D^BVTnDJ|C?hAJlC@TBTDRDLDLHNJPjAzAV`@R\\lAlCx@rAnAfCvC|FHPDFd@x@JR`BbDN\\Rj@FXDTJh@ZzCFh@Fb@H^FZNj@zAzFl@vChAjFBPBHnAhGHd@FTLf@\\rAFXv@~Ct@|CZpAJb@J\\Nj@J^z@fCJXt@bCb@tATx@j@vBJb@ZjA@FFRFNPXVb@LLPN`BnAVR`@Z|ElDpCdCTRbCrBb@^|@t@l@j@r@n@DBZXBB^\\XVd@`@pAjAn@j@lAfAp@p@h@j@OVe@EEHu@lAa@x@aAxAMKa@a@Yd@_@j@k@e@YWAAZg@","m":8809},"12:hotel>tnm":{"p":"wdsxEsd`tYHQd@y@TYPQNMZUVORKRGNEd@G^A\\?NZ@TAH?NAFAFCHEJIRMVEHmAfCGJw@`BENGXKv@U?iF?o@?S@OBOBODODOFOHuAx@ULMDMDMBOBM@O?OAOCOEOEMGUOWQwF_EUQ{BaBiHoF[Wk@c@i@a@a@YYSICICMASAE?U?a@@e@Be@Ba@DYDWHUJi@Vg@Va@R]NSHS?]KCw@E_@K[O]q@}A]u@KQw@cAQUoAaBcAuAi@u@]g@QSQQOQeB{BYUQQWWmC_CWSSSwCiCSQQQi@c@wAmAi@e@}@y@[c@i@c@iAaAOWIIMKUMaDgBqEaCwC}AWE_Ag@m@[WYcDcBgE{BuAs@iAm@WEcBy@_@UMSqCyAkFqCoCyA_@IYEWAW?a@@uAH_@@YBYJgBHs@BsAFuAFeAFU@]FI@kA`@_AZqAb@E@gA^aAZYHGB]La@L}@V_AZoA^s@Ti@Ns@Tc@J[Dc@@}@Eu@EaBOeBM{@Gy@G]Ea@C_BKeBSIA[EUC]CqBM]Cq@CaAAy@AUAK?mB?O?mBEQ?kA?O?QAU?W?_BA{@Ak@@MAqBIy@EMAcBKsAGMAG?GAQAyAIqAGkBIKAS?}AIiEQMAQA}BMqDSe@CYCMAqBKu@Ce@CsDU]CM?uCOI?{@GYEICMCQGQMQWc@m@c@y@SUMYGUGc@GMGMGGEEMKs@m@uAy@sBqAkDuBMIMIqCgBaCyASMYS}BaBOKSOkA{@{@q@m@e@USaAq@_@Yu@i@w@m@UEaAu@ICE?G?MBC@EBECCHUdAy@rDCJYtAERGTQ\\Q\\GL]j@KLMLSPYVJPr@~@r@~@LNFD~AlALHJHLJrAbAr@h@DDFJEZKNUb@SFMHEHwBhE","m":9181},"13:hotel>kyubey":{"p":"wdsxEsd`tYHQd@y@TYPQNMZUVORKRGNEd@G^A\\?NZ@TAH?NAFAFCHEJIRMVEHmAfCGJw@`BENGXKv@U?iF?o@?S@OBOBODODOFOHuAx@ULMDMDMBOBM@O?OAOCOEOEMGUOWQwF_EUQ{BaBiHoF[Wk@c@i@a@a@YYSICICMASAE?U?a@@e@Be@Ba@DYDWHUJi@Vg@Va@R]NSHS?]KIGEGEAG@G@WLMDKFKJMLWb@EVWdAOl@ENEPENCL]zAIKqByB","m":2107},"8:hotel>yokota":{"p":"wdsxEsd`tYHQd@y@TYPQNMZUVORKRGNEd@G^A\\?NZ@TAH?NAFAFCHEJIRMVEHmAfCGJw@`BENGXKv@CVE\\Kv@k@fFAHIp@Gb@KdAANCTATCb@ARKjBAHAN?NCX?FCd@Ad@?v@GbA?JCXGd@A\\ANCd@?DGhA?DC\\Cf@AVCn@AJAVAZAHGvAEdAC`@QvDEbAAJANARUC}AQAPg@zGU~CCd@AZ?T@r@B`@?TVL|A|@nAt@h@\\RJFBFD@?NF\\Hl@JL@V?n@?PBVFTJTLRPVPTR^h@T?CZARALIxBATO~DG|AALA^El@Ez@ALIj@GZe@dCk@fDSnAETCJ[dBABADCPCRWrDOxAAHCXGf@EX[dCAJCPCRYtBAHIn@ERUdBM|@Ih@Kj@AHGRQb@S^U^UZ@Ll@n@@D@@?FGJBFBD@@D?TKp@Y??","m":3423},"8:yokota>azabudai":{"p":"}esxEcpzsYf@XXcADOBCBC@ADIl@cALUXcAj@aDHk@@Is@IMAKCu@I_AMICK_@MKaAq@e@c@EIYu@IAiAMKGGMS@o@A{BWiBW]KMGa@W_Au@q@e@uAcAK[_@WMEI]HYDMZeATw@t@cCDKbAkDLc@v@iCv@eCH]BW?k@CUEOCKSa@c@AE?OA_@G]G]Ic@OYKc@Ua@Yy@m@OKYSEJQl@GROj@UfACPAPHb@VzAZ~A@HBPHb@Df@?L","m":1979},"8:azabudai>hotel":{"p":"}ctxEwc|sY?MEg@Ic@CQAI[_BW{AIc@@QBQTgANk@FSPm@DKYUo@g@IIKIOMc@]eBaBk@i@]YLQJM^o@@A~@eB~@eBn@gABGBGDGBMBOD]B[Dm@L_BDw@PyBBWBOBKBObAmEDSf@uBF[BMBIFYXqAR_AR}@BWD[^eEDs@Da@Fs@@IFi@@M@[KAOCIEKGe@]m@g@}CcCgCoBGEQOOM{AmAWSKI]YOM[UYU?M?MAMAa@Cu@Aq@AQ?K?U@U?U@SBW@UHm@Fk@Dc@BW?S?q@?_@C_@E_@Ga@a@oCGe@Gg@AQAW?i@@S@UBQDSDSVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":3413},"9:nakajima>beamsjapan":{"p":"cwyxEe|tsY??WIAA","m":16},"9:beamsjapan>isetan":{"p":"}wyxEq|tsYWCLmADKECCAAIIEYQWOCDOBCCKGKGCAGP","m":147},"9:isetan>aaliya":{"p":"e|yxEaausYa@hA_@jAADCAECa@U]So@]e@W?IECCCA?CNA@ABw@a@CA?@?@AFAD?@I`@??ADAD?@Mn@","m":295},"9:aaliya>alpen":{"p":"yfzxEw|tsYQ~@G\\??ADAD??G^AD??ADAD???DG\\?BMr@CH??AFAH?@AHIj@CN?@ABAD?@CZIb@Gd@?DG\\?BCF?@AJCN?@?DE^E`@?BAL?L@F@DBFDLFD","m":329},"9:alpen>lbreath":{"p":"wjzxEegtsY@@B@HBF@NAl@KHAZKLEFEFIDG@ABA??TKLG@ADE@CJCZCNA\\CB?JACg@F?JAFEhBMPAd@CBAFAPAHGHClA]rAg@JCDC?IFICCFGRUr@M?SAK","m":526},"9:lbreath>montbell":{"p":"kqyxEqrtsY@J?Rs@LSTGFBBLTPZ@J?B@J@DDAJABPd@|EHr@D\\@FJd@?BFP\\`AFNHAFAVCPCFTH?DNBPJGPIPEJEpA[d@M","m":519},"9:montbell>hotel":{"p":"wfyxE}}ssYIi@CM}Ab@e@LIBWHUHSq@Me@Qi@GYMi@E_@Ge@_@kDMaAM{@G_@WcBSyAI{@Go@Ek@Ew@AMC[ASC]?SCm@?e@@a@Ba@Fa@H_@Je@Pe@Xq@jBoDdD}Jt@sCn@uDx@gGNoBFgBCmBWyFW_CEUE_@Ke@E_@OsBEk@OaDAQA_@KgCMyCKeC?OC[ASA]OmCEs@Cs@@k@@k@Bk@RsABKNgAFc@\\yB\\{BDWBOFYDUZmARs@DIJ_@fBwGBIH[H_@DOx@mD^_BBOF]Fe@D_@NmBJsA@SHm@Fe@DQDQj@_Cd@kBJc@Po@Tq@DGFQLWFOlAkC@EBGNa@FUDYFe@Dk@LuC@Q?SFeB@}@?w@?[AQAa@EuA?MAYSkDAc@A[AQKwBEk@Ak@Am@@aB?K?W@c@RyD?I@U@STkE@O@]NY\\BZ@z@Av@Gv@Kd@K`@I\\KVMd@UFEZOjBaAnAo@jCsAFGZUHMHKDOJYh@gCDSFUHSHSHOLQX_@Z]p@s@b@_@t@i@hA}@`@a@FGJQR[LWFUDOBQBSB]@OBu@HkA@]?YEs@Em@Ky@[cB]uAUmACMAE?EAG?E?G?G?O?G?E?C@EDWH[dCyH^kARo@BKBIJYbEgNn@{AR_@BIT[DIRWXY\\c@`@o@j@_A\\i@JO?AXc@FMd@w@JSh@aAFKLUXi@hAuBv@uAFKPWJOPYVc@^m@JQFMt@iA^g@h@y@HKNUHKNSz@qAlAaBbAsARUh@s@PU^_@NLXVrBjCPTNR`@j@`@f@lA|AtAtBbAtAhAlC^`@HTNTTJN@P@RCdAe@x@Y\\GNC^Eb@Cf@EF?p@CRAR?R@NBPFLFVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":9060},"9:hotel>mutsukari":{"p":"wdsxEsd`tYHQd@y@TYPQNMZUVORKRGNEd@G^A\\?NZ@TAH?NAFAFCHEJIRMVEHmAfCGJw@`BENGXKv@U?iF?o@?S@OBOBODODOFOHuAx@ULMDMDMBOBM@O?OAOCOEOEMGUOWQwF_EUQ{BaBiHoF[Wk@c@i@a@a@YYSICICMASAE?U?a@@e@Be@Ba@DYDWHUJi@Vg@Va@R]NSHS?]KIGEGEAG@G@WLMDKFKJMLWb@EVWdAOl@ENEPENMOwCeDEEKKKKsCwCGGIIGJo@`Am@bAo@bAEFIGaDiDGGGGeCoC","m":2597},"9:mutsukari>virtu":{"p":"}cvxE_r`tYYYKMKPYd@Yb@EFOXKLQXYl@[TqA`CGJSr@MTo@hAKR]l@GJGJYh@KNcBlCIL[^W\\SUWSg@_@EEWImA[yCu@qHkBKC[GYESE{LwCwD}@GA[ImAYa@K_Dq@GAYGYGyBa@o@MSE{AYGAWEUE]IwCq@a@Ma@Ga@IE?OEMCOCgBWsB[KCARSrE","m":2181},"9:virtu>hotel":{"p":"_kyxEal`tYRsE@S@]LBpBZ`BVF@PBJBPDpAVVFpCl@F@\\HTDVDxGnAFBXFXFzCp@H@b@JlAXZF`E~@tEdAxEjAHBTFVDZHtD|@lEhA~Ct@TFTHVLBBPJXX\\c@`@o@j@_A\\i@JO?AXc@FMd@w@JSh@aAFKLUXi@hAuBv@uAFKPWJOPYVc@^m@JQFMt@iA^g@h@y@HKNUHKNSz@qAlAaBbAsARUh@s@PU^_@NLXVrBjCPTNR`@j@`@f@lA|AtAtBbAtAhAlC^`@HTNTTJN@P@RCdAe@x@Y\\GNC^Eb@Cf@EF?p@CRAR?R@NBPFLFVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":4333},"11:kamakura>anchoa":{"p":"ufqvEw~vrY?E@Y?I?w@?ScAAG@Af@AX?RAXATAtA?DCC?Kp@B?ZXED?d@@p@RADJBt@Rf@PRHb@LJB","m":421},"11:anchoa>onari":{"p":"w~pvE_xvrYf@NDBxBdA^Pb@FJBPBXB^D","m":191},"11:onari>wabian":{"p":"stpvEysvrYJ@B?B@`@D?ZBdA@t@@x@@P?ZD\\Jd@HVJVR`@V`@DJFIZf@GFGH??","m":292},"11:wabian>daibutsu":{"p":"eopvE{cvrYFIFG@@T\\HNGFHJBFd@t@f@x@Vh@Vx@T~@T`AHZ@HDRFf@JELLT\\Rj@HTb@~@Zr@^x@HLRXd@|@b@x@AHCLGd@G`@G`@EPMr@[rBW|AAF[vBKj@CRHd@F^Hz@H|@@BJtBJfBDj@Dn@@J_@L_@Pi@l@y@r@QHODo@Ta@@UAsAOi@OKn@q@Gm@@?QA?A?E?A??OAEEGAECCECKEe@K","m":1482},"11:hasedera>vuori":{"p":"s|ovEersrY?LE?MAK?O?UAA?G?CEAA?EAE@AJG@AVE?I?G?WAIHAH??K?KUICMCM?GACK{@UmBO_AGi@Ck@AKAQC[ASIB","m":353},"11:vuori>chikaramochi":{"p":"capvEkctrYHC@Rb@GVENEXIz@QhB_@@ADA@?Rb@?n@Hj@BA@H@Db@K??DALr@Lr@N|@@JHf@Jh@N|@FTPf@JHLLTRPKRMFEDCTI","m":533},"11:chikaramochi>inamura":{"p":"inovEqusrYLEDh@@DFj@Hh@BLD^L\\P\\TZVVH?PRDZA^Cv@K`AIh@CJ_@|AI?APk@vDBLBJBLJNLPPPNPp@n@b@ZVVZb@JLLLXPVRVTLNFLLRLLFD|@f@f@XTHLDXDTL`@^~@v@NTL?NA","m":925},"11:fureika>confidential":{"p":"ebsxEet{sYO`BM~ACF?DCXGl@AHCFCHEJBFUhBCPCR]|BAB?@AH?F?DE^AFJBNDJBUfBADHB","m":394},"11:confidential>hotel":{"p":"mesxEi{zsYvA^B@ELOh@EAoAa@AACAKCIh@GBICJm@BOFg@VmBHm@DUVsB@KDS@QTiBBU@KDWDi@D[RgBL{AHaA@SBQBUX_BBQ@IZgBZ_BPeAZcBFW@IJi@D]B[HwBFkBP_E@UBk@DkA@a@?M@MBq@JkAHc@Pi@Rk@Re@Ro@DMLu@Fk@Bc@@S@UPwCDy@NmC@YYCy@Gu@G_AGeESe@AoBS{@GIAUCUC}AQkD]KAQAOCa@Ek@Kw@U_G{B[K]MkAc@a@Oo@Uo@UiCcAQIQGaA_@mAa@qAg@sAe@DWDMNo@Ps@TaARw@DUDOJ_@Nq@@CR{@HYBKBMZsAn@kCBKBGLk@P{@FWKI]YOM[UYU?M?MAMAa@Cu@Aq@AQ?K?U@U?U@SBW@UHm@Fk@Dc@BW?S?q@?_@C_@E_@Ga@a@oCGe@Gg@AQAW?i@@S@UBQDSDSVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":4849},"12:fujiya>fuglen":{"p":"ke~xEocgtY]AMAc@CKAK??RC?MAA?IAE?GAK?O?MPKAAj@?DCb@Ab@AHQAUAAVUAMAGLEVCLCHAFQ`AAHARADGj@?@?FHAJjAJnAJpA@L","m":468},"12:fuglen>kamaasa":{"p":"un~xEkoftYB|BGjAIx@t@B`BLGPGTEPF?@@@BOrAYlCQxACHAHAD@DADF@D@YlCAFADSjBCT@DBB?@?PARH@j@Bh@BCP","m":633},"13:lambre>ginzasix":{"p":"wkuxEai`tYs@}@EHc@r@CCCCEECEA@AAAA_AcAwA}ACEECCCCECAII","m":228},"13:ginzasix>dsm":{"p":"euuxEyo`tYHHB@EDCBGJCDAD@Di@v@ABA@A@EFA@c@p@CFqBuB","m":195}};
+const ROUTES={"8:hotel>kyushiba":{"p":"ehsxEsg`tYg@bABBbBnABBOZCDg@bAg@`AEDH?b@AJ?DBF@tDAAJCXE\\CP@FADUzB]`DEZNDTDEVH@PBJDF@D@D???FIHIJEVBBBBB@@H@XJHBJHDADEFEF@H?FB@CDAD?DDHBHC@?DERCFMFO@CAA?C?C?CEMCWAA[e@??","m":822},"8:kyushiba>zojoji":{"p":"gzrxEur_tY??Zd@@@BVDL?B?B?B@@ABGNGLSBEDA?IBICEEE?E@ABGCI?GAGDEDE@KIICYKIAAACCCCWCKDIHGH??E?EAGAKEQCIACXEb@KlA?HADAPAD?HAL?BAL?B?@AJIbBCVANAN?D?DALCr@AHAD?LEl@?DAB?B?FCZCf@HJ?F?FCd@AJ?DMHEv@Cr@APANIxACz@@JAJCLILUlEOnD@D?JGbAF@ANARAPSCADAP?PAB?BEx@EfACj@AVC^N@AXH?","m":1157},"8:zojoji>tower":{"p":"{hsxEss}sYI?@YOAB_@{AQCd@[E??A?Eh@WxDBjA@\\E?C?C?A??@C@UCALAT?FCDKBa@~AENEJRVNDXTPTh@f@F@JCWj@_@f@","m":542},"8:tower>stellar":{"p":"{nsxE}~|sY^g@Vk@FDFBLARCfAYREv@OVEHDJBBODUBSj@PPDV@J?Z@P?^@h@[NSPCNA\\Kf@QCGO?O@GACEGIBABGB_@@Y@YIA??","m":503},"8:stellar>hotel":{"p":"e{rxE_j}sY@UFGn@HNJh@RLDDMLu@Fk@Bc@@S@UPwCDy@NmC@YYCy@Gu@G_AGeESe@AoBS{@GIAUCUC}AQkD]KAQAOCa@Ek@Kw@U_G{B[K]MkAc@a@Oo@Uo@UiCcAQIQGaA_@mAa@qAg@sAe@DWDMNo@Ps@TaARw@DUDOJ_@Nq@@CR{@HYBKBMZsAn@kCBKBGLk@P{@FWKI]YOM[UYU?M?MAMAa@Cu@Aq@AQ?K?U@U?U@SBW@UHm@Fk@Dc@BW?S?q@?_@C_@E_@Ga@a@oCGe@Gg@AQAW?i@@S@UBQDSDSVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":3549},"9:nakajima>montbell":{"p":"cwyxEe|tsYbAn@F?@J@@@B?DDb@ALBDDH@A@@?@@@Fl@Fh@Hn@Lv@b@tCRvARlB?FBLd@IF?D\\BTBNDZH^BFHV^hAFTH?DNBPJGPIPEJEpA[d@M","m":638},"9:montbell>lbreath":{"p":"{eyxEu_tsYe@LqAZKDQDQHKFCQEOI?GUQBWBG@I@GO]aAGQ?CKe@AGE]Is@e@}ECQK@E@AEAK?CAKQ[MUCCFGRUr@M?SAK","m":519},"9:lbreath>alpen":{"p":"kqyxEqrtsY@J?Rs@LSTGFBBGH?HEBKBsAf@mA\\IBIFQ@G@C@e@BQ@iBLGDK@G?Bf@K@C?]BO@[BKBABEDA@MFUJ??C@A@EFGHGDMD[JI@m@JO@GAICCAAA","m":526},"9:alpen>kaijin":{"p":"wjzxEegtsY@@B@HBF@NAl@KHAZKLEFEFIDG@ABA??TKLG@ADE@CJCZCNA\\CB?JACg@F?JAFEhBMPAd@CBAFAPAHGHCCMAQF@`DaALMDE@ECC?G@IE?","m":485},"9:kaijin>hotel":{"p":"_tyxEgqtsYA?{AKICeAMSCG|ACd@LZHCfDgADADEFGFGRUAMU{AQcBASFGBI@I?IEk@Ew@AMC[ASC]?SCm@?e@@a@Ba@Fa@H_@Je@Pe@Xq@jBoDdD}Jt@sCn@uDx@gGNoBFgBCmBWyFW_CEUE_@Ke@E_@OsBEk@OaDAQA_@KgCMyCKeC?OC[ASA]OmCEs@Cs@@k@@k@Bk@RsABKNgAFc@\\yB\\{BDWBOFYDUZmARs@DIJ_@fBwGBIH[H_@DOx@mD^_BBOF]Fe@D_@NmBJsA@SHm@Fe@DQDQj@_Cd@kBJc@Po@Tq@DGFQLWFOlAkC@EBGNa@FUDYFe@Dk@LuC@Q?SFeB@}@?w@?[AQAa@EuA?MAYSkDAc@A[AQKwBEk@Ak@Am@@aB?K?W@c@RyD?I@U@STkE@O@]NY\\BZ@z@Av@Gv@Kd@K`@I\\KVMd@UFEZOjBaAnAo@jCsAFGZUHMHKDOJYh@gCDSFUHSHSHOLQX_@Z]p@s@b@_@t@i@hA}@`@a@FGJQR[LWFUDOBQBSB]@OBu@HkA@]?YEs@Em@Ky@[cB]uAUmACMAE?EAG?E?G?G?O?G?E?C@EDWH[dCyH^kARo@BKBIJYbEgNn@{AR_@BIT[DIRWXY\\c@`@o@j@_A\\i@JO?AXc@FMd@w@JSh@aAFKLUXi@hAuBv@uAFKPWJOPYVc@^m@JQFMt@iA^g@h@y@HKNUHKNSz@qAlAaBbAsARUh@s@PU^_@NLXVrBjCPTNR`@j@`@f@lA|AtAtBbAtAhAlC^`@HTNTTJN@P@RCdAe@x@Y\\GNC^Eb@Cf@EF?p@CRAR?R@NBPFLFVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":8947},"10:tonkatsujp>haruka":{"p":"_ytxEgavsY[f@WUSQcAcAy@w@GE@AL]Na@@A@CLYVs@Zw@BI@AJFAB??","m":273},"10:haruka>mameya":{"p":"w{txEwkvsYOICCQPWl@I@IGGE[x@KJENECELABELADCFCHk@|AIC]Q}@[Yb@_@p@_Aw@uBmBe@a@","m":459},"10:mameya>mame":{"p":"enuxEmhvsYd@`@tBlB~@v@^q@Xc@|@Z\\PHBj@}ABIBGLJBJBHPLFDx@v@bAbARPBEb@}@","m":501},"10:mame>call":{"p":"kytxEybvsYh@gARa@L[n@gAd@cAPNDB^ZrAxALQPYHMq@o@[[IIg@e@v@kA??","m":424},"10:call>auralee":{"p":"{ptxEcovsYw@jAf@d@HHZZp@n@TTH?Va@vAqC?IDI|@mBd@gADMFMz@sBr@iB@EbAmC@G@E@GDCr@aC?E?GEIDKDMC?CAGCi@YVy@","m":748},"10:auralee>edition":{"p":"q_txEyiwsYWx@CJv@`@TJFWj@sB@Ef@mBDS`@yAVaA`@yAJ]FYToAImB?aCQuGKwCE_A[sDYyBMo@c@cB_@}Aq@cCKg@WeAsAoFK]a@eAIWCGSi@_ByDoAiDOc@cAwC?k@Yu@GQGSO_@ACCMBS@GNa@z@wBTo@r@cBV}@DMZ}ABIF]FYv@{DDSPu@Hc@Z{A^cBHe@DSDUHYDMZeATw@t@cCDKbAkDLc@v@iCv@eCH]BW?k@CUEOCKSa@c@AE?OA_@G]G]Ic@OYKc@Ua@Yy@m@OKYSYUo@g@IIKIOMc@]eBaBk@i@]YUSgBaBqAoA_@[UMYMs@YSGSGENWpAALELCJOv@KZKTQLMF","m":3607},"10:edition>birdland":{"p":"w}txEu_}sYLGPMJUJ[Nw@BKDM@MVqADOy@YiBo@iBk@w@YOESIa@MqBq@SIUI]MSICAi@SmAc@QKSKcBy@iCsAICa@KUK[KoBq@y@UWGgCu@sBm@YK_@O[O_Ak@q@_@uAy@i@Y_@Sc@W}@g@}BsAq@_@cCuAcBaAo@]IGg@YSa@H[dCyH^kARo@BKBIJYbEgNn@{AR_@BIT[DIRWXY\\c@`@o@j@_A\\i@JO?AXc@FMd@w@JSh@aAFKLUXi@hAuBv@uAFKPWY[GIkAaCGKKKJQJNHL`@z@NX","m":2926},"10:birdland>punch":{"p":"wivxEsr`tYIOGKGKc@{@AIl@cAAACEEECA?A@ABEBC@E@?BAd@y@@ABEBC@Ab@q@@C@CBE@Ah@}@CCBEDEDKBEBCyCeDEEAAEECEAAp@eADGDGDG","m":455},"10:punch>hotel":{"p":"mhvxEkiatYKNo@`AGJGJLNpCxCFFJLJJpBtBFHVTNSz@qAlAaBbAsARUh@s@PU^_@NLXVrBjCPTNR`@j@`@f@lA|AtAtBbAtAhAlC^`@HTNTTJN@P@RCdAe@x@Y\\GNC^Eb@Cf@EF?p@CRAR?R@NBPFLFVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":2360},"11:matsubara>daibutsu":{"p":"wwovEyburYSNZ^}@?s@F]NSTWVg@Zc@XCBSLIBG?W|AAF[vBKj@CRHd@F^Hz@H|@@BJtBJfBDj@Dn@@J_@L_@Pi@l@y@r@QHODo@Ta@@UAsAOi@OKn@q@Gm@@?QA?A?E?A??OAEEGAECCECKEe@K","m":1006},"11:daibutsu>hasedera":{"p":"ctpvEm`trYd@JJDDBBB@DDF@D?N@?D?@?@??Pl@Ap@FJo@h@NrANT@`@An@UDr@~AMbAIBbA\\E^GTlBJz@@B?FBLBLTH?J?JI?I@@H?V?F?HWDA@KFA@@D?D@@BDF?@?T@N?J?L@D??M","m":700},"11:sarashina>confidential":{"p":"gfsxEyqzsYd@k@CAACCCAABE?CGEBC@C@C@AA?s@q@CI@IXuA@K@GFe@@GHB","m":181},"11:confidential>trench":{"p":"mesxEi{zsYvA^B@ELOh@EAoAa@AACAKCIh@Kj@AHGRQb@S^U^UZeAz@WN]LYFM?U@eDt@YD[JC@EHoA^[Pa@^SVQXKVIRYlAm@`CERFNEPq@tC[jACDMRN\\n@nBV|@z@fD\\tALf@j@bCL`@Hb@b@`CLr@X~BRrBFv@LrCDlARtGBb@L`B@dA@\\@VF~ALdCRfFDv@LrC@VTANBZNt@`@z@f@b@TvAt@DBTLXNFBbAj@VLx@ZXH\\FXDr@H|@LR@PBLBTBL@L@L?L?L?b@CRCP?P?P@P@z@Lt@JfBPTBXBZD`@DXFXHXJVLj@Xj@ZtFzCpEdC\\RNJBHFJ`@~@?@FLDFLZFLb@bAJTTJ?@\\l@RVf@h@LNMPMNm@p@s@t@_@^CBDFVj@DJe@`@","m":3756},"11:trench>hotel":{"p":"{qqxE}uusYd@a@^x@x@[JGd@U\\MNUd@q@BEHKWWUSUSi@c@OOMMi@k@KMKQWi@AAEYKUc@cAGMM[EGGM?Aa@_AGKCIOK]SqEeCuF{Ck@[k@YWMYKYIYGa@E[EYCUCgBQu@K{@MQAQAQ?Q?SBc@BM?M?M?MAMAUCMCQCSA}@Ms@IYE]GYIy@[WMcAk@GCYOUMECwAu@c@U{@g@u@a@[OOCU@S?Q@GoAQiDUmFKuBGgBImBIaCMgFEqCAwBEk@I_AE_@Ec@McAKu@Mq@Mq@_DoM{@eDQm@O_@GQaAaCiAsCqAqDgDmJcBeEiCkGkBwEoBqEa@w@e@y@yBmDk@_Ak@{@i@m@gAeAiAgAiBaBwAoAyAqAiAkAcCmC}BeC[YWYUWKQMOOWK[KWGYI[Ge@OcASyAQwAIg@Me@Oe@O]Q[SYWWuByB]]_@[e@]GC]?a@UYOwF_Da@WKIOMGEGEw@c@o@]k@]SKUOKKQMUi@ESEa@Ck@AO@]?YEs@Em@Ky@[cB]uAUmACMAE?EAG?E?G?G?O?G?E?C@EDWH[dCyH^kARo@BKBIJYbEgNn@{AR_@BIT[DIRWXY\\c@`@o@j@_A\\i@JO?AXc@FMd@w@JSh@aAFKLUXi@hAuBv@uAFKPWJOPYVc@^m@JQFMt@iA^g@h@y@HKNUHKNSz@qAlAaBbAsARUh@s@PU^_@NLXVrBjCPTNR`@j@`@f@lA|AtAtBbAtAhAlC^`@HTNTTJN@P@RCdAe@x@Y\\GNC^Eb@Cf@EF?p@CRAR?R@NBPFLFVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":9302},"12:tnm>nodaya":{"p":"cr_yEcectYm@nAGGMM[Yd@_AzBwE\\q@Rc@LYBIsAcAMKKIMI_BmAGEMOs@_As@_AKQMUZWXWHMZg@LSR[L[HUFWRiADQn@qC","m":821},"12:nodaya>sensoji":{"p":"ir_yEsjdtYVgAPw@BKF]BKDSH_@XgAd@{BDSFUZ{AH]F[d@qBFWXoA^_B?AHc@F[RaANm@f@}BH_@Hc@t@wEPgADWDWZmBb@qCF]DWL?X?X?bBDbABV@N?lCH?S?IA[?QAOCaAC_@Ac@CULsANuAJeA@O@OLmA@M","m":1454},"12:sensoji>yonoya":{"p":"gp~xE__gtY???@?B?FF?P@^B?IBy@d@Bf@DH?^BH@J?^B@?r@D`@@T@Z@F@?F?N?dA","m":291},"12:yonoya>fujiya":{"p":"id~xEo|ftY?eA?O?G@S?CG?@EHwA?Eg@E","m":126},"12:fujiya>leaves":{"p":"ke~xEocgtYf@DF@@EF?`AFB?D@p@DN@r@D`AD\\@jAFIrAD?B@L@F@D?APFHN@vCPB@D?F@fBNFAFSH@D@JDBCBGJOBG@CHA@ABBPPDMBGR@@GJU@AhCwGFEHWDINHRg@BBDB?AB?B@BMBOBMJDbBf@fA\\B@D@D@ZJr@Tv@TDBD@dBh@B?FBD@B@jDdAhA\\LKPDPD?e@f@AX??e@t@Cj@CC{@","m":1426},"12:leaves>kamaasa":{"p":"ee|xEkggtY?Q_BH[@e@@O@?j@?`A?R?J?J?JAHCNKCWG_Bi@qC{@KCKEkBk@qBo@KCUIICwDiAICg@Ya@~@CFkAzCiArCELGNCHCFELA^ANAHARAT?HQzBI|@KrAAJCTCZUfCMdAKn@APSrAEZ[bCETCLALEZ]pCYbCCPCPUrBY|BEd@KAG?]CeBM[AmBIu@Iw@KQCOCo@Ig@Gw@KKAGAsASCRUtCo@ETgC","m":2203},"12:kamaasa>imahan":{"p":"ak~xEcnetYBQi@Ck@CIA@S?Q?ACCAEBURkB@E@GXmCEAGA@EAE@E@IBIPyAXmCNsAACAAG?","m":401},"13:kyubey>lambre":{"p":"wnuxEec`tYkAoABEBC?Aj@{@BBBEDIFI@CBCAEb@s@DIr@|@","m":201},"13:lambre>hamarikyu":{"p":"wkuxEai`tYvAhBBGNw@BM@GBET]DGDCTULM@ABABABC@BB@b@QBA?I?G??A[v@g@BCHFHB??FAFBH?`@KFC\\MJGr@YHCHApAS~@INAnAGn@LLEDAPHVLDBPJ@Q@OJSBB`AjATVV]HM\\e@??@AXYVWPMJKfA~@XBPHVRVR`@XPPJFDK?CDGLBPDP?LALEDANAHAJIBKp@TtAbADo@DKJC","m":1163},"13:hamarikyu>hongwanji":{"p":"wwsxEao`tYKBEJEn@uAcAq@UCJKHI@O@E@MDM@Q?QEMCEF?BEJKGQQa@YWSWSQIYCgA_AKJQLWVYXA@??]d@ILW\\UWaAkACCTc@PYZm@N}@l@eE@a@@OAi@Cc@CWCSCKEQAICOGOUa@W]aCgC}@aAKKSUaCoCeAkAMMGM?AGIKOGCgBgCACCCU[CEAEAEAE@EIEIMMSCECKE@E?EAIKMOBCNSCEa@i@EG\\a@@?B?@?B?BABABA@AX]KOMQQU","m":1558},"13:hongwanji>dsm":{"p":"mcuxEsfbtYPTLPJNY\\A@C@C@C@C?A?C?A?]`@DF`@h@BDORCBLNHJCDEDMRGHM@@NAHeArAi@p@@BFHLPFHBBCDCDEFCBEDIJs@z@ADABCDE@}@jAABAHGDEBGDo@x@A@CDEJCDC?GB{@hAEBCBCDEBe@h@CBCDa@d@ADAD?J@DrBjCABED[b@EDCD@@@B?BABo@z@E?A@CDEDAB?@c@l@CDABY`@A?ADADEDE@?@ABm@bAA@ABCDCBq@hA@@DDILGHINDD@@i@z@ABCBABABe@r@CDp@r@","m":1171},"13:dsm>itoya":{"p":"_|uxEwm`tYq@s@GGEIDG`@q@@A}CiDBCBE@CHKRYDECCGGOSGGEECQUY_BgBEECCEECCCCBEDEDKBEBCyCeDEEAAEECEAACA]]","m":554},"13:itoya>mitsukoshi":{"p":"ykvxEugatY\\\\B@@@BDDD@@DDxCdDD@BBBBBB@BDDTVv@|@","m":229},"13:mitsukoshi>hotel":{"p":"gbvxEa}`tY^`@FHVTNSz@qAlAaBbAsARUh@s@PU^_@NLXVrBjCPTNR`@j@`@f@lA|AtAtBbAtAhAlC^`@HTNTTJN@P@RCdAe@x@Y\\GNC^Eb@Cf@EF?p@CRAR?R@NBPFLFVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":2095},"10:hotel>tonkatsujp":{"p":"wdsxEsd`tYHQd@y@TYPQNMZUVORKRGNEd@G^A\\?NZ@TAH?NAFAFCHEJIRMVEHmAfCGJw@`BENGXKv@U?iF?o@?S@OBOBODODOFOHuAx@ULMDMDMBOBM@O?OAOCOEOEMGUOWQwF_EUQ{BaBiHoF[Wk@c@i@a@a@YYSICICMASAE?U?a@@e@Be@Ba@DYDWHUJi@Vg@Va@R]NSHS?]KCw@E_@K[O]q@}A]u@KQw@cAQUoAaBcAuAi@u@]g@QSQQOQeB{BYUQRc@j@}ApBoA`Bs@fAGJORGJQVo@~@_@j@y@hAGJKPYd@Yb@EFOXKLQXYl@eB~CcBjCkAvBuExHc@hA[`AaBlFYTsAvECFITCHELu@vB}A|E[dAMd@K`@CX?TBN@LTdAZ~A^jBL`ALdAF~@@hB?z@?V?TAB?FADCFCDk@|@aB~AoAbAu@h@]Z{@z@QT[^KPINGNIVGV[xAI\\AJAPALAHE~@AL?L@P?PBNBVD`@z@|HBPD\\Hv@nAhL@NJ|@D^BVTnDJ|C?hAJlC@TBTDRDLDLHNJPjAzAV`@R\\lAlCx@rAnAfCvC|FHPDFd@x@JR`BbDN\\Rj@FXDTJh@ZzCFh@Fb@H^FZNj@zAzFl@vChAjFBPBHnAhGHd@FTLf@\\rAFXv@~Ct@|CZpAJb@J\\Nj@J^z@fCJXt@bCb@tATx@j@vBJb@ZjA@FFRFNPXVb@LLPN`BnAVR`@Z|ElDpCdCTRbCrBb@^|@t@l@j@r@n@DBZXBB^\\XVd@`@pAjAn@j@lAfAp@p@h@j@OVe@EEHu@lAa@x@aAxAMKa@a@Yd@_@j@k@e@YWAAZg@","m":8809},"12:hotel>tnm":{"p":"wdsxEsd`tYHQd@y@TYPQNMZUVORKRGNEd@G^A\\?NZ@TAH?NAFAFCHEJIRMVEHmAfCGJw@`BENGXKv@U?iF?o@?S@OBOBODODOFOHuAx@ULMDMDMBOBM@O?OAOCOEOEMGUOWQwF_EUQ{BaBiHoF[Wk@c@i@a@a@YYSICICMASAE?U?a@@e@Be@Ba@DYDWHUJi@Vg@Va@R]NSHS?]KCw@E_@K[O]q@}A]u@KQw@cAQUoAaBcAuAi@u@]g@QSQQOQeB{BYUQQWWmC_CWSSSwCiCSQQQi@c@wAmAi@e@}@y@[c@i@c@iAaAOWIIMKUMaDgBqEaCwC}AWE_Ag@m@[WYcDcBgE{BuAs@iAm@WEcBy@_@UMSqCyAkFqCoCyA_@IYEWAW?a@@uAH_@@YBYJgBHs@BsAFuAFeAFU@]FI@kA`@_AZqAb@E@gA^aAZYHGB]La@L}@V_AZoA^s@Ti@Ns@Tc@J[Dc@@}@Eu@EaBOeBM{@Gy@G]Ea@C_BKeBSIA[EUC]CqBM]Cq@CaAAy@AUAK?mB?O?mBEQ?kA?O?QAU?W?_BA{@Ak@@MAqBIy@EMAcBKsAGMAG?GAQAyAIqAGkBIKAS?}AIiEQMAQA}BMqDSe@CYCMAqBKu@Ce@CsDU]CM?uCOI?{@GYEICMCQGQMQWc@m@c@y@SUMYGUGc@GMGMGGEEMKs@m@uAy@sBqAkDuBMIMIqCgBaCyASMYS}BaBOKSOkA{@{@q@m@e@USaAq@_@Yu@i@w@m@UEaAu@ICE?G?MBC@EBECCHUdAy@rDCJYtAERGTQ\\Q\\GL]j@KLMLSPYVJPr@~@r@~@LNFD~AlALHJHLJrAbAr@h@DDFJEZKNUb@SFMHEHwBhE","m":9181},"13:hotel>kyubey":{"p":"wdsxEsd`tYHQd@y@TYPQNMZUVORKRGNEd@G^A\\?NZ@TAH?NAFAFCHEJIRMVEHmAfCGJw@`BENGXKv@U?iF?o@?S@OBOBODODOFOHuAx@ULMDMDMBOBM@O?OAOCOEOEMGUOWQwF_EUQ{BaBiHoF[Wk@c@i@a@a@YYSICICMASAE?U?a@@e@Be@Ba@DYDWHUJi@Vg@Va@R]NSHS?]KIGEGEAG@G@WLMDKFKJMLWb@EVWdAOl@ENEPENCL]zAIKqByB","m":2107},"8:hotel>yokota":{"p":"wdsxEsd`tYHQd@y@TYPQNMZUVORKRGNEd@G^A\\?NZ@TAH?NAFAFCHEJIRMVEHmAfCGJw@`BENGXKv@CVE\\Kv@k@fFAHIp@Gb@KdAANCTATCb@ARKjBAHAN?NCX?FCd@Ad@?v@GbA?JCXGd@A\\ANCd@?DGhA?DC\\Cf@AVCn@AJAVAZAHGvAEdAC`@QvDEbAAJANARUC}AQAPg@zGU~CCd@AZ?T@r@B`@?TVL|A|@nAt@h@\\RJFBFD@?NF\\Hl@JL@V?n@?PBVFTJTLRPVPTR^h@T?CZARALIxBATO~DG|AALA^El@Ez@ALIj@GZe@dCk@fDSnAETCJ[dBABADCPCRWrDOxAAHCXGf@EX[dCAJCPCRYtBAHIn@ERUdBM|@Ih@Kj@AHGRQb@S^U^UZ@Ll@n@@D@@?FGJBFBD@@D?TKp@Y??","m":3423},"8:yokota>azabudai":{"p":"}esxEcpzsYf@XXcADOBCBC@ADIl@cALUXcAj@aDHk@@Is@IMAKCu@I_AMICK_@MKaAq@e@c@EIYu@IAiAMKGGMS@o@A{BWiBW]KMGa@W_Au@q@e@uAcAK[_@WMEI]HYDMZeATw@t@cCDKbAkDLc@v@iCv@eCH]BW?k@CUEOCKSa@c@AE?OA_@G]G]Ic@OYKc@Ua@Yy@m@OKYSEJQl@GROj@UfACPAPHb@VzAZ~A@HBPHb@Df@?L","m":1979},"8:azabudai>hotel":{"p":"}ctxEwc|sY?MEg@Ic@CQAI[_BW{AIc@@QBQTgANk@FSPm@DKYUo@g@IIKIOMc@]eBaBk@i@]YLQJM^o@@A~@eB~@eBn@gABGBGDGBMBOD]B[Dm@L_BDw@PyBBWBOBKBObAmEDSf@uBF[BMBIFYXqAR_AR}@BWD[^eEDs@Da@Fs@@IFi@@M@[KAOCIEKGe@]m@g@}CcCgCoBGEQOOM{AmAWSKI]YOM[UYU?M?MAMAa@Cu@Aq@AQ?K?U@U?U@SBW@UHm@Fk@Dc@BW?S?q@?_@C_@E_@Ga@a@oCGe@Gg@AQAW?i@@S@UBQDSDSVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":3413},"9:nakajima>beamsjapan":{"p":"cwyxEe|tsY??WIAA","m":16},"9:beamsjapan>isetan":{"p":"}wyxEq|tsYWCLmADKECCAAIIEYQWOCDOBCCKGKGCAGP","m":147},"9:isetan>aaliya":{"p":"e|yxEaausYa@hA_@jAADCAECa@U]So@]e@W?IECCCA?CNA@ABw@a@CA?@?@AFAD?@I`@??ADAD?@Mn@","m":295},"9:aaliya>alpen":{"p":"yfzxEw|tsYQ~@G\\??ADAD??G^AD??ADAD???DG\\?BMr@CH??AFAH?@AHIj@CN?@ABAD?@CZIb@Gd@?DG\\?BCF?@AJCN?@?DE^E`@?BAL?L@F@DBFDLFD","m":329},"9:alpen>lbreath":{"p":"wjzxEegtsY@@B@HBF@NAl@KHAZKLEFEFIDG@ABA??TKLG@ADE@CJCZCNA\\CB?JACg@F?JAFEhBMPAd@CBAFAPAHGHClA]rAg@JCDC?IFICCFGRUr@M?SAK","m":526},"9:lbreath>montbell":{"p":"kqyxEqrtsY@J?Rs@LSTGFBBLTPZ@J?B@J@DDAJABPd@|EHr@D\\@FJd@?BFP\\`AFNHAFAVCPCFTH?DNBPJGPIPEJEpA[d@M","m":519},"9:montbell>hotel":{"p":"wfyxE}}ssYIi@CM}Ab@e@LIBWHUHSq@Me@Qi@GYMi@E_@Ge@_@kDMaAM{@G_@WcBSyAI{@Go@Ek@Ew@AMC[ASC]?SCm@?e@@a@Ba@Fa@H_@Je@Pe@Xq@jBoDdD}Jt@sCn@uDx@gGNoBFgBCmBWyFW_CEUE_@Ke@E_@OsBEk@OaDAQA_@KgCMyCKeC?OC[ASA]OmCEs@Cs@@k@@k@Bk@RsABKNgAFc@\\yB\\{BDWBOFYDUZmARs@DIJ_@fBwGBIH[H_@DOx@mD^_BBOF]Fe@D_@NmBJsA@SHm@Fe@DQDQj@_Cd@kBJc@Po@Tq@DGFQLWFOlAkC@EBGNa@FUDYFe@Dk@LuC@Q?SFeB@}@?w@?[AQAa@EuA?MAYSkDAc@A[AQKwBEk@Ak@Am@@aB?K?W@c@RyD?I@U@STkE@O@]NY\\BZ@z@Av@Gv@Kd@K`@I\\KVMd@UFEZOjBaAnAo@jCsAFGZUHMHKDOJYh@gCDSFUHSHSHOLQX_@Z]p@s@b@_@t@i@hA}@`@a@FGJQR[LWFUDOBQBSB]@OBu@HkA@]?YEs@Em@Ky@[cB]uAUmACMAE?EAG?E?G?G?O?G?E?C@EDWH[dCyH^kARo@BKBIJYbEgNn@{AR_@BIT[DIRWXY\\c@`@o@j@_A\\i@JO?AXc@FMd@w@JSh@aAFKLUXi@hAuBv@uAFKPWJOPYVc@^m@JQFMt@iA^g@h@y@HKNUHKNSz@qAlAaBbAsARUh@s@PU^_@NLXVrBjCPTNR`@j@`@f@lA|AtAtBbAtAhAlC^`@HTNTTJN@P@RCdAe@x@Y\\GNC^Eb@Cf@EF?p@CRAR?R@NBPFLFVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":9060},"9:hotel>mutsukari":{"p":"wdsxEsd`tYHQd@y@TYPQNMZUVORKRGNEd@G^A\\?NZ@TAH?NAFAFCHEJIRMVEHmAfCGJw@`BENGXKv@U?iF?o@?S@OBOBODODOFOHuAx@ULMDMDMBOBM@O?OAOCOEOEMGUOWQwF_EUQ{BaBiHoF[Wk@c@i@a@a@YYSICICMASAE?U?a@@e@Be@Ba@DYDWHUJi@Vg@Va@R]NSHS?]KIGEGEAG@G@WLMDKFKJMLWb@EVWdAOl@ENEPENMOwCeDEEKKKKsCwCGGIIGJo@`Am@bAo@bAEFIGaDiDGGGGeCoC","m":2597},"9:mutsukari>virtu":{"p":"}cvxE_r`tYYYKMKPYd@Yb@EFOXKLQXYl@[TqA`CGJSr@MTo@hAKR]l@GJGJYh@KNcBlCIL[^W\\SUWSg@_@EEWImA[yCu@qHkBKC[GYESE{LwCwD}@GA[ImAYa@K_Dq@GAYGYGyBa@o@MSE{AYGAWEUE]IwCq@a@Ma@Ga@IE?OEMCOCgBWsB[KCARSrE","m":2181},"9:virtu>hotel":{"p":"_kyxEal`tYRsE@S@]LBpBZ`BVF@PBJBPDpAVVFpCl@F@\\HTDVDxGnAFBXFXFzCp@H@b@JlAXZF`E~@tEdAxEjAHBTFVDZHtD|@lEhA~Ct@TFTHVLBBPJXX\\c@`@o@j@_A\\i@JO?AXc@FMd@w@JSh@aAFKLUXi@hAuBv@uAFKPWJOPYVc@^m@JQFMt@iA^g@h@y@HKNUHKNSz@qAlAaBbAsARUh@s@PU^_@NLXVrBjCPTNR`@j@`@f@lA|AtAtBbAtAhAlC^`@HTNTTJN@P@RCdAe@x@Y\\GNC^Eb@Cf@EF?p@CRAR?R@NBPFLFVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":4333},"11:kamakura>anchoa":{"p":"ufqvEw~vrY?E@Y?I?w@?ScAAG@Af@AX?RAXATAtA?DCC?Kp@B?ZXED?d@@p@RADJBt@Rf@PRHb@LJB","m":421},"11:anchoa>onari":{"p":"w~pvE_xvrYf@NDBxBdA^Pb@FJBPBXB^D","m":191},"11:onari>wabian":{"p":"stpvEysvrYJ@B?B@`@D?ZBdA@t@@x@@P?ZD\\Jd@HVJVR`@V`@DJFIZf@GFGH??","m":292},"11:wabian>daibutsu":{"p":"eopvE{cvrYFIFG@@T\\HNGFHJBFd@t@f@x@Vh@Vx@T~@T`AHZ@HDRFf@JELLT\\Rj@HTb@~@Zr@^x@HLRXd@|@b@x@AHCLGd@G`@G`@EPMr@[rBW|AAF[vBKj@CRHd@F^Hz@H|@@BJtBJfBDj@Dn@@J_@L_@Pi@l@y@r@QHODo@Ta@@UAsAOi@OKn@q@Gm@@?QA?A?E?A??OAEEGAECCECKEe@K","m":1482},"11:hasedera>vuori":{"p":"s|ovEersrY?LE?MAK?O?UAA?G?CEAA?EAE@AJG@AVE?I?G?WAIHAH??K?KUICMCM?GACK{@UmBO_AGi@Ck@AKAQC[ASIB","m":353},"11:vuori>chikaramochi":{"p":"capvEkctrYHC@Rb@GVENEXIz@QhB_@@ADA@?Rb@?n@Hj@BA@H@Db@K??DALr@Lr@N|@@JHf@Jh@N|@FTPf@JHLLTRPKRMFEDCTI","m":533},"11:chikaramochi>inamura":{"p":"inovEqusrYLEDh@@DFj@Hh@BLD^L\\P\\TZVVH?PRDZA^Cv@K`AIh@CJ_@|AI?APk@vDBLBJBLJNLPPPNPp@n@b@ZVVZb@JLLLXPVRVTLNFLLRLLFD|@f@f@XTHLDXDTL`@^~@v@NTL?NA","m":925},"11:fureika>confidential":{"p":"ebsxEet{sYO`BM~ACF?DCXGl@AHCFCHEJBFUhBCPCR]|BAB?@AH?F?DE^AFJBNDJBUfBADHB","m":394},"11:confidential>hotel":{"p":"mesxEi{zsYvA^B@ELOh@EAoAa@AACAKCIh@GBICJm@BOFg@VmBHm@DUVsB@KDS@QTiBBU@KDWDi@D[RgBL{AHaA@SBQBUX_BBQ@IZgBZ_BPeAZcBFW@IJi@D]B[HwBFkBP_E@UBk@DkA@a@?M@MBq@JkAHc@Pi@Rk@Re@Ro@DMLu@Fk@Bc@@S@UPwCDy@NmC@YYCy@Gu@G_AGeESe@AoBS{@GIAUCUC}AQkD]KAQAOCa@Ek@Kw@U_G{B[K]MkAc@a@Oo@Uo@UiCcAQIQGaA_@mAa@qAg@sAe@DWDMNo@Ps@TaARw@DUDOJ_@Nq@@CR{@HYBKBMZsAn@kCBKBGLk@P{@FWKI]YOM[UYU?M?MAMAa@Cu@Aq@AQ?K?U@U?U@SBW@UHm@Fk@Dc@BW?S?q@?_@C_@E_@Ga@a@oCGe@Gg@AQAW?i@@S@UBQDSDSVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":4849},"12:fujiya>fuglen":{"p":"ke~xEocgtY]AMAc@CKAK??RC?MAA?IAE?GAK?O?MPKAAj@?DCb@Ab@AHQAUAAVUAMAGLEVCLCHAFQ`AAHARADGj@?@?FHAJjAJnAJpA@L","m":468},"12:fuglen>kamaasa":{"p":"un~xEkoftYB|BGjAIx@t@B`BLGPGTEPF?@@@BOrAYlCQxACHAHAD@DADF@D@YlCAFADSjBCT@DBB?@?PARH@j@Bh@BCP","m":633},"13:lambre>ginzasix":{"p":"wkuxEai`tYs@}@EHc@r@CCCCEECEA@AAAA_AcAwA}ACEECCCCECAII","m":228},"13:ginzasix>dsm":{"p":"euuxEyo`tYHHB@EDCBGJCDAD@Di@v@ABA@A@EFA@c@p@CFqBuB","m":195},"8:hotel>tenichi":{"p":"wdsxEsd`tYHQd@y@TYPQNMZUVORKRGNEd@G^A\\?NZ@TAH?NAFAFCHEJIRMVEHmAfCGJw@`BENGXKv@U?iF?o@?S@OBOBODODOFOHuAx@ULMDMDMBOBM@O?OAOCOEOEMGUOWQwF_EUQ{BaBiHoF[Wk@c@i@a@a@YYSICICMASAE?U?a@@e@Be@Ba@DYDWHUJi@Vg@Va@R]NSHS?]KIGEGEAG@G@WLMDKFKJMLWb@EVWdAOl@ENEPENMOwCeDEEKKKKsCwCGGIIGJo@`Am@bAo@bAEFIGkBqB","m":2447},"8:tenichi>zojoji":{"p":"q}uxEgk`tYu@w@GGFGl@cAl@cAh@y@DGHOFILJrC|CDDHJHHrCxCFFJJJJrC~CFDLNTPx@j@n@b@HHb@VRN@@XRlDpCJHTRHHjDjC`@X|@r@LJJHJH^XZVZVBBv@n@NLPNtAfAFDNLRLtAdAt@j@|ApA`Ar@n@f@b@\\JFLDL@CV?HAZALGh@AHGr@E`@Er@_@dEEZCVS|@S~@YpAGXXJpCdAbBn@@B@B@D?DAHCZ?FSjCUdCC^A`@BH@N@N?F?z@@t@@R@R@JBHDJDFLHHDd@PrAh@RFNBf@HXBTBd@FVL|A|@nAt@h@\\RJFB@S@c@@w@B}A?c@@Q@iABEHEDKDS_AIG@YAA?","m":2965},"8:tenichi>azabudai":{"p":"q}uxEgk`tYu@w@GGGG_DiDKMKPYd@Yb@EFOXKLQXYl@eB~CcBjCkAvBuExHc@hA[`AaBlFYTsAvECFITCHELu@vB}A|EGv@@`@BRHRDNnC|AbCtAp@^|BpA|@f@LFt@b@f@XvAx@rBjAXP\\JXHpBl@r@R~A`@NDVHpAj@z@\\ZNTH\\NZN`@Rj@\\bAh@hAj@RHNH\\Ld@N|@\\D@RH`@LPF`@NzBv@TFLFjGtB~Aj@LDx@ZPJNJpBfBhB~AVTXXj@h@pAlAl@d@ZXJHHFXVzBzAn@b@JF\\P^P^Jd@L`@DLBB?L@V@R?N\\JXBNDRBn@?TCNMb@KAH]BW?k@CUEOCKSa@c@AE?OA_@G]G]Ic@OYKc@Ua@Yy@m@OKYSEJQl@GROj@UfACPAPHb@VzAZ~A@HBPHb@Df@?L","m":4219},"8:yokota>zojoji":{"p":"}esxEcpzsYf@XXcADOBCBC@ADIl@cALUXcAj@aDHk@@Is@IMAKCu@I_AMICK_@DUVsB@KDS@QTiBBU@KDWDi@D[RgBL{AHaA@SBQBUX_BBQ@IZgBZ_BPeAZcBFW@IJi@D]B[HwBFkBP_E@UBk@DkA@a@?M@MBq@JkAHc@Pi@Rk@Re@Ro@DMLu@Fk@Bc@@S@UPwCDy@NmC@YYCy@Gu@G_AGeESe@AoBSAPANAR?@CVB?DDE|@Ct@?H`AHSdE_AIG@YAA?","m":2346},"8:tower>hotel":{"p":"{nsxE}~|sY^g@Vk@FDFBLARCfAYREv@OVEFMe@Ug@YqAw@{A{@UMWGKCWEYGe@Ia@K[KoAg@WIMIMQISESCUCiA?s@?I?c@DM@a@B_@TeCRkC?GB[_G{B[K]MkAc@a@Oo@Uo@UiCcAQIQGaA_@mAa@qAg@sAe@DWDMNo@Ps@TaARw@DUDOJ_@Nq@@CR{@HYBKBMZsAn@kCBKBGLk@P{@FWKI]YOM[UYU?M?MAMAa@Cu@Aq@AQ?K?U@U?U@SBW@UHm@Fk@Dc@BW?S?q@?_@C_@E_@Ga@a@oCGe@Gg@AQAW?i@@S@UBQDSDSVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":3411},"12:imahan>sanboa":{"p":"_k~xE{dftYA?DQFUFQB?BABAHy@LkAD?D?nAHP@`CFl@BNiAFa@Hm@Hq@Fi@H@","m":378},"12:travelers>onibus":{"p":"izpxEmrssYZo@B@d@TVP^u@`@q@BBp@aA^a@HG","m":200},"12:onibus>vase":{"p":"irpxEcyssYIFGG[e@ISIQGQKSCBCBABEIY[QUGIABGJIKIIQSFIDGi@w@Yg@IIC?CEEEQUCAa@j@ORIK","m":317},"12:vase>ldk":{"p":"s}pxEubtsY_AeA[c@CCGFGFc@\\","m":109},"12:ldk>sml":{"p":"gbqxEudtsYb@]FGFGRYFIDKDIBK?I?KBGECm@q@SWOIc@Og@WUUKQBEGIEICIQ_@Ka@UEGWGWLIJQF{ANuD@y@EC?KsDH","m":597},"12:sml>okura":{"p":"alqxEy~tsYy@BO@uADG?G@IFCIEDSLEDHNMLCDEPHLLZBDBJJXDR@DCFABs@rAIPIRCJCNEVG`@CLCJ^L@DBL@N?LANEHg@`AEJ","m":446},"12:okura>kamawanu":{"p":"suqxEoktsYDKf@aAQEc@G@O","m":82},"12:kamawanu>ivy":{"p":"yuqxE{ntsYANb@FPDg@`AMXaApABDDDm@p@MN","m":193},"12:ivy>ushimitsu":{"p":"oyqxEaftsYLOl@q@b@q@j@}@b@w@JU@M@K?M?G@CBCBCF@@M@Kj@H`A?H?@?F?dA@H?@?HCBAn@e@@CFC`Am@LIJQF{ANuD@y@L@N?L@F}@?K@MBk@Fw@JuAfCp@Fs@@gCHg@@C","m":916},"12:ushimitsu>trench":{"p":"{~pxEwlusYFWAEU{@GSEOIIEC_@Qg@_@ECKHCDARI?MAQ???ECECc@HkAT_ANC?AK?KO@M@S?U?c@EIAGAQCOGKCOGMGIEECMIKGMGOMFSBK^]","m":489},"12:trench>hotel":{"p":"{qqxE}uusYd@a@^x@x@[JGd@U\\MNUd@q@BEHKWWUSUSi@c@OOMMi@k@KMKQWi@AAEYKUc@cAGMM[EGGM?Aa@_AGKCIOK]SqEeCuF{Ck@[k@YWMYKYIYGa@E[EYCUCgBQu@K{@MQAQAQ?Q?SBc@BM?M?M?MAMAUCMCQCSA}@Ms@IYE]GYIy@[WMcAk@GCYOUMECwAu@c@U{@g@u@a@[OOCU@S?Q@GoAQiDUmFKuBGgBImBIaCMgFEqCAwBEk@I_AE_@Ec@McAKu@Mq@Mq@_DoM{@eDQm@O_@GQaAaCiAsCqAqDgDmJcBeEiCkGkBwEoBqEa@w@e@y@yBmDk@_Ak@{@i@m@gAeAiAgAiBaBwAoAyAqAiAkAcCmC}BeC[YWYUWKQMOOWK[KWGYI[Ge@OcASyAQwAIg@Me@Oe@O]Q[SYWWuByB]]_@[e@]GC]?a@UYOwF_Da@WKIOMGEGEw@c@o@]k@]SKUOKKQMUi@ESEa@Ck@AO@]?YEs@Em@Ky@[cB]uAUmACMAE?EAG?E?G?G?O?G?E?C@EDWH[dCyH^kARo@BKBIJYbEgNn@{AR_@BIT[DIRWXY\\c@`@o@j@_A\\i@JO?AXc@FMd@w@JSh@aAFKLUXi@hAuBv@uAFKPWJOPYVc@^m@JQFMt@iA^g@h@y@HKNUHKNSz@qAlAaBbAsARUh@s@PU^_@NLXVrBjCPTNR`@j@`@f@lA|AtAtBbAtAhAlC^`@HTNTTJN@P@RCdAe@x@Y\\GNC^Eb@Cf@EF?p@CRAR?R@NBPFLFVP^\\t@p@|IzGrCtBhFbEJHLHLHNHNFJ@L@P@NALCJCLGLELGjAs@PKPITIRGTCRAR?R?NALMhCiF","m":9302},"8:hotel>tenkuni":{"p":"wdsxEsd`tYdAeBhBqAfCWNZGhAqDvHY`BcI@oAZ{BpAwAT{B{@aZoTqAKiDTsErBgA]{Ax@yAwB","m":1923},"8:tenkuni>zojoji":{"p":"wiuxEgm`tYg@q@j@s@hCtDkAjAy@lD`l@`d@f@NoAbOiAhFtGnCu@fKXlFjDzAlC\\jGnDLmIXk@cBI","m":2703},"8:tenkuni>azabudai":{"p":"wiuxEgm`tYg@q@j@s@hCtDkAjAy@lD`l@`d@f@NoAbOkEtRa@|DfBxAq@xEHxCxFjDk@hCpCzAWfDv@hCLhB]p@LaBa@sAwBS{Ae@iD}BkAdFrAtI","m":3332},"8:hotel>abechan":{"p":"wdsxEsd`tYdAeBhBqAfCWNjAgEzJsBxQkCfk@sBUcAxQBv@rGtD|Ej@lCzBT?}@pSaDvQeB|P|Cp@Kt@tBf@MaE","m":3276},"8:abechan>zojoji":{"p":"a|rxEig{sYYuBkES`AgK`DwQz@}TToB`BoFx@sNePeAIrE`AHSdEcBI","m":1956},"8:abechan>azabudai":{"p":"a|rxEig{sYYuB_DUk@@gIvCiHo@mAk@aGyEI]hIsX?yA]}@wBS{Ae@iD}BkAdFrAtI","m":1770},"9:hotel>sanshuya":{"p":"wdsxEsd`tYdAeBhBqAfCWNZGhAqDvHY`BcI@oAZwC|A{ABsIuFiRoNqAKoCNmFxBq@KIwAwB_FyMyP{M`RcN{N","m":3044},"9:sanshuya>virtu":{"p":"gtvxEccatY_D_DmA|FwHiEaG|d@u]eIc]qGUfF","m":2222},"9:kaijin>beamsjapan":{"p":"}syxEoqtsYVEq@_HeB{@","m":216},"10:edition>torigin":{"p":"u}txEw_}sYt@eAx@aEuUeIsGeDuQwFwYmPeAcAzKi^fAeC~EeHvHeN~GmKNPkBvCbBrB","m":3143},"10:torigin>punch":{"p":"_`vxEar`tY_BcBxAwB{DyEVa@mD{DbA}A","m":493},"10:hotel>maisen":{"p":"wdsxEsd`tYdAeBhBqAfCWNZGhAqDvHY`BcI@oAZwC|A{@H_AQ}[yUqAKoCNmFxBq@KIwAwB_FyMyPsMtQeTf_@mMv`@@lAlBxKDdHs@jAoJzIuAxEMtDdE~_@x@dRxCxEvP|\\vA~J~P`u@|GhUv@jAjCrBgHlMpE|BtIxHIR","m":8309},"10:maisen>haruka":{"p":"_kuxEikvsYHSxBjBf@aA|CxBbAwBZJh@_ARL","m":372},"11:kamakura>fukumi":{"p":"ufqvEw~vrY@uBkA?mCcAeEzJJD","m":392},"11:fukumi>onari":{"p":"gsqvEoxvrYKEjAmCjHj@?ZdACdGnB~CzAzBX","m":629},"11:shoutaien>confidential":{"p":"mmsxEyr~sYjAGAaCxCTmArWsBUcArNB|CrGtD|Ej@lCzBT?}@pSeDhRq@dIuBbPRN","m":2338},"11:kamakura>akimoto":{"p":"ufqvEw~vrY@uBkA?aA_@","m":135},"11:akimoto>onari":{"p":"akqvEmcwrY`A^I`FCOp@B?ZdACdGnB~CzAzBX","m":555},"12:kamaasa>yonehisa":{"p":"ak~xEcnetYBQ_BICq@jBcSwF]By@]EKiDyBg@","m":724},"12:yonehisa>sanboa":{"p":"mw~xEenftYxBf@B^dRt@|@sF","m":547},"12:tnm>yabusoba":{"p":"cr_yEcectYw@`BeATyAfDvHhFxExEjQec@G[}AsAaDiBHgAmAsAlAuC`\\|SlDxFH~AOrD~F^","m":2536},"12:yabusoba>sensoji":{"p":"qs}xEe|btY|FR?gD{Lq@cAUeC}DKoArI}z@vCqVwIqBsMwATiByHWOkD|@kJ","m":2825},"12:ivy>tatsuya":{"p":"oyqxEaftsYnDiFd@iBrEJbD}BR{Ir@{IDwFE{@y@gBuAyAZk@C]lCgB","m":1153},"12:tatsuya>trench":{"p":"cdqxEg_vsYmCfBB\\}ArBiCfA_@y@e@`@","m":335},"13:hotel>midori":{"p":"wdsxEsd`tYdAeBhBqAfCWNZGhAqDvHY`BcI@oAZwC|AkAFkBy@aZoTqAKoCNuFfCQpHeDrMq@PsAa@eBy@eAoA","m":2322},"13:midori>lambre":{"p":"qquxEgv_tYz@dATa@JDpDqOuAqB","m":411}};
 /* ---------- 实景地图（OpenStreetMap 底图 + 预先算好的步行 / 打车路线） ---------- */
 function decPoly(s){let i=0,la=0,ln=0,o=[];while(i<s.length){let b,sh=0,r=0;do{b=s.charCodeAt(i++)-63;r|=(b&31)<<sh;sh+=5;}while(b>=32);la+=r&1?~(r>>1):r>>1;sh=0;r=0;do{b=s.charCodeAt(i++)-63;r|=(b&31)<<sh;sh+=5;}while(b>=32);ln+=r&1?~(r>>1):r>>1;o.push([la/1e5,ln/1e5]);}return o;}
 const LL=p=>p.ll||p.km;
@@ -1370,8 +1503,9 @@ function makeMap(el){ const m=L.map(el,{scrollWheelZoom:false,zoomControl:true,a
 function addHotel(m){ L.marker(P.hotel.ll,{icon:houseIcon,zIndexOffset:1000}).bindPopup(`<b>mesm Tokyo</b><br>5 晚都住这里<br><a target="_blank" rel="noopener" href="${NAVTO(HOTEL)}">导航回酒店 ↗</a>`).addTo(m); }
 function initOverview(){
   const el=document.getElementById("realmap"); el.hidden=false; document.getElementById("bigmap").hidden=true;
+  if(window.__ovm){ window.__ovm.remove(); }
   document.querySelector("#overview + .mapwrap .mapnote").textContent="实景底图来自 OpenStreetMap，步行和打车段是按真实道路算的路线，虚线是电车。点数字看店名和导航；双指或按钮缩放。镰仓在各日地图里单独放大。";
-  const m=makeMap(el); addHotel(m); const all=[];
+  const m=makeMap(el); window.__ovm=m; addHotel(m); const all=[];
   DAYS.forEach(d=>{ const r=drawDay(m,d,{pill:true,small:true,far:true,below:DAYS.indexOf(d)%2===1}); r.bounds.forEach(b=>all.push(b)); });
   m.fitBounds(all,{padding:[18,18]});
 }
@@ -1386,12 +1520,12 @@ function initDay(det,d){
     const r=drawDay(m,d,{km,pill:true,far:true}); if(!km) r.bounds.push(P.hotel.ll);
     m.fitBounds(r.bounds,{padding:[22,22],maxZoom:16}); });
 }
+function hookDay(sec,d){ const det=sec.querySelector("details.daymap"); det.addEventListener("toggle",()=>{ if(det.open) initDay(det,d); }); if(det.open) initDay(det,d); }
 function tryReal(){
   if(typeof L==="undefined") return;
   const img=new Image(); let done=false;
-  const ok=()=>{ if(done) return; done=true; initOverview();
-    document.querySelectorAll("details.daymap").forEach(det=>{ const d=DAYS.find(x=>"d"+x.id===det.closest("section").id);
-      det.addEventListener("toggle",()=>{ if(det.open) initDay(det,d); }); if(det.open) initDay(det,d); }); };
+  const ok=()=>{ if(done) return; done=true; window.__real=true; initOverview();
+    DAYS.forEach(d=>hookDay(document.getElementById("d"+d.id),d)); };
   const no=()=>{ if(done) return; done=true; const n=document.querySelector("#overview + .mapwrap .mapnote"); if(n) n.textContent+=" 这个预览环境加载不了在线地图，所以显示手绘版；打开公开网址或下载的 HTML 就是实景地图。"; };
   img.onload=ok; img.onerror=no; setTimeout(no,6000);
   img.src="https://a.basemaps.cartocdn.com/rastertiles/voyager/12/3638/1613.png";
