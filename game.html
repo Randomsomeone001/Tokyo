@@ -438,7 +438,7 @@ function draw(){
   res.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
   let rating=null;
   res.querySelectorAll("#stars button").forEach(b=>b.addEventListener("click",()=>{ rating=+b.dataset.r; res.querySelectorAll("#stars button").forEach(x=>x.setAttribute("aria-pressed",String(+x.dataset.r===rating))); }));
-  $("again").addEventListener("click",()=>{ spinning=false; S.step=0; S.a={pace:null,tier:null,food:[],shop:[],monday:null,night:null}; res.hidden=true; $("qbox").hidden=false; renderQ(); window.scrollTo({top:0}); });
+  $("again").addEventListener("click",()=>{ S.step=0; S.a={pace:null,tier:null,food:[],shop:[],monday:null,night:null}; res.hidden=true; $("qbox").hidden=false; renderQ(); window.scrollTo({top:0}); });
   $("send").addEventListener("click",async()=>{
     const note=$("saveNote"); const comment=$("cmt").value.trim();
     if(!rating&&!comment){ note.textContent="先点一个分数，或者写一句想改的地方。"; return; }
