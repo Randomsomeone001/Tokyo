@@ -138,7 +138,7 @@ footer{font-size:12px;color:var(--muted);text-align:center}
   <section class="machine" aria-label="十二星座决定你的专属行程">
     <div class="mtop">
       <div class="brand">十二星座决定你的专属行程<small>10.8 → 10.13 · 两个人 · 选 6 张券，出一张你的东京签</small></div>
-      <span class="coin" id="coin">¥0 投入</span>
+      <span class="coin" id="coin">¥0 投入</span><span class="coin" id="testerTag" hidden>自己试玩 · 不算朋友的</span>
     </div>
     <div class="screen" id="screen"><span>请选择：<b id="scrQ">出行强度</b></span><span id="scrN">券 1 / 6</span></div>
     <div class="steps" id="steps"></div>
@@ -306,6 +306,9 @@ const DAYS=[
 /* ---------- 状态 ---------- */
 const S={step:0,a:{pace:null,tier:null,food:[],shop:[],monday:null,night:null}};
 const $=id=>document.getElementById(id);
+/* 自己试玩的标记：打开 game.html#me 一次，这个浏览器以后玩的每一局都会标成 tester；打开 #notme 取消 */
+let TESTER=false;
+try{ if(location.hash==="#me") localStorage.setItem("tokyoTester","1"); if(location.hash==="#notme") localStorage.removeItem("tokyoTester"); TESTER=localStorage.getItem("tokyoTester")==="1"; }catch(e){ TESTER=location.hash==="#me"; }
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const RATE=0.0425, cny=v=>Math.round(v*RATE/10)*10;
 const API=/^https?:$/.test(location.protocol)&&!/claude\.ai|claudeusercontent|anthropic/.test(location.hostname);
@@ -414,7 +417,7 @@ function draw(){
   const stops=plan.reduce((a,d)=>a+d.items.filter(x=>!x.fixed&&!x.meal&&!x.bar).length,0);
   const bars=plan.reduce((a,d)=>a+d.items.filter(x=>x.bar).length,0);
   const hit=S.a.food.filter(c=>meals.some(m=>m.cat===c)).length;
-  LAST={answers:JSON.parse(JSON.stringify(S.a)),persona:per.name,kichi:per.kichi,
+  LAST={tester:TESTER,answers:JSON.parse(JSON.stringify(S.a)),persona:per.name,kichi:per.kichi,
     rolls:ROLLS.slice(),plan:plan.map(d=>({d:d.d,route:d.chosenRoute||null,items:d.items.map(x=>x.t+" "+x.n)})),foodCost:cost,stops,bars,v:1};
   const ans=[LABEL["pace:"+S.a.pace],LABEL["tier:"+S.a.tier]].concat(S.a.food.map(k=>LABEL["food:"+k]),S.a.shop.map(k=>LABEL["shop:"+k]),[LABEL["monday:"+S.a.monday],LABEL["night:"+S.a.night]]);
   const res=$("result"); res.hidden=false;
@@ -526,7 +529,7 @@ async function save(){
   }catch(e){ note.textContent="记录暂时没存上，不影响看签。"; }
 }
 
-renderQ();
+renderQ(); if(TESTER) $("testerTag").hidden=false;
 })();
 </script>
 </body></html>
