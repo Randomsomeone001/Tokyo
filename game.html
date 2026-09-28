@@ -138,7 +138,7 @@ footer{font-size:12px;color:var(--muted);text-align:center}
   <section class="machine" aria-label="十二星座决定你的专属行程">
     <div class="mtop">
       <div class="brand">十二星座决定你的专属行程<small>10.8 → 10.13 · 两个人 · 选 6 张券，出一张你的东京签</small></div>
-      <span class="coin" id="coin">¥0 投入</span><span class="coin" id="testerTag" hidden>自己试玩 · 不算朋友的</span>
+      <span class="coin" id="coin" hidden></span><span class="coin" id="testerTag" hidden>自己试玩 · 不算朋友的</span>
     </div>
     <div class="screen" id="screen"><span>请选择：<b id="scrQ">出行强度</b></span><span id="scrN">券 1 / 6</span></div>
     <div class="steps" id="steps"></div>
@@ -226,8 +226,7 @@ const DAYS=[
  {d:"10.10",wd:"周六",note:"调休上班日，但晚上不开会",slots:[
    {t:"11:45",kind:"meal",meal:"L",pick:[
      {n:"とんかつ.jp 表参道",cat:"tonkatsu",tier:"q",pp:2500,why:"炸猪排百名店 2024 / 2026"},
-     {n:"とんかつ まい泉 青山本店",cat:"tonkatsu",tier:"c",pp:2800,why:"1965 年的炸猪排老店"},
-     {n:"更科堀井（麻布十番）",cat:"soba",tier:"c",pp:2500,why:"1789 年的荞麦，吃完打车去表参道"}]},
+     {n:"とんかつ まい泉 青山本店",cat:"tonkatsu",tier:"c",pp:2800,why:"1965 年的炸猪排老店"}]},
    {t:"13:30",fixed:"Atelier Haruka 表参道做妆发（已安排）"},
    {t:"14:45",kind:"spot",cat:"cafe",opt:1,n:"KOFFEE MAMEYA",why:"豆子专门店的站立吧台"},
    {t:"15:15",kind:"spot",cat:"designer",n:"Mame Kurogouchi",why:"织物和工艺感很强的女装"},
@@ -237,7 +236,7 @@ const DAYS=[
    {t:"18:30",kind:"meal",meal:"D",pick:[
      {n:"銀座バードランド",cat:"yakitori",tier:"q",pp:13500,why:"烧鸟百名店 2023–2025"},
      {n:"鳥ぎん 銀座本店",cat:"yakitori",tier:"c",pp:3200,why:"70 多年的烤串釜饭"},
-     {n:"銀座 久兵衛",cat:"sushi",tier:"q",pp:25000,why:"晚上也能订的寿司名店"}]},
+     {n:"もつやき 登運とん（有乐町）",cat:"izakaya",tier:"c",pp:3800,why:"1953 年开在高架桥下的烤杂碎"}]},
    {t:"20:30",kind:"bar",n:"Punch Room",why:"Asia's 50 Best 2026 #23"},
    {t:"22:00",kind:"bar",second:1,n:"Star Bar Ginza",why:"Tabelog 酒吧百名店"}]},
  {d:"10.11",wd:"周日",note:"全天休息，三连休人多",slots:[
@@ -263,7 +262,8 @@ const DAYS=[
    {t:"12:00",kind:"meal",meal:"L",pick:[
      {n:"入谷 のだや",cat:"unagi",tier:"q",pp:10000,why:"鳗鱼百名店，Tabelog 3.97"},
      {n:"鳗割烹 伊豆荣 本店",cat:"unagi",tier:"q",pp:7000,why:"上野 300 年老店"},
-     {n:"上野藪そば",cat:"soba",tier:"c",pp:2000,why:"1892 年的荞麦"}]}],
+     {n:"上野藪そば",cat:"soba",tier:"c",pp:2000,why:"1892 年的荞麦"},
+     {n:"韻松亭（上野公园）",cat:"kaiseki",tier:"c",pp:3500,why:"1875 年创业，公园里的日式定食"}]}],
   routes:{
    asakusa:[
      {t:"13:20",kind:"spot",cat:"temple",n:"浅草寺",why:"节假日走两侧小路"},
@@ -318,7 +318,7 @@ function renderSteps(){
   const q=Q[Math.min(S.step,Q.length-1)];
   $("scrQ").textContent=S.step>=Q.length?"出签完成":q.title.replace(/？$/,"");
   $("scrN").textContent=S.step>=Q.length?"券 6 / 6":`券 ${S.step+1} / ${Q.length}`;
-  $("coin").textContent=`¥${(S.step*100).toLocaleString()} 投入`;
+  if(S.step<Q.length) $("coin").hidden=true;
 }
 function isOn(q,k){ const v=S.a[q.id]; return q.multi?v.includes(k):v===k; }
 function renderQ(){
@@ -349,7 +349,7 @@ function pickMeal(slot,used){
   slot.pick.forEach((c,i)=>{
     let s=0; if(used["n:"+c.n]) s-=100;
     if(S.a.food.includes(c.cat)) s+=4;
-    if(c.tier===want) s+=(S.a.tier==="dice"?6:3);
+    if(c.tier===want) s+=(S.a.tier==="dice"?6:5);
     if(used[c.cat]) s-=3*used[c.cat];
     s-=i*0.1; /* 同分时用手帐里的默认顺序 */
     if(s>bs){bs=s;best=c;}
@@ -416,6 +416,7 @@ function draw(){
   const cost=meals.reduce((a,m)=>a+m.pp,0);
   const stops=plan.reduce((a,d)=>a+d.items.filter(x=>!x.fixed&&!x.meal&&!x.bar).length,0);
   const bars=plan.reduce((a,d)=>a+d.items.filter(x=>x.bar).length,0);
+  $("coin").textContent=`6 天正餐每人 ¥${cost.toLocaleString()}（约 ${cny(cost).toLocaleString()} 元）`; $("coin").hidden=false;
   const hit=S.a.food.filter(c=>meals.some(m=>m.cat===c)).length;
   LAST={tester:TESTER,answers:JSON.parse(JSON.stringify(S.a)),persona:per.name,kichi:per.kichi,
     rolls:ROLLS.slice(),plan:plan.map(d=>({d:d.d,route:d.chosenRoute||null,items:d.items.map(x=>x.t+" "+x.n)})),foodCost:cost,stops,bars,v:1};
