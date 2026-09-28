@@ -133,11 +133,7 @@ footer{font-size:12px;color:var(--muted);text-align:center}
 
   <section class="slipwrap" id="result" hidden></section>
 
-  <section class="crowd" id="crowd">
-    <h3>大家怎么选</h3>
-    <div class="note" id="crowdNote">正在读取……</div>
-    <div class="bars" id="crowdBars"></div>
-  </section>
+
 
   <footer>行程数据来自「东京十月手帐」：每家店都按 Tabelog 百名店、米其林、50 Best 或 Google 高分挑过。会议时间（东京 20:00 以后）和已订的造型、航班不会被抽掉。</footer>
 </div>
@@ -428,35 +424,20 @@ function draw(){
     $("send").disabled=true; note.textContent="正在提交……";
     try{ const r=await fetch("/api/feedback",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:LAST.id,rating,comment})});
       const j=await r.json(); if(!j.ok) throw new Error(j.error);
-      note.innerHTML='<span class="ok">已提交，谢谢！</span> 你的选择和留言会帮下一版行程改得更好。'; loadCrowd();
+      note.innerHTML='<span class="ok">已提交，谢谢！</span> 你的选择和留言会帮下一版行程改得更好。';
     }catch(e){ $("send").disabled=false; note.textContent="没提交上，检查一下网络再点一次。"; }
   });
   save();
 }
 async function save(){
   const note=$("saveNote");
-  if(!API){ note.textContent="这是预览版，不会保存记录；把公开网址发给朋友玩，每一局都会记下来。"; return; }
+  if(!API){ note.textContent="这是预览版，不会保存记录；公开网址上的每一局都会记下来。"; return; }
   try{ const r=await fetch("/api/play",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(LAST)});
-    const j=await r.json(); if(j.ok){ LAST.id=j.id; note.textContent="这一局已经记下来了。"; loadCrowd(); } else note.textContent="记录暂时没存上（后台还没设置好）。";
+    const j=await r.json(); if(j.ok){ LAST.id=j.id; note.textContent="这一局已经记下来了。"; } else note.textContent="记录暂时没存上（后台还没设置好）。";
   }catch(e){ note.textContent="记录暂时没存上，不影响看签。"; }
 }
 
-/* ---------- 大家怎么选 ---------- */
-async function loadCrowd(){
-  const note=$("crowdNote"), bars=$("crowdBars");
-  if(!API){ note.textContent="公开网址上会显示所有玩家的选择统计（只有计数，不显示留言）。"; bars.innerHTML=""; return; }
-  try{ const j=await (await fetch("/api/stats",{cache:"no-store"})).json();
-    if(!j.ok){ note.textContent="统计暂时读不到。"; return; }
-    if(!j.plays){ note.textContent="还没有人玩过，你是第一个。"; bars.innerHTML=""; return; }
-    note.textContent=`已经有 ${j.plays} 局${j.rated?`，平均打分 ${j.rating} / 5`:""}。`;
-    const top=(obj,pre,n)=>Object.entries(obj||{}).sort((a,b)=>b[1]-a[1]).slice(0,n).map(([k,v])=>[LABEL[pre+":"+k]||k,v]);
-    const rows=[["出行强度",top(j.pace,"pace",3)],["吃饭",top(j.tier,"tier",3)],["最想吃",top(j.food,"food",5)],["想逛",top(j.shop,"shop",4)]];
-    bars.innerHTML=rows.map(([h,list])=>{ const mx=Math.max(1,...list.map(x=>x[1]));
-      return `<div class="note" style="margin-top:4px"><b>${esc(h)}</b></div>`+list.map(([k,v])=>`<div class="barrow"><span>${esc(k)}</span><span class="tr"><i style="width:${Math.round(v/mx*100)}%"></i></span><span class="v">${v}</span></div>`).join(""); }).join("");
-  }catch(e){ note.textContent="统计暂时读不到。"; }
-}
-
-renderQ(); loadCrowd();
+renderQ();
 })();
 </script>
 </body></html>
