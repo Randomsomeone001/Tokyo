@@ -1,0 +1,462 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"></head><body>
+<title>十二星座决定你的专属行程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{
+  --bg:#E9EDF1; --surface:#FFFFFF; --ink:#172131; --muted:#586477; --line:#D4DAE2;
+  --machine:#1F2B45; --machine2:#2B3A5C; --screen:#C9F2D6; --screenInk:#0E3B22;
+  --accent:#C8372D; --paper:#FFFFFF; --paperInk:#1B1B1B;
+  --k1:#F2C230; --k2:#3BA776; --k3:#E86A92; --k4:#4C8BD6; --k5:#F08A3C; --k6:#8C6FD1;
+  --shadow:0 2px 0 rgba(15,22,36,.18), 0 8px 24px rgba(15,22,36,.10);
+  --disp:"Dela Gothic One","Hiragino Sans","PingFang SC","Noto Sans SC",sans-serif;
+  --body:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F141D; --surface:#182130; --ink:#E7ECF3; --muted:#9BA7B9; --line:#2A3649;
+    --machine:#0A0F18; --machine2:#16213A; --screen:#0F3A24; --screenInk:#A9F0C2;
+    --accent:#F0604F; --paper:#F4F2EC; --paperInk:#1B1B1B;
+    --shadow:0 2px 0 rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F141D; --surface:#182130; --ink:#E7ECF3; --muted:#9BA7B9; --line:#2A3649;
+  --machine:#0A0F18; --machine2:#16213A; --screen:#0F3A24; --screenInk:#A9F0C2;
+  --accent:#F0604F; --paper:#F4F2EC; --paperInk:#1B1B1B;
+  --shadow:0 2px 0 rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 var(--body);padding-inline:16px;padding-block:20px 48px}
+.wrap{max-width:780px;margin:0 auto;display:grid;gap:18px}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--k4);outline-offset:2px}
+
+/* 机器头部 */
+.machine{background:var(--machine);color:#EEF2F8;border-radius:16px;padding:18px 18px 16px;box-shadow:var(--shadow);display:grid;gap:14px}
+.mtop{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--disp);font-size:clamp(22px,5vw,30px);line-height:1.1;letter-spacing:.02em;text-wrap:balance}
+.brand small{display:block;font-family:var(--body);font-size:13px;font-weight:400;color:#AFBBD0;letter-spacing:0;margin-top:6px}
+.coin{font-family:var(--mono);font-size:12px;color:#AFBBD0;border:1px solid #3A4A6E;border-radius:999px;padding:4px 10px;white-space:nowrap}
+.screen{background:var(--screen);color:var(--screenInk);border-radius:10px;padding:12px 14px;font-family:var(--mono);font-size:13px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;box-shadow:inset 0 2px 6px rgba(0,0,0,.25)}
+.screen b{font-weight:700}
+.steps{display:flex;gap:6px}
+.steps i{flex:1;height:6px;border-radius:3px;background:#34466B}
+.steps i.on{background:var(--k1)}
+.steps i.done{background:#7C8EB3}
+
+/* 题目 */
+.q{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:14px}
+.q h2{margin:0;font-size:19px;line-height:1.35;text-wrap:balance}
+.q .hint{margin:-8px 0 0;color:var(--muted);font-size:13px}
+.keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.key{position:relative;text-align:left;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:0 0 10px;overflow:hidden;box-shadow:0 2px 0 var(--line);transition:transform .08s ease, box-shadow .08s ease;min-height:92px;display:flex;flex-direction:column}
+.key .band{height:8px;background:var(--kc,var(--k1))}
+.key .kt{padding:8px 12px 0;font-weight:700;font-size:15px;line-height:1.3}
+.key .kd{padding:3px 12px 0;color:var(--muted);font-size:12px;line-height:1.45}
+.key .lamp{position:absolute;top:16px;right:10px;width:12px;height:12px;border-radius:50%;border:2px solid var(--line);background:transparent}
+.key[aria-pressed="true"]{border-color:var(--kc,var(--k1));box-shadow:0 0 0 2px var(--kc,var(--k1)) inset, 0 1px 0 var(--line);transform:translateY(1px)}
+.key[aria-pressed="true"] .lamp{background:var(--kc,var(--k1));border-color:var(--kc,var(--k1));box-shadow:0 0 8px var(--kc,var(--k1))}
+.nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{cursor:pointer;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 16px;font-weight:600;min-height:44px}
+.btn.go{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.nick{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.nick input{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0;width:180px}
+
+/* 签 */
+.slipwrap{display:grid;gap:14px}
+.slip{background:var(--paper);color:var(--paperInk);border-radius:6px;box-shadow:var(--shadow);padding:22px 20px 18px;position:relative;overflow:hidden;animation:out .7s cubic-bezier(.2,.8,.2,1)}
+@keyframes out{from{transform:translateY(-24px);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){.slip{animation:none}}
+.slip::before{content:"";position:absolute;inset:0 0 auto 0;height:10px;background:repeating-linear-gradient(90deg,var(--accent) 0 18px,transparent 18px 26px)}
+.fortune{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.kichi{font-family:var(--disp);font-size:44px;line-height:1;color:var(--accent);writing-mode:vertical-rl;letter-spacing:.1em;border:3px solid var(--accent);border-radius:6px;padding:10px 6px}
+.persona{flex:1;min-width:200px}
+.persona h3{margin:0;font-size:22px;line-height:1.3;text-wrap:balance}
+.persona p{margin:6px 0 0;font-size:14px;color:#454545}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font-size:12px;border:1px solid #CFCFCF;border-radius:999px;padding:2px 9px;color:#333}
+.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.sum div{border-top:2px solid #1B1B1B;padding-top:6px}
+.sum b{display:block;font-family:var(--mono);font-size:18px;font-variant-numeric:tabular-nums}
+.sum span{font-size:12px;color:#555}
+@media (max-width:480px){.sum{grid-template-columns:1fr 1fr}}
+.days{display:grid;gap:12px;margin-top:16px}
+.day{border-top:1px dashed #BDBDBD;padding-top:10px}
+.day h4{margin:0 0 6px;font-size:15px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.day h4 .d{font-family:var(--mono);color:var(--accent)}
+.day h4 small{font-weight:400;color:#666;font-size:12px}
+.day ol{margin:0;padding:0;list-style:none;display:grid;gap:4px}
+.day li{display:grid;grid-template-columns:52px 1fr;gap:8px;font-size:14px;line-height:1.45}
+.day li .t{font-family:var(--mono);font-size:12px;color:#666;padding-top:2px}
+.day li .why{display:block;font-size:12px;color:#777}
+.day li.meal .n::before{content:"食 ";color:var(--accent);font-weight:700}
+.day li.bar .n::before{content:"酒 ";color:#4C5FA8;font-weight:700}
+.stamp{position:absolute;right:14px;bottom:12px;font-family:var(--disp);color:var(--accent);opacity:.18;font-size:64px;line-height:1;pointer-events:none}
+
+.fb{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:12px}
+.fb h3{margin:0;font-size:16px}
+.stars{display:flex;gap:6px;flex-wrap:wrap}
+.stars button{cursor:pointer;border:1px solid var(--line);background:var(--surface);border-radius:8px;min-width:44px;min-height:44px;font-family:var(--mono);font-weight:700}
+.stars button[aria-pressed="true"]{background:var(--k1);border-color:var(--k1);color:#1B1B1B}
+.fb textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px;min-height:80px;width:100%;resize:vertical}
+.note{font-size:13px;color:var(--muted)}
+.ok{color:var(--k2);font-weight:600}
+
+.crowd{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:10px}
+.crowd h3{margin:0;font-size:16px}
+.bars{display:grid;gap:6px}
+.barrow{display:grid;grid-template-columns:92px 1fr 32px;gap:8px;align-items:center;font-size:13px}
+.barrow .tr{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.barrow .tr i{display:block;height:100%;background:var(--k4)}
+.barrow .v{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+footer{font-size:12px;color:var(--muted);text-align:center}
+</style>
+
+<div class="wrap">
+  <section class="machine" aria-label="十二星座决定你的专属行程">
+    <div class="mtop">
+      <div class="brand">十二星座决定你的专属行程<small>10.8 → 10.13 · 两个人 · 选 6 张券，出一张你的东京签</small></div>
+      <span class="coin" id="coin">¥0 投入</span>
+    </div>
+    <div class="screen" id="screen"><span>请选择：<b id="scrQ">出行强度</b></span><span id="scrN">券 1 / 6</span></div>
+    <div class="steps" id="steps"></div>
+  </section>
+
+  <section class="q" id="qbox" aria-live="polite"></section>
+
+  <section class="slipwrap" id="result" hidden></section>
+
+  <section class="crowd" id="crowd">
+    <h3>大家怎么选</h3>
+    <div class="note" id="crowdNote">正在读取……</div>
+    <div class="bars" id="crowdBars"></div>
+  </section>
+
+  <footer>行程数据来自「东京十月手帐」：每家店都按 Tabelog 百名店、米其林、50 Best 或 Google 高分挑过。会议时间（东京 20:00 以后）和已订的造型、航班不会被抽掉。</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+/* ---------- 题目 ---------- */
+const Q=[
+ {id:"pace",title:"这趟想玩多累？",hint:"决定每天塞几站、几点出门。",multi:false,keys:[
+   ["lazy","懒人慢游","每天 2–3 站，10:30 以后出门，逛累了就回酒店","--k2"],
+   ["mid","刚刚好","每天 4–5 站，下午一条步行线逛到底","--k1"],
+   ["max","能多看就多看","每天 6 站以上，可选的景点全都去","--k5"]]},
+ {id:"tier",title:"吃饭走哪条线？",hint:"品质线是米其林和 Tabelog 百名店；亲民线是本地人常去的高分老店。",multi:false,keys:[
+   ["q","品质榜单","人均 ¥8,000–30,000（约 340–1,280 元），大多要订","--k3"],
+   ["c","亲民老店","人均 ¥1,000–7,000（约 40–300 元），大多排队就能吃","--k2"],
+   ["mix","午饭亲民，晚饭品质","午饭 ¥1,000–7,000（约 40–300 元），晚饭 ¥8,000–30,000（约 340–1,280 元）","--k6"],
+   ["dice","都可以，实在不行摇骰子","每顿饭掷一次：单数吃亲民，双数吃品质，人均 ¥1,000–30,000（约 40–1,280 元）","--k5"]]},
+ {id:"food",title:"最想吃哪些？",hint:"可以多选，最多 5 个；选中的会优先排进去。",multi:true,max:5,keys:[
+   ["sushi","寿司","银座久兵卫 / 美登利","--k4"],["tempura","天妇罗","天一 / 天國 / よこ田","--k1"],
+   ["wagyu","和牛烧肉","正泰苑 / うしみつ","--k3"],["sukiyaki","寿喜烧","浅草今半 / 米久","--k5"],
+   ["unagi","鳗鱼饭","のだや / 伊豆荣","--k6"],["yakitori","烧鸟 · 烤串","Birdland / 鳥ぎん / あべちゃん","--k2"],
+   ["kaiseki","怀石 · 割烹","六雁 / 中嶋 / ふくみ","--k4"],["soba","荞麦","更科堀井 / 上野藪そば","--k1"],
+   ["tonkatsu","炸猪排","とんかつ.jp / まい泉","--k5"],["izakaya","拉面 · 居酒屋","麺屋海神 / 三州屋 / たつや","--k3"]]},
+ {id:"shop",title:"喜欢逛什么样的店？",hint:"可以多选；南极装备和周六造型是必去的，不用选。",multi:true,max:6,keys:[
+   ["designer","设计师买手店","Mame、AURALEE、1LDK、DSM","--k3"],["craft","手艺老铺 · 器物","よのや、合羽桥、SML、うつわ祥見","--k5"],
+   ["dept","百货 · 大牌","伊势丹、GINZA SIX、三越","--k4"],["books","书店 · 文具","茑屋书店、伊东屋、Traveler's Factory","--k6"],
+   ["cafe","咖啡 · 甜品","KOFFEE MAMEYA、L'Ambre、FUGLEN","--k1"],["temple","寺院 · 庭园","增上寺、浅草寺、大佛、长谷寺","--k2"],
+   ["view","看塔 · 夜景","东京塔、稻村崎日落、31 楼大堂吧","--k4"]]},
+ {id:"monday",title:"周一下午（巴西放假，整天都空）去哪？",hint:"上午都在上野，吃完鳗鱼再分开走。",multi:false,keys:[
+   ["asakusa","浅草老东京","浅草寺、手艺老铺、合羽桥道具街，晚上寿喜烧","--k5"],
+   ["nakameguro","中目黑 · 代官山","目黑川边的买手店、茑屋书店，晚上惠比寿烧肉","--k3"],
+   ["auto","帮我选","按你前面选的口味和店来定","--k1"]]},
+ {id:"night",title:"晚上不开会的那几晚怎么过？",hint:"周五、周六、周日、周一晚上都不开会。",multi:false,keys:[
+   ["early","吃完就回酒店","早点休息，第二天精神好","--k2"],
+   ["one","喝一杯再回","每晚一家看夜景或榜单酒吧","--k4"],
+   ["two","续摊","能去两家就去两家，Asia's 50 Best 都排上","--k6"]]}
+];
+const LABEL={}; Q.forEach(q=>q.keys.forEach(k=>LABEL[q.id+":"+k[0]]=k[1]));
+
+/* ---------- 候选池 ----------
+ kind: meal / bar / spot / fixed；tier: q / c；cat: 餐厅品类或店铺类型；opt: 可以被懒人模式省掉；pp: 人均日元 */
+const DAYS=[
+ {d:"10.8",wd:"周四",note:"落地打车到酒店，20:00 开会",latest:"19:00",slots:[
+   {t:"12:30",fixed:"成田 T2 落地，打车去酒店（港区定额约 ¥35,000）"},
+   {t:"15:00",fixed:"mesm Tokyo 入住，放下行李"},
+   {t:"15:15",kind:"meal",meal:"L",pick:[
+     {n:"天ぷら 天一 銀座本店",cat:"tempura",tier:"q",pp:18000,why:"天妇罗百名店，中午到晚上不休息"},
+     {n:"天冨良 よこ田",t:"16:30",shift:75,cat:"tempura",tier:"q",pp:20000,why:"麻布十番，连续 8 年米其林推荐（先在酒店歇一会儿）"},
+     {n:"銀座 天國 本店",cat:"tempura",tier:"c",pp:4000,why:"1885 年的天丼老铺"},
+     {n:"あべちゃん 麻布十番",t:"16:30",shift:75,cat:"yakitori",tier:"c",pp:3800,why:"1933 年的炖牛杂和烤串（先在酒店歇一会儿）"}]},
+   {t:"16:45",side:"A",kind:"spot",cat:"temple",opt:1,n:"增上寺",why:"古寺背后就是东京塔，赶上 17:16 日落"},
+   {t:"17:30",side:"A",kind:"spot",cat:"view",opt:1,n:"东京塔 Main Deck",why:"蓝调时刻看城市亮灯"},
+   {t:"16:45",side:"B",kind:"spot",cat:"designer",alsoCat:["books","dept"],opt:1,n:"麻布台之丘",why:"Conran Shop、大垣书店、United Arrows"},
+   {t:"18:30",kind:"bar",cat:"view",n:"Stellar Garden（33F）",why:"正对东京塔的酒吧",meeting:true},
+   {t:"20:00",fixed:"回酒店开会"}]},
+ {d:"10.9",wd:"周五",note:"12:00 后自由，晚上不开会",slots:[
+   {t:"12:20",kind:"meal",meal:"L",pick:[
+     {n:"新宿割烹 中嶋",cat:"kaiseki",tier:"q",pp:1500,why:"米其林星级割烹的沙丁鱼午定食"},
+     {n:"麺屋海神",cat:"izakaya",tier:"c",pp:1200,why:"拉面百名店，鱼汤盐拉面"},
+     {n:"王ろじ",cat:"tonkatsu",tier:"c",pp:1800,why:"1921 年的炸猪排咖喱饭"},
+     {n:"かつ プリポー",cat:"tonkatsu",tier:"q",pp:3000,why:"炸猪排百名店 2026，Tabelog 3.85"}]},
+   {t:"13:30",kind:"spot",cat:"craft",opt:1,n:"BEAMS JAPAN",why:"6 层日本制造的手艺选品"},
+   {t:"14:00",kind:"spot",cat:"dept",alsoCat:["designer"],opt:1,n:"伊势丹新宿 本馆",why:"3F 国际设计师，5F 日本器物"},
+   {t:"15:30",kind:"spot",cat:"cafe",opt:1,n:"CAFE AALIYA",why:"Café 百名店，30 年的法式吐司"},
+   {t:"16:10",fixed:"Alpen / L-Breath / mont-bell 买齐南极装备"},
+   {t:"17:40",fixed:"打车回酒店放东西"},
+   {t:"19:00",kind:"meal",meal:"D",pick:[
+     {n:"六雁（银座怀石）",cat:"kaiseki",tier:"q",pp:33000,why:"以蔬菜为主角的现代江户怀石"},
+     {n:"天ぷら あらたみかわ",cat:"tempura",tier:"q",pp:25000,why:"天妇罗百名店 2025，Tabelog 4.02"},
+     {n:"大衆割烹 三州屋",cat:"izakaya",tier:"c",pp:3500,why:"1968 年的银座大众割烹"},
+     {n:"鳥ぎん 銀座本店",cat:"yakitori",tier:"c",pp:3200,why:"烤串 + 鸡肉釜饭，1951 年创业"}]},
+   {t:"21:15",kind:"bar",cat:"view",n:"Virtù（39F）",why:"Asia's 50 Best 2026 #26"},
+   {t:"22:45",kind:"bar",second:1,n:"Gold Bar at EDITION",why:"Asia 51–100，周五有 DJ"}]},
+ {d:"10.10",wd:"周六",note:"调休上班日，但晚上不开会",slots:[
+   {t:"11:45",kind:"meal",meal:"L",pick:[
+     {n:"とんかつ.jp 表参道",cat:"tonkatsu",tier:"q",pp:2500,why:"炸猪排百名店 2024 / 2026"},
+     {n:"とんかつ まい泉 青山本店",cat:"tonkatsu",tier:"c",pp:2800,why:"1965 年的炸猪排老店"},
+     {n:"更科堀井（麻布十番）",cat:"soba",tier:"c",pp:2500,why:"1789 年的荞麦，吃完打车去表参道"}]},
+   {t:"13:30",fixed:"Atelier Haruka 表参道做妆发（已安排）"},
+   {t:"14:45",kind:"spot",cat:"cafe",opt:1,n:"KOFFEE MAMEYA",why:"豆子专门店的站立吧台"},
+   {t:"15:15",kind:"spot",cat:"designer",n:"Mame Kurogouchi",why:"织物和工艺感很强的女装"},
+   {t:"15:45",kind:"spot",cat:"craft",alsoCat:["designer"],opt:1,n:"call by minä perhonen",why:"皆川明的布料和生活器物"},
+   {t:"16:15",kind:"spot",cat:"designer",opt:1,n:"AURALEE / Arts & Science",why:"面料和剪裁见长的日本品牌"},
+   {t:"16:45",kind:"bar",cat:"view",keep:1,n:"EDITION 虎之门 31F 大堂吧",why:"带着妆发拍东京塔日落"},
+   {t:"18:30",kind:"meal",meal:"D",pick:[
+     {n:"銀座バードランド",cat:"yakitori",tier:"q",pp:13500,why:"烧鸟百名店 2023–2025"},
+     {n:"鳥ぎん 銀座本店",cat:"yakitori",tier:"c",pp:3200,why:"70 多年的烤串釜饭"},
+     {n:"銀座 久兵衛",cat:"sushi",tier:"q",pp:25000,why:"晚上也能订的寿司名店"}]},
+   {t:"20:30",kind:"bar",n:"Punch Room",why:"Asia's 50 Best 2026 #23"},
+   {t:"22:00",kind:"bar",second:1,n:"Star Bar Ginza",why:"Tabelog 酒吧百名店"}]},
+ {d:"10.11",wd:"周日",note:"全天休息，三连休人多",slots:[
+   {t:"10:30",fixed:"滨松町 → 镰仓（约 1 小时 10 分）"},
+   {t:"12:00",kind:"meal",meal:"L",pick:[
+     {n:"鎌倉ふくみ",cat:"kaiseki",tier:"q",pp:9800,why:"镰仓食材的日本料理午餐套餐"},
+     {n:"秋本",cat:"izakaya",tier:"c",pp:2500,why:"镰仓特产银鱼盖饭，日本料理百名店"},
+     {n:"鎌倉 松原庵",cat:"soba",tier:"c",pp:3000,why:"荞麦百名店的老宅，要排队"}]},
+   {t:"13:30",kind:"spot",cat:"craft",opt:1,n:"うつわ祥見 onari NEAR",why:"日本陶艺家作品"},
+   {t:"14:00",kind:"spot",cat:"craft",opt:1,n:"WABIAN",why:"天然材料的篮子和器物"},
+   {t:"14:40",kind:"spot",cat:"temple",n:"镰仓大佛",why:"10 月 8:00–17:00"},
+   {t:"15:15",kind:"spot",cat:"temple",opt:1,n:"长谷寺",why:"山腰俯瞰由比滨"},
+   {t:"15:50",kind:"spot",cat:"cafe",alsoCat:["craft"],opt:1,n:"vuori",why:"一楼咖啡，二楼器物艺廊"},
+   {t:"16:45",kind:"spot",cat:"view",keep:1,n:"稻村崎看日落",why:"17:12 日落，天气好能看到富士山剪影"},
+   {t:"19:30",kind:"meal",meal:"D",pick:[
+     {n:"正泰苑 芝大门",cat:"wagyu",tier:"q",pp:10000,why:"烧肉百名店连续 8 年"},
+     {n:"总本家 更科堀井",cat:"soba",tier:"c",pp:2500,why:"230 年的荞麦老铺"},
+     {n:"麻布 やきとん ふじ嶋",cat:"yakitori",tier:"c",pp:4500,why:"猪肉串居酒屋"}]},
+   {t:"21:30",kind:"bar",cat:"view",n:"Tokyo Confidential",why:"Asia 2025 #70，露台正对东京塔"},
+   {t:"23:00",kind:"bar",second:1,n:"Bar Trench（惠比寿）",why:"Asia 2026 #53"}]},
+ {d:"10.12",wd:"周一",note:"巴西放假，晚上不开会",route:true,slots:[
+   {t:"10:30",kind:"spot",cat:"temple",alsoCat:["books"],opt:1,n:"东京国立博物馆（广重特展）",why:"可选，睡够了再去"},
+   {t:"12:00",kind:"meal",meal:"L",pick:[
+     {n:"入谷 のだや",cat:"unagi",tier:"q",pp:10000,why:"鳗鱼百名店，Tabelog 3.97"},
+     {n:"鳗割烹 伊豆荣 本店",cat:"unagi",tier:"q",pp:7000,why:"上野 300 年老店"},
+     {n:"上野藪そば",cat:"soba",tier:"c",pp:2000,why:"1892 年的荞麦"}]}],
+  routes:{
+   asakusa:[
+     {t:"13:20",kind:"spot",cat:"temple",n:"浅草寺",why:"节假日走两侧小路"},
+     {t:"13:50",kind:"spot",cat:"craft",opt:1,n:"よのや櫛舗 / ふじ屋",why:"1717 年的黄杨木梳、手染手拭"},
+     {t:"14:50",kind:"spot",cat:"cafe",opt:1,n:"FUGLEN ASAKUSA",why:"挪威精品咖啡"},
+     {t:"16:00",kind:"spot",cat:"craft",n:"合羽桥道具街 · 釜浅商店",why:"手工厨刀可现场刻名"},
+     {t:"18:00",kind:"meal",meal:"D",pick:[
+       {n:"浅草今半",cat:"sukiyaki",tier:"q",pp:17000,why:"寿喜烧百名店"},
+       {n:"米久本店",cat:"sukiyaki",tier:"c",pp:6000,why:"1886 年的牛锅"},
+       {n:"ヨシカミ",cat:"izakaya",tier:"c",pp:3500,why:"1951 年的浅草洋食"}]},
+     {t:"20:00",kind:"bar",n:"浅草サンボア",why:"Tabelog 酒吧百名店的 Highball"}],
+   nakameguro:[
+     {t:"13:50",kind:"spot",cat:"books",opt:1,n:"TRAVELER'S FACTORY",why:"旅行手帐旗舰店"},
+     {t:"14:15",kind:"spot",cat:"cafe",opt:1,n:"ONIBUS COFFEE",why:"老房子里的精品咖啡"},
+     {t:"14:50",kind:"spot",cat:"designer",n:"Vase / 1LDK",why:"目黑川边的买手店"},
+     {t:"15:50",kind:"spot",cat:"craft",opt:1,n:"工藝 器と道具 SML",why:"日本各地的陶瓷和木器"},
+     {t:"16:15",kind:"spot",cat:"designer",alsoCat:["craft"],opt:1,n:"OKURA / かまわぬ",why:"蓝染服装、手拭"},
+     {t:"17:00",kind:"spot",cat:"books",alsoCat:["cafe"],n:"代官山 T-SITE 茑屋书店",why:"逛累了在 IVY PLACE 坐坐"},
+     {t:"18:30",kind:"meal",meal:"D",pick:[
+       {n:"焼肉 うしみつ",cat:"wagyu",tier:"q",pp:12000,why:"惠比寿和牛烧肉"},
+       {n:"ビーフキッチン 中目黒",cat:"wagyu",tier:"q",pp:9000,why:"烧肉百名店 6 年"},
+       {n:"たつや 駅前店",cat:"izakaya",tier:"c",pp:3000,why:"站着吃的烤猪杂串老店"}]},
+     {t:"20:30",kind:"bar",n:"Bar Trench",why:"Asia 2026 #53"},
+     {t:"22:00",kind:"bar",second:1,n:"Bar Tram",why:"Trench 的姐妹店"}]}},
+ {d:"10.13",wd:"周二",note:"上午空，17:45 去成田",slots:[
+   {t:"11:30",kind:"meal",meal:"L",pick:[
+     {n:"银座 久兵卫 本店",cat:"sushi",tier:"q",pp:16500,why:"吧台「久兵卫」套餐 16 贯"},
+     {n:"梅丘寿司の美登利 銀座",cat:"sushi",tier:"c",pp:3200,why:"东京人排队的平价寿司"},
+     {n:"天ぷら 天一",cat:"tempura",tier:"q",pp:12000,why:"天妇罗百名店"},
+     {n:"竹葉亭 本店",cat:"unagi",tier:"c",pp:3500,why:"江户老铺的鲷鱼茶泡饭和鳗鱼"}]},
+   {t:"12:45",kind:"spot",cat:"cafe",opt:1,n:"Café de L'Ambre",why:"1948 年只做咖啡的喫茶店"},
+   {t:"13:30",kind:"spot",cat:"dept",alsoCat:["books","designer"],n:"GINZA SIX · 茑屋书店",why:"日本设计师品牌和艺术书"},
+   {t:"14:30",kind:"spot",cat:"designer",opt:1,n:"Dover Street Market Ginza",why:"川久保玲策划的集合店"},
+   {t:"14:50",kind:"spot",cat:"temple",opt:1,n:"滨离宫 中岛御茶屋",why:"池中茶屋喝抹茶"},
+   {t:"15:15",kind:"spot",cat:"books",opt:1,n:"伊东屋",why:"12 层文具店"},
+   {t:"16:00",kind:"spot",cat:"dept",n:"银座三越 地下食品层",why:"买伴手礼"},
+   {t:"17:45",fixed:"打车去成田，22:30 EK319 起飞"}]}
+];
+
+/* ---------- 状态 ---------- */
+const S={step:0,a:{pace:null,tier:null,food:[],shop:[],monday:null,night:null}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const RATE=0.0425, cny=v=>Math.round(v*RATE/10)*10;
+const API=/^https?:$/.test(location.protocol)&&!/claude\.ai|claudeusercontent|anthropic/.test(location.hostname);
+
+function renderSteps(){
+  $("steps").innerHTML=Q.map((q,i)=>`<i class="${i<S.step?"done":i===S.step?"on":""}"></i>`).join("");
+  const q=Q[Math.min(S.step,Q.length-1)];
+  $("scrQ").textContent=S.step>=Q.length?"出签完成":q.title.replace(/？$/,"");
+  $("scrN").textContent=S.step>=Q.length?"券 6 / 6":`券 ${S.step+1} / ${Q.length}`;
+  $("coin").textContent=`¥${(S.step*100).toLocaleString()} 投入`;
+}
+function isOn(q,k){ const v=S.a[q.id]; return q.multi?v.includes(k):v===k; }
+function renderQ(){
+  renderSteps();
+  const q=Q[S.step]; const box=$("qbox");
+  const ready=q.multi?S.a[q.id].length>0:!!S.a[q.id];
+  box.innerHTML=`<h2>${esc(q.title)}</h2><p class="hint">${esc(q.hint)}${q.multi?` 已选 ${S.a[q.id].length} / ${q.max}`:""}</p>
+   <div class="keys">${q.keys.map(k=>`<button type="button" class="key" style="--kc:var(${k[3]})" aria-pressed="${isOn(q,k[0])}" data-k="${k[0]}"><span class="band"></span><span class="lamp"></span><span class="kt">${esc(k[1])}</span><span class="kd">${esc(k[2])}</span></button>`).join("")}</div>
+   ${S.step===0?`<p class="nick">不记名：只记下选择和打分，不会记录你是谁。</p>`:""}
+   <div class="nav"><button type="button" class="btn" id="back" ${S.step===0?"disabled":""}>上一张</button>
+   <button type="button" class="btn go" id="next" ${ready?"":"disabled"}>${S.step===Q.length-1?"出签":"下一张"}</button></div>`;
+  box.querySelectorAll(".key").forEach(b=>b.addEventListener("click",()=>{
+    const k=b.dataset.k;
+    if(q.multi){ const arr=S.a[q.id]; const i=arr.indexOf(k); if(i>=0) arr.splice(i,1); else if(arr.length<q.max) arr.push(k); }
+    else S.a[q.id]=k;
+    renderQ(); const nb=$("qbox").querySelector(`[data-k="${k}"]`); if(nb) nb.focus();
+  }));
+  $("back").addEventListener("click",()=>{ if(S.step>0){S.step--;renderQ();} });
+  $("next").addEventListener("click",()=>{ if(S.step<Q.length-1){S.step++;renderQ();} else draw(); });
+}
+
+/* ---------- 出签：打分挑店 ---------- */
+let ROLLS=[];
+function wantTier(meal,slot){ const t=S.a.tier;
+  if(t==="dice"){ const r=1+Math.floor(Math.random()*6); ROLLS.push(r); slot._roll=r; return r%2?"c":"q"; }
+  return t==="mix"?(meal==="L"?"c":"q"):t; }
+function pickMeal(slot,used){
+  let best=null,bs=-1e9; const want=wantTier(slot.meal,slot);
+  slot.pick.forEach((c,i)=>{
+    let s=0; if(used["n:"+c.n]) s-=100;
+    if(S.a.food.includes(c.cat)) s+=4;
+    if(c.tier===want) s+=(S.a.tier==="dice"?6:3);
+    if(used[c.cat]) s-=3*used[c.cat];
+    s-=i*0.1; /* 同分时用手帐里的默认顺序 */
+    if(s>bs){bs=s;best=c;}
+  });
+  used[best.cat]=(used[best.cat]||0)+1; used["n:"+best.n]=1;
+  return best;
+}
+function spotScore(sl){ const cats=[sl.cat].concat(sl.alsoCat||[]); return cats.filter(c=>S.a.shop.includes(c)).length; }
+function buildDay(day,used){
+  let slots=day.slots.slice();
+  if(day.route){
+    let r=S.a.monday;
+    if(r==="auto"){ const na=["designer","books"].filter(c=>S.a.shop.includes(c)).length+(S.a.food.includes("wagyu")?1:0);
+      const as=["craft","temple"].filter(c=>S.a.shop.includes(c)).length+(S.a.food.includes("sukiyaki")?1:0); r=na>as?"nakameguro":"asakusa"; }
+    day.chosenRoute=r; slots=slots.concat(day.routes[r]);
+  }
+  const pace=S.a.pace, night=S.a.night;
+  const cap=pace==="lazy"?2:pace==="mid"?4:99;
+  const spots=slots.filter(s=>s.kind==="spot");
+  const ranked=spots.map(s=>({s,sc:spotScore(s)+(s.opt?0:0.5)})).sort((a,b)=>b.sc-a.sc);
+  const keepSpots=new Set();
+  ranked.forEach(({s,sc},i)=>{ if(!s.opt||s.keep) keepSpots.add(s); else if(pace==="max") keepSpots.add(s); else if(keepSpots.size<cap&&(sc>0||pace==="mid")) keepSpots.add(s); });
+  if(pace==="lazy") ranked.filter(x=>!x.s.opt).forEach(x=>keepSpots.add(x.s));
+  const sideSc=k=>spots.filter(s=>s.side===k).reduce((a,s)=>a+spotScore(s),0);
+  if(spots.some(s=>s.side)){ const lose=sideSc("B")>sideSc("A")?"A":"B"; spots.filter(s=>s.side===lose).forEach(s=>keepSpots.delete(s)); }
+  const out=[]; let shift=0;
+  const tm=t=>{ const [h,m]=t.split(":").map(Number); const v=h*60+m+shift; return Math.floor(v/60)+":"+String(v%60).padStart(2,"0"); };
+  const late=t=>day.latest&&shift&&(()=>{ const [h,m]=t.split(":").map(Number), [lh,lm]=day.latest.split(":").map(Number); return h*60+m+shift>lh*60+lm; })();
+  slots.forEach(s=>{
+    if(s.fixed){ out.push({t:s.t,n:s.fixed,fixed:1}); return; }
+    if(s.kind==="meal"){ const c=pickMeal(s,used); if(c.shift) shift=c.shift; out.push({t:c.t||s.t,n:c.n,why:(s._roll?`骰子掷出 ${s._roll} 点，吃${s._roll%2?"亲民":"品质"} · `:"")+c.why,meal:1,pp:c.pp,tier:c.tier,cat:c.cat}); return; }
+    if(late(s.t)) return;
+    const T=shift?tm(s.t):s.t;
+    if(s.kind==="spot"){ if(keepSpots.has(s)) out.push({t:T,n:s.n,why:s.why,cats:[s.cat].concat(s.alsoCat||[])}); return; }
+    if(s.kind==="bar"){
+      if(s.keep){ out.push({t:T,n:s.n,why:s.why,bar:1}); return; }
+      if(s.meeting){ if(night!=="early"&&S.a.shop.includes("view")) out.push({t:T,n:s.n,why:s.why+"（19:25 前要走）",bar:1}); return; }
+      if(night==="early") return; if(s.second&&night!=="two") return;
+      out.push({t:T,n:s.n,why:s.why,bar:1});
+    }
+  });
+  return out;
+}
+function persona(){
+  const p=S.a.pace, t=S.a.tier, f=S.a.food, sh=S.a.shop;
+  const name={lazy:{q:"松弛贵妇",c:"巷子老饕",mix:"慢游美食家",dice:"随缘松弛派"},mid:{q:"精致城市漫步者",c:"东京生活家",mix:"会吃会逛的行家",dice:"命运美食家"},max:{q:"米其林特种兵",c:"暴走老饕",mix:"全能打卡王",dice:"赌神级吃货"}}[p][t];
+  const lines=[];
+  if(sh.includes("designer")) lines.push("衣柜会比来时满"); if(sh.includes("craft")) lines.push("会带回一把刻名的刀或一只杯子");
+  if(sh.includes("view")) lines.push("相册里东京塔至少 30 张"); if(f.includes("wagyu")||f.includes("sukiyaki")) lines.push("和牛是这趟的主线");
+  if(f.includes("sushi")) lines.push("久兵卫的吧台等你"); if(S.a.night==="two") lines.push("榜单酒吧一家不落");
+  if(!lines.length) lines.push("按自己的节奏，舒服最重要");
+  const kichi=(p==="lazy"&&S.a.night!=="two")?"大吉":p==="max"?"末吉":"中吉";
+  return {name,lines,kichi};
+}
+let LAST=null;
+function draw(){
+  S.step=Q.length; renderSteps(); $("qbox").hidden=true;
+  ROLLS=[]; const used={}; const plan=DAYS.map(d=>({d:d.d,wd:d.wd,note:d.note,route:d.route?(S.a.monday==="auto"?d:null):null,items:buildDay(d,used),chosenRoute:d.chosenRoute}));
+  const per=persona();
+  const meals=plan.flatMap(d=>d.items.filter(x=>x.meal));
+  const cost=meals.reduce((a,m)=>a+m.pp,0);
+  const stops=plan.reduce((a,d)=>a+d.items.filter(x=>!x.fixed&&!x.meal&&!x.bar).length,0);
+  const bars=plan.reduce((a,d)=>a+d.items.filter(x=>x.bar).length,0);
+  const hit=S.a.food.filter(c=>meals.some(m=>m.cat===c)).length;
+  LAST={answers:JSON.parse(JSON.stringify(S.a)),persona:per.name,kichi:per.kichi,
+    rolls:ROLLS.slice(),plan:plan.map(d=>({d:d.d,route:d.chosenRoute||null,items:d.items.map(x=>x.t+" "+x.n)})),foodCost:cost,stops,bars,v:1};
+  const ans=[LABEL["pace:"+S.a.pace],LABEL["tier:"+S.a.tier]].concat(S.a.food.map(k=>LABEL["food:"+k]),S.a.shop.map(k=>LABEL["shop:"+k]),[LABEL["monday:"+S.a.monday],LABEL["night:"+S.a.night]]);
+  const res=$("result"); res.hidden=false;
+  res.innerHTML=`<article class="slip" aria-label="你的东京签">
+    <div class="fortune"><div class="kichi">${per.kichi}</div><div class="persona"><h3>你是「${esc(per.name)}」</h3><p>${esc(per.lines.join("；"))}。</p>
+    <div class="chips">${ans.map(a=>`<span class="chip">${esc(a)}</span>`).join("")}</div></div></div>
+    <div class="sum"><div><b>¥${cost.toLocaleString()}</b><span>6 天正餐每人合计（约 ${cny(cost).toLocaleString()} 元）</span></div><div><b>${stops}</b><span>要逛的店和景点</span></div><div><b>${hit} / ${S.a.food.length}</b><span>想吃的品类吃到了</span></div></div>
+    <div class="days">${plan.map(d=>`<section class="day"><h4><span class="d">${d.d}</span>${d.wd}<small>${esc(d.note)}${d.chosenRoute?` · 下午走${d.chosenRoute==="asakusa"?"浅草":"中目黑、代官山"}`:""}</small></h4><ol>${d.items.map(x=>`<li class="${x.meal?"meal":x.bar?"bar":""}"><span class="t">${esc(x.t)}</span><span><span class="n">${esc(x.n)}</span>${x.why?`<span class="why">${esc(x.why)}${x.pp?` · 人均 ¥${x.pp.toLocaleString()}（约 ${cny(x.pp).toLocaleString()} 元）`:""}</span>`:""}</span></li>`).join("")}</ol></section>`).join("")}</div>
+    <div class="stamp" aria-hidden="true">吉</div></article>
+   <section class="fb"><h3>这张签合不合你心意？</h3>
+    <div class="stars" id="stars">${[1,2,3,4,5].map(n=>`<button type="button" aria-pressed="false" data-r="${n}">${n} 分</button>`).join("")}</div>
+    <label for="cmt" class="note">哪里想改？想加什么店？（可不填）</label>
+    <textarea id="cmt" maxlength="500" placeholder="比如：周日想多逛一会儿器物店；烧肉可以换成涮涮锅"></textarea>
+    <div class="nav"><button type="button" class="btn" id="again">重新抽一次</button><button type="button" class="btn go" id="send">提交打分</button></div>
+    <p class="note" id="saveNote"></p></section>`;
+  res.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+  let rating=null;
+  res.querySelectorAll("#stars button").forEach(b=>b.addEventListener("click",()=>{ rating=+b.dataset.r; res.querySelectorAll("#stars button").forEach(x=>x.setAttribute("aria-pressed",String(+x.dataset.r===rating))); }));
+  $("again").addEventListener("click",()=>{ S.step=0; S.a={pace:null,tier:null,food:[],shop:[],monday:null,night:null}; res.hidden=true; $("qbox").hidden=false; renderQ(); window.scrollTo({top:0}); });
+  $("send").addEventListener("click",async()=>{
+    const note=$("saveNote"); const comment=$("cmt").value.trim();
+    if(!rating&&!comment){ note.textContent="先点一个分数，或者写一句想改的地方。"; return; }
+    if(!API||!LAST.id){ note.textContent=API?"这一局还没存上，稍后再点一次提交。":"这是预览版，打分只会保存在公开网址上的游戏里。"; return; }
+    $("send").disabled=true; note.textContent="正在提交……";
+    try{ const r=await fetch("/api/feedback",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:LAST.id,rating,comment})});
+      const j=await r.json(); if(!j.ok) throw new Error(j.error);
+      note.innerHTML='<span class="ok">已提交，谢谢！</span> 你的选择和留言会帮下一版行程改得更好。'; loadCrowd();
+    }catch(e){ $("send").disabled=false; note.textContent="没提交上，检查一下网络再点一次。"; }
+  });
+  save();
+}
+async function save(){
+  const note=$("saveNote");
+  if(!API){ note.textContent="这是预览版，不会保存记录；把公开网址发给朋友玩，每一局都会记下来。"; return; }
+  try{ const r=await fetch("/api/play",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(LAST)});
+    const j=await r.json(); if(j.ok){ LAST.id=j.id; note.textContent="这一局已经记下来了。"; loadCrowd(); } else note.textContent="记录暂时没存上（后台还没设置好）。";
+  }catch(e){ note.textContent="记录暂时没存上，不影响看签。"; }
+}
+
+/* ---------- 大家怎么选 ---------- */
+async function loadCrowd(){
+  const note=$("crowdNote"), bars=$("crowdBars");
+  if(!API){ note.textContent="公开网址上会显示所有玩家的选择统计（只有计数，不显示留言）。"; bars.innerHTML=""; return; }
+  try{ const j=await (await fetch("/api/stats",{cache:"no-store"})).json();
+    if(!j.ok){ note.textContent="统计暂时读不到。"; return; }
+    if(!j.plays){ note.textContent="还没有人玩过，你是第一个。"; bars.innerHTML=""; return; }
+    note.textContent=`已经有 ${j.plays} 局${j.rated?`，平均打分 ${j.rating} / 5`:""}。`;
+    const top=(obj,pre,n)=>Object.entries(obj||{}).sort((a,b)=>b[1]-a[1]).slice(0,n).map(([k,v])=>[LABEL[pre+":"+k]||k,v]);
+    const rows=[["出行强度",top(j.pace,"pace",3)],["吃饭",top(j.tier,"tier",3)],["最想吃",top(j.food,"food",5)],["想逛",top(j.shop,"shop",4)]];
+    bars.innerHTML=rows.map(([h,list])=>{ const mx=Math.max(1,...list.map(x=>x[1]));
+      return `<div class="note" style="margin-top:4px"><b>${esc(h)}</b></div>`+list.map(([k,v])=>`<div class="barrow"><span>${esc(k)}</span><span class="tr"><i style="width:${Math.round(v/mx*100)}%"></i></span><span class="v">${v}</span></div>`).join(""); }).join("");
+  }catch(e){ note.textContent="统计暂时读不到。"; }
+}
+
+renderQ(); loadCrowd();
+})();
+</script>
+</body></html>
