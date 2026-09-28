@@ -2,15 +2,15 @@
 <title>十二星座决定你的专属行程</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@900&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
 :root{
   --bg:#E9EDF1; --surface:#FFFFFF; --ink:#172131; --muted:#586477; --line:#D4DAE2;
   --machine:#1F2B45; --machine2:#2B3A5C; --screen:#C9F2D6; --screenInk:#0E3B22;
   --accent:#C8372D; --paper:#FFFFFF; --paperInk:#1B1B1B;
-  --k1:#F2C230; --k2:#3BA776; --k3:#E86A92; --k4:#4C8BD6; --k5:#F08A3C; --k6:#8C6FD1;
+  --k1:#F2C230; --k2:#3BA776; --k3:#E86A92; --k4:#4C8BD6; --k5:#F08A3C; --k6:#8C6FD1; --k7:#2A9D9A;
   --shadow:0 2px 0 rgba(15,22,36,.18), 0 8px 24px rgba(15,22,36,.10);
-  --disp:"Dela Gothic One","Hiragino Sans","PingFang SC","Noto Sans SC",sans-serif;
+  --disp:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
   --body:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
 }
@@ -31,6 +31,7 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font:15px/1.6 var(--body);padding-inline:16px;padding-block:20px 48px}
 .wrap{max-width:780px;margin:0 auto;display:grid;gap:18px}
 a{color:inherit}
@@ -40,7 +41,7 @@ button{font:inherit;color:inherit}
 /* 机器头部 */
 .machine{background:var(--machine);color:#EEF2F8;border-radius:16px;padding:18px 18px 16px;box-shadow:var(--shadow);display:grid;gap:14px}
 .mtop{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.brand{font-family:var(--disp);font-size:clamp(22px,5vw,30px);line-height:1.1;letter-spacing:.02em;text-wrap:balance}
+.brand{font-family:var(--disp);font-weight:900;font-size:clamp(22px,5vw,30px);line-height:1.1;letter-spacing:.02em;text-wrap:balance}
 .brand small{display:block;font-family:var(--body);font-size:13px;font-weight:400;color:#AFBBD0;letter-spacing:0;margin-top:6px}
 .coin{font-family:var(--mono);font-size:12px;color:#AFBBD0;border:1px solid #3A4A6E;border-radius:999px;padding:4px 10px;white-space:nowrap}
 .screen{background:var(--screen);color:var(--screenInk);border-radius:10px;padding:12px 14px;font-family:var(--mono);font-size:13px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;box-shadow:inset 0 2px 6px rgba(0,0,0,.25)}
@@ -76,7 +77,7 @@ button{font:inherit;color:inherit}
 @media (prefers-reduced-motion: reduce){.slip{animation:none}}
 .slip::before{content:"";position:absolute;inset:0 0 auto 0;height:10px;background:repeating-linear-gradient(90deg,var(--accent) 0 18px,transparent 18px 26px)}
 .fortune{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:6px}
-.kichi{font-family:var(--disp);font-size:44px;line-height:1;color:var(--accent);writing-mode:vertical-rl;letter-spacing:.1em;border:3px solid var(--accent);border-radius:6px;padding:10px 6px}
+.kichi{font-family:var(--disp);font-weight:900;font-size:44px;line-height:1;color:var(--accent);writing-mode:vertical-rl;letter-spacing:.1em;border:3px solid var(--accent);border-radius:6px;padding:10px 6px}
 .persona{flex:1;min-width:200px}
 .persona h3{margin:0;font-size:22px;line-height:1.3;text-wrap:balance}
 .persona p{margin:6px 0 0;font-size:14px;color:#454545}
@@ -98,8 +99,22 @@ button{font:inherit;color:inherit}
 .day li .why{display:block;font-size:12px;color:#777}
 .day li.meal .n::before{content:"食 ";color:var(--accent);font-weight:700}
 .day li.bar .n::before{content:"酒 ";color:#4C5FA8;font-weight:700}
-.stamp{position:absolute;right:14px;bottom:12px;font-family:var(--disp);color:var(--accent);opacity:.18;font-size:64px;line-height:1;pointer-events:none}
+.stamp{position:absolute;right:14px;bottom:12px;font-family:var(--disp);font-weight:900;color:var(--accent);opacity:.18;font-size:64px;line-height:1;pointer-events:none}
 
+.wheelbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:12px;justify-items:center;text-align:center}
+.wheelbox h3{margin:0;font-size:16px;justify-self:stretch;text-align:left}
+.wheelbox .sub{margin:-6px 0 0;font-size:13px;color:var(--muted);justify-self:stretch;text-align:left}
+.wheel{position:relative;width:min(300px,100%);aspect-ratio:1;max-width:100%}
+.wheel canvas{width:100%;height:100%;display:block;border-radius:50%;box-shadow:var(--shadow);transition:transform 3.2s cubic-bezier(.15,.85,.2,1)}
+.wheel .pin{position:absolute;left:50%;top:-6px;transform:translateX(-50%);width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:24px solid var(--accent);filter:drop-shadow(0 2px 2px rgba(0,0,0,.3));z-index:2}
+.wheel .hub{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:var(--machine);color:#fff;display:grid;place-items:center;font-family:var(--disp);font-weight:900;font-size:14px;border:3px solid #fff;z-index:2}
+@media (prefers-reduced-motion: reduce){.wheel canvas{transition:none}}
+.ticket{justify-self:stretch;display:grid;grid-template-columns:1fr auto;gap:4px 12px;text-align:left;background:var(--paper);color:var(--paperInk);border-radius:8px;padding:14px 16px;border:2px dashed var(--tc,var(--accent));box-shadow:var(--shadow)}
+.ticket .tn{font-weight:800;font-size:18px;grid-column:1}
+.ticket .no{font-family:var(--mono);font-size:12px;color:#666;grid-column:2;grid-row:1;align-self:center}
+.ticket .ts{grid-column:1 / -1;font-size:14px}
+.ticket .tv{grid-column:1 / -1;font-size:12px;color:#666;border-top:1px dotted #bbb;padding-top:6px;margin-top:4px}
+.tickets{justify-self:stretch;display:grid;gap:10px}
 .fb{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:12px}
 .fb h3{margin:0;font-size:16px}
 .stars{display:flex;gap:6px;flex-wrap:wrap}
@@ -309,7 +324,6 @@ function renderQ(){
   const ready=q.multi?S.a[q.id].length>0:!!S.a[q.id];
   box.innerHTML=`<h2>${esc(q.title)}</h2><p class="hint">${esc(q.hint)}${q.multi?` 已选 ${S.a[q.id].length} / ${q.max}`:""}</p>
    <div class="keys">${q.keys.map(k=>`<button type="button" class="key" style="--kc:var(${k[3]})" aria-pressed="${isOn(q,k[0])}" data-k="${k[0]}"><span class="band"></span><span class="lamp"></span><span class="kt">${esc(k[1])}</span><span class="kd">${esc(k[2])}</span></button>`).join("")}</div>
-   ${S.step===0?`<p class="nick">不记名：只记下选择和打分，不会记录你是谁。</p>`:""}
    <div class="nav"><button type="button" class="btn" id="back" ${S.step===0?"disabled":""}>上一张</button>
    <button type="button" class="btn go" id="next" ${ready?"":"disabled"}>${S.step===Q.length-1?"出签":"下一张"}</button></div>`;
   box.querySelectorAll(".key").forEach(b=>b.addEventListener("click",()=>{
@@ -384,7 +398,10 @@ function persona(){
   if(sh.includes("view")) lines.push("相册里东京塔至少 30 张"); if(f.includes("wagyu")||f.includes("sukiyaki")) lines.push("和牛是这趟的主线");
   if(f.includes("sushi")) lines.push("久兵卫的吧台等你"); if(S.a.night==="two") lines.push("榜单酒吧一家不落");
   if(!lines.length) lines.push("按自己的节奏，舒服最重要");
-  const kichi=(p==="lazy"&&S.a.night!=="two")?"大吉":p==="max"?"末吉":"中吉";
+  const LOTS=[["大吉",20,"天气晴好，稻村崎能看到富士山"],["吉",30,"想订的店都有位"],["中吉",30,"排队不超过 20 分钟"],["平吉",20,"慢慢逛，舒服最重要"]];
+  let r=Math.random()*100, lot=LOTS[LOTS.length-1];
+  for(const l of LOTS){ if(r<l[1]){ lot=l; break; } r-=l[1]; }
+  const kichi=lot[0]; lines.unshift(lot[2]);
   return {name,lines,kichi};
 }
 let LAST=null;
@@ -407,6 +424,11 @@ function draw(){
     <div class="sum"><div><b>¥${cost.toLocaleString()}</b><span>6 天正餐每人合计（约 ${cny(cost).toLocaleString()} 元）</span></div><div><b>${stops}</b><span>要逛的店和景点</span></div><div><b>${hit} / ${S.a.food.length}</b><span>想吃的品类吃到了</span></div></div>
     <div class="days">${plan.map(d=>`<section class="day"><h4><span class="d">${d.d}</span>${d.wd}<small>${esc(d.note)}${d.chosenRoute?` · 下午走${d.chosenRoute==="asakusa"?"浅草":"中目黑、代官山"}`:""}</small></h4><ol>${d.items.map(x=>`<li class="${x.meal?"meal":x.bar?"bar":""}"><span class="t">${esc(x.t)}</span><span><span class="n">${esc(x.n)}</span>${x.why?`<span class="why">${esc(x.why)}${x.pp?` · 人均 ¥${x.pp.toLocaleString()}（约 ${cny(x.pp).toLocaleString()} 元）`:""}</span>`:""}</span></li>`).join("")}</ol></section>`).join("")}</div>
     <div class="stamp" aria-hidden="true">吉</div></article>
+   <section class="wheelbox"><h3>抽完签，再转一份大礼包</h3><p class="sub">8 份大礼包里装着什么，转到才知道。抽到就出示给对方兑现。</p>
+    <div class="wheel" id="wheelView"><span class="pin" aria-hidden="true"></span><canvas id="wheel" width="600" height="600" role="img" aria-label="幸运转盘，8 份大礼包"></canvas><span class="hub" aria-hidden="true">礼</span></div>
+    <button type="button" class="btn go" id="spin">转！</button>
+    <p class="note" id="cool" hidden></p>
+    <div class="tickets" id="tickets" aria-live="polite"></div></section>
    <section class="fb"><h3>这张签合不合你心意？</h3>
     <div class="stars" id="stars">${[1,2,3,4,5].map(n=>`<button type="button" aria-pressed="false" data-r="${n}">${n} 分</button>`).join("")}</div>
     <label for="cmt" class="note">哪里想改？想加什么店？（可不填）</label>
@@ -416,7 +438,7 @@ function draw(){
   res.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
   let rating=null;
   res.querySelectorAll("#stars button").forEach(b=>b.addEventListener("click",()=>{ rating=+b.dataset.r; res.querySelectorAll("#stars button").forEach(x=>x.setAttribute("aria-pressed",String(+x.dataset.r===rating))); }));
-  $("again").addEventListener("click",()=>{ S.step=0; S.a={pace:null,tier:null,food:[],shop:[],monday:null,night:null}; res.hidden=true; $("qbox").hidden=false; renderQ(); window.scrollTo({top:0}); });
+  $("again").addEventListener("click",()=>{ spinning=false; S.step=0; S.a={pace:null,tier:null,food:[],shop:[],monday:null,night:null}; res.hidden=true; $("qbox").hidden=false; renderQ(); window.scrollTo({top:0}); });
   $("send").addEventListener("click",async()=>{
     const note=$("saveNote"); const comment=$("cmt").value.trim();
     if(!rating&&!comment){ note.textContent="先点一个分数，或者写一句想改的地方。"; return; }
@@ -427,7 +449,74 @@ function draw(){
       note.innerHTML='<span class="ok">已提交，谢谢！</span> 你的选择和留言会帮下一版行程改得更好。';
     }catch(e){ $("send").disabled=false; note.textContent="没提交上，检查一下网络再点一次。"; }
   });
-  save();
+  save(); initWheel();
+}
+/* ---------- 大礼包转盘 ---------- */
+const PRIZES=[
+ ["请 J 人喝咖啡券","J人真棒！谢谢J人！"],
+ ["新增会邀 ×1 券","Hello Chelsea，快速对一下"],
+ ["合作方全部请假券","一觉醒来巴西公共假期增加 10000 倍"],
+ ["P人续杯券","P人免费酒精一杯，谁是P人你别管"],
+ ["谢谢惠顾","这个人很幸运，什么都没有抽到"],
+ ["再转一次","手气不错，马上再转一次"],
+ ["P人当导游券","P人真棒！谢谢P人！"],
+ ["J人隐藏款","出示本券让J人现挂"]];
+const AGAIN=5, COLORS=["--k1","--k4","--k2","--k6","--k5","--k3","--accent","--k7"], COOL_KEY="tokyoGiftUntil", DAY=24*3600*1000;
+let ROT=0, SPUN=[], chain=0, busy=false, ORDER=[], REVEAL=-1, coolTimer=null;
+function cssv(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||"#888"; }
+function coolUntil(){ try{ return +localStorage.getItem(COOL_KEY)||0; }catch(e){ return 0; } }
+function setCool(){ try{ localStorage.setItem(COOL_KEY,String(Date.now()+DAY)); }catch(e){} }
+function coolLeft(){ return Math.max(0,coolUntil()-Date.now()); }
+function drawWheel(){
+  const cv=$("wheel"), x=cv.getContext("2d"), N=PRIZES.length, R0=300, seg=2*Math.PI/N;
+  x.clearRect(0,0,600,600);
+  ORDER.forEach((pi,i)=>{ const a0=-Math.PI/2+i*seg, a1=a0+seg;
+    x.beginPath(); x.moveTo(R0,R0); x.arc(R0,R0,R0-4,a0,a1); x.closePath(); x.fillStyle=cssv(COLORS[i]); x.fill();
+    x.strokeStyle="#ffffff"; x.lineWidth=4; x.stroke();
+    x.save(); x.translate(R0,R0); x.rotate(a0+seg/2); x.textAlign="right"; x.textBaseline="middle";
+    x.fillStyle="#ffffff"; x.font='700 30px -apple-system,"PingFang SC","Noto Sans SC",sans-serif';
+    x.shadowColor="rgba(0,0,0,.35)"; x.shadowBlur=4; x.fillText(i===REVEAL?PRIZES[pi][0].replace(/券$/,""):"大礼包 "+(i+1),R0-30,0); x.restore(); });
+  x.beginPath(); x.arc(R0,R0,R0-3,0,2*Math.PI); x.lineWidth=6; x.strokeStyle="#ffffff"; x.stroke();
+}
+function initWheel(){
+  ROT=0; SPUN=[]; chain=0; busy=false; REVEAL=-1;
+  ORDER=PRIZES.map((_,i)=>i).sort(()=>Math.random()-.5);
+  drawWheel();
+  const cv=$("wheel"); cv.style.transition="none"; cv.style.transform="rotate(0deg)"; void cv.offsetWidth; cv.style.transition="";
+  $("tickets").innerHTML=""; $("spin").onclick=go; checkCool();
+}
+function checkCool(){
+  clearInterval(coolTimer);
+  const left=coolLeft(), btn=$("spin"), c=$("cool");
+  if(!left){ btn.disabled=false; c.hidden=true; if(!busy) btn.textContent="转！"; return; }
+  btn.disabled=true; btn.textContent="喜欢您再来"; c.hidden=false;
+  const tickc=()=>{ const l=coolLeft(); if(!l){ clearInterval(coolTimer); checkCool(); return; }
+    const h=Math.floor(l/3600000), m=Math.floor(l%3600000/60000); c.textContent=`每 24 小时能转一次，还要等 ${h} 小时 ${m} 分。`; };
+  tickc(); coolTimer=setInterval(tickc,30000);
+}
+function roll(){ const N=PRIZES.length; let pi=Math.floor(Math.random()*N);
+  if(pi===AGAIN&&chain>=2) pi=(pi+1+Math.floor(Math.random()*(N-1)))%N; return pi; }
+const reduce=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+function go(){
+  if(busy||coolLeft()) return; busy=true; const pi=roll(); $("spin").disabled=true; $("spin").textContent="转动中……";
+  const N=PRIZES.length, i=ORDER.indexOf(pi), deg=360/N, center=i*deg+deg/2, jitter=(Math.random()-.5)*deg*0.6;
+  const cur=((ROT%360)+360)%360; ROT+=360*5+((360-center-jitter)-cur+720)%360;
+  $("wheel").style.transform=`rotate(${ROT}deg)`;
+  setTimeout(()=>{ REVEAL=i; drawWheel(); landed(pi); }, reduce()?50:3300);
+}
+function landed(pi){
+  const p=PRIZES[pi]; const no="No."+String(1000+Math.floor(Math.random()*9000)); SPUN.push(p[0]);
+  const col=COLORS[ORDER.indexOf(pi)];
+  const t=document.createElement("div"); t.className="ticket"; t.style.setProperty("--tc",`var(${col})`);
+  t.innerHTML=`<span class="tn">${esc(p[0])}</span><span class="no">${no}</span><span class="ts">${esc(p[1])}</span><span class="tv">${pi===AGAIN?"马上再转一次":"有效期 10.8–10.13 · 出示给对方即可兑现"}</span>`;
+  $("tickets").prepend(t); busy=false;
+  if(pi===AGAIN){ chain++; $("spin").textContent="再转一次"; setTimeout(go,900); return; }
+  setCool(); saveSpins(); checkCool();
+}
+async function saveSpins(){
+  if(LAST) LAST.spins=SPUN.slice();
+  if(!API||!LAST||!LAST.id) return;
+  try{ await fetch("/api/spin",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:LAST.id,spins:SPUN})}); }catch(e){}
 }
 async function save(){
   const note=$("saveNote");
