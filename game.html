@@ -1,536 +1,80 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"></head><body>
-<title>十二星座决定你的专属行程</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@900&family=JetBrains+Mono:wght@500;700&display=swap">
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#161d27"><title>霓虹二分法</title>
 <style>
-:root{
-  --bg:#E9EDF1; --surface:#FFFFFF; --ink:#172131; --muted:#586477; --line:#D4DAE2;
-  --machine:#1F2B45; --machine2:#2B3A5C; --screen:#C9F2D6; --screenInk:#0E3B22;
-  --accent:#C8372D; --paper:#FFFFFF; --paperInk:#1B1B1B;
-  --k1:#F2C230; --k2:#3BA776; --k3:#E86A92; --k4:#4C8BD6; --k5:#F08A3C; --k6:#8C6FD1; --k7:#2A9D9A;
-  --shadow:0 2px 0 rgba(15,22,36,.18), 0 8px 24px rgba(15,22,36,.10);
-  --disp:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
-  --body:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0F141D; --surface:#182130; --ink:#E7ECF3; --muted:#9BA7B9; --line:#2A3649;
-    --machine:#0A0F18; --machine2:#16213A; --screen:#0F3A24; --screenInk:#A9F0C2;
-    --accent:#F0604F; --paper:#F4F2EC; --paperInk:#1B1B1B;
-    --shadow:0 2px 0 rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0F141D; --surface:#182130; --ink:#E7ECF3; --muted:#9BA7B9; --line:#2A3649;
-  --machine:#0A0F18; --machine2:#16213A; --screen:#0F3A24; --screenInk:#A9F0C2;
-  --accent:#F0604F; --paper:#F4F2EC; --paperInk:#1B1B1B;
-  --shadow:0 2px 0 rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
-  color-scheme:dark;
-}
-*{box-sizing:border-box}
-[hidden]{display:none!important}
-body{background:var(--bg);color:var(--ink);font:15px/1.6 var(--body);padding-inline:16px;padding-block:20px 48px}
-.wrap{max-width:780px;margin:0 auto;display:grid;gap:18px}
-a{color:inherit}
-button{font:inherit;color:inherit}
-:focus-visible{outline:3px solid var(--k4);outline-offset:2px}
-
-/* 机器头部 */
-.machine{background:var(--machine);color:#EEF2F8;border-radius:16px;padding:18px 18px 16px;box-shadow:var(--shadow);display:grid;gap:14px}
-.mtop{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.brand{font-family:var(--disp);font-weight:900;font-size:clamp(22px,5vw,30px);line-height:1.1;letter-spacing:.02em;text-wrap:balance}
-.brand small{display:block;font-family:var(--body);font-size:13px;font-weight:400;color:#AFBBD0;letter-spacing:0;margin-top:6px}
-.coin{font-family:var(--mono);font-size:12px;color:#AFBBD0;border:1px solid #3A4A6E;border-radius:999px;padding:4px 10px;white-space:nowrap}
-.screen{background:var(--screen);color:var(--screenInk);border-radius:10px;padding:12px 14px;font-family:var(--mono);font-size:13px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;box-shadow:inset 0 2px 6px rgba(0,0,0,.25)}
-.screen b{font-weight:700}
-.steps{display:flex;gap:6px}
-.steps i{flex:1;height:6px;border-radius:3px;background:#34466B}
-.steps i.on{background:var(--k1)}
-.steps i.done{background:#7C8EB3}
-
-/* 题目 */
-.q{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:14px}
-.q h2{margin:0;font-size:19px;line-height:1.35;text-wrap:balance}
-.q .hint{margin:-8px 0 0;color:var(--muted);font-size:13px}
-.keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-.key{position:relative;text-align:left;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:0 0 10px;overflow:hidden;box-shadow:0 2px 0 var(--line);transition:transform .08s ease, box-shadow .08s ease;min-height:92px;display:flex;flex-direction:column}
-.key .band{height:8px;background:var(--kc,var(--k1))}
-.key .kt{padding:8px 12px 0;font-weight:700;font-size:15px;line-height:1.3}
-.key .kd{padding:3px 12px 0;color:var(--muted);font-size:12px;line-height:1.45}
-.key .lamp{position:absolute;top:16px;right:10px;width:12px;height:12px;border-radius:50%;border:2px solid var(--line);background:transparent}
-.key[aria-pressed="true"]{border-color:var(--kc,var(--k1));box-shadow:0 0 0 2px var(--kc,var(--k1)) inset, 0 1px 0 var(--line);transform:translateY(1px)}
-.key[aria-pressed="true"] .lamp{background:var(--kc,var(--k1));border-color:var(--kc,var(--k1));box-shadow:0 0 8px var(--kc,var(--k1))}
-.nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
-.btn{cursor:pointer;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 16px;font-weight:600;min-height:44px}
-.btn.go{background:var(--accent);border-color:var(--accent);color:#fff}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.nick{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted)}
-.nick input{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0;width:180px}
-
-/* 签 */
-.slipwrap{display:grid;gap:14px}
-.slip{background:var(--paper);color:var(--paperInk);border-radius:6px;box-shadow:var(--shadow);padding:22px 20px 18px;position:relative;overflow:hidden;animation:out .7s cubic-bezier(.2,.8,.2,1)}
-@keyframes out{from{transform:translateY(-24px);opacity:0}to{transform:none;opacity:1}}
-@media (prefers-reduced-motion: reduce){.slip{animation:none}}
-.slip::before{content:"";position:absolute;inset:0 0 auto 0;height:10px;background:repeating-linear-gradient(90deg,var(--accent) 0 18px,transparent 18px 26px)}
-.fortune{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:6px}
-.kichi{font-family:var(--disp);font-weight:900;font-size:44px;line-height:1;color:var(--accent);writing-mode:vertical-rl;letter-spacing:.1em;border:3px solid var(--accent);border-radius:6px;padding:10px 6px}
-.persona{flex:1;min-width:200px}
-.persona h3{margin:0;font-size:22px;line-height:1.3;text-wrap:balance}
-.persona p{margin:6px 0 0;font-size:14px;color:#454545}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.chip{font-size:12px;border:1px solid #CFCFCF;border-radius:999px;padding:2px 9px;color:#333}
-.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
-.sum div{border-top:2px solid #1B1B1B;padding-top:6px}
-.sum b{display:block;font-family:var(--mono);font-size:18px;font-variant-numeric:tabular-nums}
-.sum span{font-size:12px;color:#555}
-@media (max-width:480px){.sum{grid-template-columns:1fr 1fr}}
-.days{display:grid;gap:12px;margin-top:16px}
-.day{border-top:1px dashed #BDBDBD;padding-top:10px}
-.day h4{margin:0 0 6px;font-size:15px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
-.day h4 .d{font-family:var(--mono);color:var(--accent)}
-.day h4 small{font-weight:400;color:#666;font-size:12px}
-.day ol{margin:0;padding:0;list-style:none;display:grid;gap:4px}
-.day li{display:grid;grid-template-columns:52px 1fr;gap:8px;font-size:14px;line-height:1.45}
-.day li .t{font-family:var(--mono);font-size:12px;color:#666;padding-top:2px}
-.day li .why{display:block;font-size:12px;color:#777}
-.day li.meal .n::before{content:"食 ";color:var(--accent);font-weight:700}
-.day li.bar .n::before{content:"酒 ";color:#4C5FA8;font-weight:700}
-.stamp{position:absolute;right:14px;bottom:12px;font-family:var(--disp);font-weight:900;color:var(--accent);opacity:.18;font-size:64px;line-height:1;pointer-events:none}
-
-.wheelbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:12px;justify-items:center;text-align:center}
-.wheelbox h3{margin:0;font-size:16px;justify-self:stretch;text-align:left}
-.wheelbox .sub{margin:-6px 0 0;font-size:13px;color:var(--muted);justify-self:stretch;text-align:left}
-.wheel{position:relative;width:min(300px,100%);aspect-ratio:1;max-width:100%}
-.wheel canvas{width:100%;height:100%;display:block;border-radius:50%;box-shadow:var(--shadow);transition:transform 3.2s cubic-bezier(.15,.85,.2,1)}
-.wheel .pin{position:absolute;left:50%;top:-6px;transform:translateX(-50%);width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:24px solid var(--accent);filter:drop-shadow(0 2px 2px rgba(0,0,0,.3));z-index:2}
-.wheel .hub{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:var(--machine);color:#fff;display:grid;place-items:center;font-family:var(--disp);font-weight:900;font-size:14px;border:3px solid #fff;z-index:2}
-@media (prefers-reduced-motion: reduce){.wheel canvas{transition:none}}
-.ticket{justify-self:stretch;display:grid;grid-template-columns:1fr auto;gap:4px 12px;text-align:left;background:var(--paper);color:var(--paperInk);border-radius:8px;padding:14px 16px;border:2px dashed var(--tc,var(--accent));box-shadow:var(--shadow)}
-.ticket .tn{font-weight:800;font-size:18px;grid-column:1}
-.ticket .no{font-family:var(--mono);font-size:12px;color:#666;grid-column:2;grid-row:1;align-self:center}
-.ticket .ts{grid-column:1 / -1;font-size:14px}
-.ticket .tv{grid-column:1 / -1;font-size:12px;color:#666;border-top:1px dotted #bbb;padding-top:6px;margin-top:4px}
-.tickets{justify-self:stretch;display:grid;gap:10px}
-.fb{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:12px}
-.fb h3{margin:0;font-size:16px}
-.stars{display:flex;gap:6px;flex-wrap:wrap}
-.stars button{cursor:pointer;border:1px solid var(--line);background:var(--surface);border-radius:8px;min-width:44px;min-height:44px;font-family:var(--mono);font-weight:700}
-.stars button[aria-pressed="true"]{background:var(--k1);border-color:var(--k1);color:#1B1B1B}
-.fb textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px;min-height:80px;width:100%;resize:vertical}
-.note{font-size:13px;color:var(--muted)}
-.ok{color:var(--k2);font-weight:600}
-
-.crowd{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:10px}
-.crowd h3{margin:0;font-size:16px}
-.bars{display:grid;gap:6px}
-.barrow{display:grid;grid-template-columns:92px 1fr 32px;gap:8px;align-items:center;font-size:13px}
-.barrow .tr{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
-.barrow .tr i{display:block;height:100%;background:var(--k4)}
-.barrow .v{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums}
-footer{font-size:12px;color:var(--muted);text-align:center}
-</style>
-
-<div class="wrap">
-  <section class="machine" aria-label="十二星座决定你的专属行程">
-    <div class="mtop">
-      <div class="brand">十二星座决定你的专属行程<small>10.8 → 10.13 · 两个人 · 选 6 张券，出一张你的东京签</small></div>
-      <span class="coin" id="coin" hidden></span><span class="coin" id="testerTag" hidden>自己试玩 · 不算朋友的</span>
-    </div>
-    <div class="screen" id="screen"><span>请选择：<b id="scrQ">出行强度</b></span><span id="scrN">券 1 / 6</span></div>
-    <div class="steps" id="steps"></div>
-  </section>
-
-  <section class="q" id="qbox" aria-live="polite"></section>
-
-  <section class="slipwrap" id="result" hidden></section>
-
-
-
-  <footer>行程数据来自「东京十月手帐」：每家店都按 Tabelog 百名店、米其林、50 Best 或 Google 高分挑过。会议时间（东京 20:00 以后）和已订的造型、航班不会被抽掉。</footer>
-</div>
-
+:root{color-scheme:light dark;--bg:#f0ede6;--card:#fffcf6;--ink:#182125;--muted:#63706e;--line:#d9dcd2;--accent:#be423b;--mint:#ccebb4;--purple:#dfd4f6;--dark:#161d27;--shadow:0 6px 0 #19232812}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif}button,input{font:inherit}button,a,input{-webkit-tap-highlight-color:transparent}button{cursor:pointer;color:inherit}button:disabled{cursor:not-allowed;opacity:.45}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #638ca8;outline-offset:4px}[hidden]{display:none!important}.wrap{max-width:840px;margin:auto;padding:28px 20px 64px}.mast{background:var(--dark);color:#faf7ee;padding:26px;border-radius:22px;margin-bottom:22px;position:relative;overflow:hidden}.eyebrow{font:11px/1.5 ui-monospace,monospace;letter-spacing:3px;color:#b6c9be}.mast h1{font-size:clamp(32px,7vw,52px);line-height:1.15;letter-spacing:3px;margin:14px 0 10px}.mast p{color:#c9d0ce;margin:0;max-width:540px}.badge{display:inline-block;background:var(--mint);color:#283c23;padding:3px 10px;border-radius:100px;font-size:12px;margin-top:16px}.headrow,.spread{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.theme{border:1px solid #61706b;background:transparent;color:#d9e4db;border-radius:50%;width:40px;height:40px}.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;margin-top:18px;box-shadow:var(--shadow)}h2{font-size:25px;line-height:1.35;margin:8px 0 12px}h3{margin:0 0 10px;font-size:18px}.muted,.hint{color:var(--muted);font-size:13px}.hint{margin:8px 0 16px}.big{font-size:18px}.btn{border:1px solid var(--line);border-radius:10px;padding:11px 18px;min-height:46px;background:var(--card);color:var(--ink);font-weight:600}.primary{background:var(--ink);border-color:var(--ink);color:var(--card)}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0 18px}.option{text-align:left;min-height:230px;padding:22px;border:2px solid var(--line);border-radius:16px;background:var(--card);display:flex;flex-direction:column;transition:transform .16s,border-color .16s,box-shadow .16s}.option:hover{transform:translateY(-3px);border-color:var(--ink);box-shadow:0 7px 0 #19232812}.option.a{background:var(--mint);color:#20371f}.option.b{background:var(--purple);color:#34284c}.letter{font:40px/1 ui-monospace,monospace;opacity:.4}.option b{font-size:23px;line-height:1.4;margin:22px 0 8px}.option .desc{font-size:13px;opacity:.82}.option .foot{font-size:11px;margin-top:auto;padding-top:18px;letter-spacing:1px}.progress{height:6px;border-radius:20px;overflow:hidden;background:var(--line);margin:16px 0}.progress span{display:block;height:100%;background:var(--accent);transition:width .2s}.tag{font-size:12px;letter-spacing:1px;color:var(--accent);font-weight:700}.versus{font-family:ui-monospace,monospace;color:var(--muted)}.rank{list-style:none;margin:20px 0;padding:0}.rank li{display:flex;align-items:center;gap:12px;border-top:1px solid var(--line);padding:12px 0}.rank li.out{opacity:.7}.num{font:18px/1 ui-monospace,monospace;width:30px;color:var(--accent);flex-shrink:0}.rank .name{flex:1;font-size:15px}.rank .tools{display:flex;gap:5px}.small{border:1px solid var(--line);background:var(--card);border-radius:8px;min-width:40px;min-height:42px;padding:6px}.cut{border-top:2px dashed var(--accent)!important}.resultgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.resultgrid .panel{margin:0}.resultgrid ol{padding-left:24px}.resultgrid li{padding:6px 0}.wheelwrap{max-width:300px;margin:20px auto;position:relative}.wheelwrap svg{width:100%;display:block;transition:transform 2.8s cubic-bezier(.12,.75,.18,1);filter:drop-shadow(0 6px 4px #0002)}.pin{position:absolute;z-index:2;left:50%;top:-9px;transform:translateX(-50%);width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:27px solid var(--accent)}.hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:4px solid white;border-radius:50%;width:58px;height:58px;display:grid;place-items:center;background:var(--dark);color:white;font-weight:800}.center{text-align:center}.ticket{border:2px dashed var(--accent);padding:16px;border-radius:12px;margin-top:12px;text-align:left}.ticket strong{display:block}.ticket small{color:var(--muted)}.promo{border-top:1px solid var(--line);padding-top:20px;margin-top:24px}.promo label{display:block;font-size:13px;color:var(--muted)}.inputrow{display:flex;gap:8px;margin-top:8px}.inputrow input{min-width:0;flex:1;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg);color:var(--ink)}footer{font-size:12px;color:var(--muted);text-align:center;margin-top:24px}a{color:inherit}.toast{min-height:22px;color:var(--accent);font-size:13px}.homegrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0}.mini{padding:18px;border:1px solid var(--line);border-radius:12px}.mini strong{display:block;font-size:24px}.choicecount{font:12px ui-monospace,monospace;color:var(--muted)}details summary{cursor:pointer}.log{font-size:13px;line-height:1.8;color:var(--muted)}[data-theme=dark]{--bg:#10161c;--card:#1d252c;--ink:#f1eee4;--muted:#a3b0b3;--line:#37414b;--accent:#f79786;--shadow:none}.rank li:focus{outline:none}@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10161c;--card:#1d252c;--ink:#f1eee4;--muted:#a3b0b3;--line:#37414b;--accent:#f79786;--shadow:none}}@media(max-width:540px){.wrap{padding:16px 14px 40px}.mast{padding:22px}.panel{padding:18px}.pair{gap:9px}.option{padding:15px;min-height:245px}.option b{font-size:19px}.resultgrid{grid-template-columns:1fr}.rank{margin:14px 0}.rank li{gap:6px}.rank .name{font-size:13px}.small{min-width:36px}.inputrow{flex-wrap:wrap}.inputrow input{flex-basis:170px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style></head><body><div class="wrap"><header class="mast"><div class="headrow"><span class="eyebrow">TOKYO / THIS OR THAT</span><button class="theme" id="theme" aria-label="切换明暗主题">◐</button></div><h1>霓虹二分法</h1><p>别想标准答案。<br>如果现在就出发，你更想选哪一个？</p><span class="badge">两场偏好对决 · 19 次心动选择</span><span id="tester" class="badge" hidden>测试模式</span></header><main id="app"></main><p id="storageNote" class="toast" role="status"></p><footer>只记录偏好，不替你安排旅行。<br><a href="index.html">回到东京十月手帐 ↗</a></footer></div>
 <script>
-(function(){
-"use strict";
-/* ---------- 题目 ---------- */
-const Q=[
- {id:"pace",title:"这趟想玩多累？",hint:"决定每天塞几站、几点出门。",multi:false,keys:[
-   ["lazy","懒人慢游","每天 2–3 站，10:30 以后出门，逛累了就回酒店","--k2"],
-   ["mid","刚刚好","每天 4–5 站，下午一条步行线逛到底","--k1"],
-   ["max","能多看就多看","每天 6 站以上，可选的景点全都去","--k5"]]},
- {id:"tier",title:"吃饭走哪条线？",hint:"品质线是米其林和 Tabelog 百名店；亲民线是本地人常去的高分老店。",multi:false,keys:[
-   ["q","品质榜单","人均 ¥8,000–30,000（约 340–1,280 元），大多要订","--k3"],
-   ["c","亲民老店","人均 ¥1,000–7,000（约 40–300 元），大多排队就能吃","--k2"],
-   ["mix","午饭亲民，晚饭品质","午饭 ¥1,000–7,000（约 40–300 元），晚饭 ¥8,000–30,000（约 340–1,280 元）","--k6"],
-   ["dice","都可以，实在不行摇骰子","每顿饭掷一次：单数吃亲民，双数吃品质，人均 ¥1,000–30,000（约 40–1,280 元）","--k5"]]},
- {id:"food",title:"最想吃哪些？",hint:"可以多选，最多 5 个；选中的会优先排进去。",multi:true,max:5,keys:[
-   ["sushi","寿司","银座久兵卫 / 美登利","--k4"],["tempura","天妇罗","天一 / 天國 / よこ田","--k1"],
-   ["wagyu","和牛烧肉","正泰苑 / うしみつ","--k3"],["sukiyaki","寿喜烧","浅草今半 / 米久","--k5"],
-   ["unagi","鳗鱼饭","のだや / 伊豆荣","--k6"],["yakitori","烧鸟 · 烤串","Birdland / 鳥ぎん / あべちゃん","--k2"],
-   ["kaiseki","怀石 · 割烹","六雁 / 中嶋 / ふくみ","--k4"],["soba","荞麦","更科堀井 / 上野藪そば","--k1"],
-   ["tonkatsu","炸猪排","とんかつ.jp / まい泉","--k5"],["izakaya","拉面 · 居酒屋","麺屋海神 / 三州屋 / たつや","--k3"]]},
- {id:"shop",title:"喜欢逛什么样的店？",hint:"可以多选；南极装备和周六造型是必去的，不用选。",multi:true,max:6,keys:[
-   ["designer","设计师买手店","Mame、AURALEE、1LDK、DSM","--k3"],["craft","手艺老铺 · 器物","よのや、合羽桥、SML、うつわ祥見","--k5"],
-   ["dept","百货 · 大牌","伊势丹、GINZA SIX、三越","--k4"],["books","书店 · 文具","茑屋书店、伊东屋、Traveler's Factory","--k6"],
-   ["cafe","咖啡 · 甜品","KOFFEE MAMEYA、L'Ambre、FUGLEN","--k1"],["temple","寺院 · 庭园","增上寺、浅草寺、大佛、长谷寺","--k2"],
-   ["view","看塔 · 夜景","东京塔、稻村崎日落、31 楼大堂吧","--k4"]]},
- {id:"monday",title:"周一下午（巴西放假，整天都空）去哪？",hint:"上午都在上野，吃完鳗鱼再分开走。",multi:false,keys:[
-   ["asakusa","浅草老东京","浅草寺、手艺老铺、合羽桥道具街，晚上寿喜烧","--k5"],
-   ["nakameguro","中目黑 · 代官山","目黑川边的买手店、茑屋书店，晚上惠比寿烧肉","--k3"],
-   ["auto","帮我选","按你前面选的口味和店来定","--k1"]]},
- {id:"night",title:"晚上不开会的那几晚怎么过？",hint:"周五、周六、周日、周一晚上都不开会。",multi:false,keys:[
-   ["early","吃完就回酒店","早点休息，第二天精神好","--k2"],
-   ["one","喝一杯再回","每晚一家看夜景或榜单酒吧","--k4"],
-   ["two","续摊","能去两家就去两家，Asia's 50 Best 都排上","--k6"]]}
-];
-const LABEL={}; Q.forEach(q=>q.keys.forEach(k=>LABEL[q.id+":"+k[0]]=k[1]));
-
-/* ---------- 候选池 ----------
- kind: meal / bar / spot / fixed；tier: q / c；cat: 餐厅品类或店铺类型；opt: 可以被懒人模式省掉；pp: 人均日元 */
-const DAYS=[
- {d:"10.8",wd:"周四",note:"落地打车到酒店，20:00 开会",latest:"19:00",slots:[
-   {t:"12:30",fixed:"成田 T2 落地，打车去酒店（港区定额约 ¥35,000）"},
-   {t:"15:00",fixed:"mesm Tokyo 入住，放下行李"},
-   {t:"15:15",kind:"meal",meal:"L",pick:[
-     {n:"天ぷら 天一 銀座本店",cat:"tempura",tier:"q",pp:18000,why:"天妇罗百名店，中午到晚上不休息"},
-     {n:"天冨良 よこ田",t:"16:30",shift:75,cat:"tempura",tier:"q",pp:20000,why:"麻布十番，连续 8 年米其林推荐（先在酒店歇一会儿）"},
-     {n:"銀座 天國 本店",cat:"tempura",tier:"c",pp:4000,why:"1885 年的天丼老铺"},
-     {n:"あべちゃん 麻布十番",t:"16:30",shift:75,cat:"yakitori",tier:"c",pp:3800,why:"1933 年的炖牛杂和烤串（先在酒店歇一会儿）"}]},
-   {t:"16:45",side:"A",kind:"spot",cat:"temple",opt:1,n:"增上寺",why:"古寺背后就是东京塔，赶上 17:16 日落"},
-   {t:"17:30",side:"A",kind:"spot",cat:"view",opt:1,n:"东京塔 Main Deck",why:"蓝调时刻看城市亮灯"},
-   {t:"16:45",side:"B",kind:"spot",cat:"designer",alsoCat:["books","dept"],opt:1,n:"麻布台之丘",why:"Conran Shop、大垣书店、United Arrows"},
-   {t:"18:30",kind:"bar",cat:"view",n:"Stellar Garden（33F）",why:"正对东京塔的酒吧",meeting:true},
-   {t:"20:00",fixed:"回酒店开会"}]},
- {d:"10.9",wd:"周五",note:"12:00 后自由，晚上不开会",slots:[
-   {t:"12:20",kind:"meal",meal:"L",pick:[
-     {n:"新宿割烹 中嶋",cat:"kaiseki",tier:"q",pp:1500,why:"米其林星级割烹的沙丁鱼午定食"},
-     {n:"麺屋海神",cat:"izakaya",tier:"c",pp:1200,why:"拉面百名店，鱼汤盐拉面"},
-     {n:"王ろじ",cat:"tonkatsu",tier:"c",pp:1800,why:"1921 年的炸猪排咖喱饭"},
-     {n:"かつ プリポー",cat:"tonkatsu",tier:"q",pp:3000,why:"炸猪排百名店 2026，Tabelog 3.85"}]},
-   {t:"13:30",kind:"spot",cat:"craft",opt:1,n:"BEAMS JAPAN",why:"6 层日本制造的手艺选品"},
-   {t:"14:00",kind:"spot",cat:"dept",alsoCat:["designer"],opt:1,n:"伊势丹新宿 本馆",why:"3F 国际设计师，5F 日本器物"},
-   {t:"15:30",kind:"spot",cat:"cafe",opt:1,n:"CAFE AALIYA",why:"Café 百名店，30 年的法式吐司"},
-   {t:"16:10",fixed:"Alpen / L-Breath / mont-bell 买齐南极装备"},
-   {t:"17:40",fixed:"打车回酒店放东西"},
-   {t:"19:00",kind:"meal",meal:"D",pick:[
-     {n:"六雁（银座怀石）",cat:"kaiseki",tier:"q",pp:33000,why:"以蔬菜为主角的现代江户怀石"},
-     {n:"天ぷら あらたみかわ",cat:"tempura",tier:"q",pp:25000,why:"天妇罗百名店 2025，Tabelog 4.02"},
-     {n:"大衆割烹 三州屋",cat:"izakaya",tier:"c",pp:3500,why:"1968 年的银座大众割烹"},
-     {n:"鳥ぎん 銀座本店",cat:"yakitori",tier:"c",pp:3200,why:"烤串 + 鸡肉釜饭，1951 年创业"}]},
-   {t:"21:15",kind:"bar",cat:"view",n:"Virtù（39F）",why:"Asia's 50 Best 2026 #26"},
-   {t:"22:45",kind:"bar",second:1,n:"Gold Bar at EDITION",why:"Asia 51–100，周五有 DJ"}]},
- {d:"10.10",wd:"周六",note:"调休上班日，但晚上不开会",slots:[
-   {t:"11:45",kind:"meal",meal:"L",pick:[
-     {n:"とんかつ.jp 表参道",cat:"tonkatsu",tier:"q",pp:2500,why:"炸猪排百名店 2024 / 2026"},
-     {n:"とんかつ まい泉 青山本店",cat:"tonkatsu",tier:"c",pp:2800,why:"1965 年的炸猪排老店"}]},
-   {t:"13:30",fixed:"Atelier Haruka 表参道做妆发（已安排）"},
-   {t:"14:45",kind:"spot",cat:"cafe",opt:1,n:"KOFFEE MAMEYA",why:"豆子专门店的站立吧台"},
-   {t:"15:15",kind:"spot",cat:"designer",n:"Mame Kurogouchi",why:"织物和工艺感很强的女装"},
-   {t:"15:45",kind:"spot",cat:"craft",alsoCat:["designer"],opt:1,n:"call by minä perhonen",why:"皆川明的布料和生活器物"},
-   {t:"16:15",kind:"spot",cat:"designer",opt:1,n:"AURALEE / Arts & Science",why:"面料和剪裁见长的日本品牌"},
-   {t:"16:45",kind:"bar",cat:"view",keep:1,n:"EDITION 虎之门 31F 大堂吧",why:"带着妆发拍东京塔日落"},
-   {t:"18:30",kind:"meal",meal:"D",pick:[
-     {n:"銀座バードランド",cat:"yakitori",tier:"q",pp:13500,why:"烧鸟百名店 2023–2025"},
-     {n:"鳥ぎん 銀座本店",cat:"yakitori",tier:"c",pp:3200,why:"70 多年的烤串釜饭"},
-     {n:"もつやき 登運とん（有乐町）",cat:"izakaya",tier:"c",pp:3800,why:"1953 年开在高架桥下的烤杂碎"}]},
-   {t:"20:30",kind:"bar",n:"Punch Room",why:"Asia's 50 Best 2026 #23"},
-   {t:"22:00",kind:"bar",second:1,n:"Star Bar Ginza",why:"Tabelog 酒吧百名店"}]},
- {d:"10.11",wd:"周日",note:"全天休息，三连休人多",slots:[
-   {t:"10:30",fixed:"滨松町 → 镰仓（约 1 小时 10 分）"},
-   {t:"12:00",kind:"meal",meal:"L",pick:[
-     {n:"鎌倉ふくみ",cat:"kaiseki",tier:"q",pp:9800,why:"镰仓食材的日本料理午餐套餐"},
-     {n:"秋本",cat:"izakaya",tier:"c",pp:2500,why:"镰仓特产银鱼盖饭，日本料理百名店"},
-     {n:"鎌倉 松原庵",cat:"soba",tier:"c",pp:3000,why:"荞麦百名店的老宅，要排队"}]},
-   {t:"13:30",kind:"spot",cat:"craft",opt:1,n:"うつわ祥見 onari NEAR",why:"日本陶艺家作品"},
-   {t:"14:00",kind:"spot",cat:"craft",opt:1,n:"WABIAN",why:"天然材料的篮子和器物"},
-   {t:"14:40",kind:"spot",cat:"temple",n:"镰仓大佛",why:"10 月 8:00–17:00"},
-   {t:"15:15",kind:"spot",cat:"temple",opt:1,n:"长谷寺",why:"山腰俯瞰由比滨"},
-   {t:"15:50",kind:"spot",cat:"cafe",alsoCat:["craft"],opt:1,n:"vuori",why:"一楼咖啡，二楼器物艺廊"},
-   {t:"16:45",kind:"spot",cat:"view",keep:1,n:"稻村崎看日落",why:"17:12 日落，天气好能看到富士山剪影"},
-   {t:"19:30",kind:"meal",meal:"D",pick:[
-     {n:"正泰苑 芝大门",cat:"wagyu",tier:"q",pp:10000,why:"烧肉百名店连续 8 年"},
-     {n:"总本家 更科堀井",cat:"soba",tier:"c",pp:2500,why:"230 年的荞麦老铺"},
-     {n:"麻布 やきとん ふじ嶋",cat:"yakitori",tier:"c",pp:4500,why:"猪肉串居酒屋"}]},
-   {t:"21:30",kind:"bar",cat:"view",n:"Tokyo Confidential",why:"Asia 2025 #70，露台正对东京塔"},
-   {t:"23:00",kind:"bar",second:1,n:"Bar Trench（惠比寿）",why:"Asia 2026 #53"}]},
- {d:"10.12",wd:"周一",note:"巴西放假，晚上不开会",route:true,slots:[
-   {t:"10:30",kind:"spot",cat:"temple",alsoCat:["books"],opt:1,n:"东京国立博物馆（广重特展）",why:"可选，睡够了再去"},
-   {t:"12:00",kind:"meal",meal:"L",pick:[
-     {n:"入谷 のだや",cat:"unagi",tier:"q",pp:10000,why:"鳗鱼百名店，Tabelog 3.97"},
-     {n:"鳗割烹 伊豆荣 本店",cat:"unagi",tier:"q",pp:7000,why:"上野 300 年老店"},
-     {n:"上野藪そば",cat:"soba",tier:"c",pp:2000,why:"1892 年的荞麦"},
-     {n:"韻松亭（上野公园）",cat:"kaiseki",tier:"c",pp:3500,why:"1875 年创业，公园里的日式定食"}]}],
-  routes:{
-   asakusa:[
-     {t:"13:20",kind:"spot",cat:"temple",n:"浅草寺",why:"节假日走两侧小路"},
-     {t:"13:50",kind:"spot",cat:"craft",opt:1,n:"よのや櫛舗 / ふじ屋",why:"1717 年的黄杨木梳、手染手拭"},
-     {t:"14:50",kind:"spot",cat:"cafe",opt:1,n:"FUGLEN ASAKUSA",why:"挪威精品咖啡"},
-     {t:"16:00",kind:"spot",cat:"craft",n:"合羽桥道具街 · 釜浅商店",why:"手工厨刀可现场刻名"},
-     {t:"18:00",kind:"meal",meal:"D",pick:[
-       {n:"浅草今半",cat:"sukiyaki",tier:"q",pp:17000,why:"寿喜烧百名店"},
-       {n:"米久本店",cat:"sukiyaki",tier:"c",pp:6000,why:"1886 年的牛锅"},
-       {n:"ヨシカミ",cat:"izakaya",tier:"c",pp:3500,why:"1951 年的浅草洋食"}]},
-     {t:"20:00",kind:"bar",n:"浅草サンボア",why:"Tabelog 酒吧百名店的 Highball"}],
-   nakameguro:[
-     {t:"13:50",kind:"spot",cat:"books",opt:1,n:"TRAVELER'S FACTORY",why:"旅行手帐旗舰店"},
-     {t:"14:15",kind:"spot",cat:"cafe",opt:1,n:"ONIBUS COFFEE",why:"老房子里的精品咖啡"},
-     {t:"14:50",kind:"spot",cat:"designer",n:"Vase / 1LDK",why:"目黑川边的买手店"},
-     {t:"15:50",kind:"spot",cat:"craft",opt:1,n:"工藝 器と道具 SML",why:"日本各地的陶瓷和木器"},
-     {t:"16:15",kind:"spot",cat:"designer",alsoCat:["craft"],opt:1,n:"OKURA / かまわぬ",why:"蓝染服装、手拭"},
-     {t:"17:00",kind:"spot",cat:"books",alsoCat:["cafe"],n:"代官山 T-SITE 茑屋书店",why:"逛累了在 IVY PLACE 坐坐"},
-     {t:"18:30",kind:"meal",meal:"D",pick:[
-       {n:"焼肉 うしみつ",cat:"wagyu",tier:"q",pp:12000,why:"惠比寿和牛烧肉"},
-       {n:"ビーフキッチン 中目黒",cat:"wagyu",tier:"q",pp:9000,why:"烧肉百名店 6 年"},
-       {n:"たつや 駅前店",cat:"izakaya",tier:"c",pp:3000,why:"站着吃的烤猪杂串老店"}]},
-     {t:"20:30",kind:"bar",n:"Bar Trench",why:"Asia 2026 #53"},
-     {t:"22:00",kind:"bar",second:1,n:"Bar Tram",why:"Trench 的姐妹店"}]}},
- {d:"10.13",wd:"周二",note:"上午空，17:45 去成田",slots:[
-   {t:"11:30",kind:"meal",meal:"L",pick:[
-     {n:"银座 久兵卫 本店",cat:"sushi",tier:"q",pp:16500,why:"吧台「久兵卫」套餐 16 贯"},
-     {n:"梅丘寿司の美登利 銀座",cat:"sushi",tier:"c",pp:3200,why:"东京人排队的平价寿司"},
-     {n:"天ぷら 天一",cat:"tempura",tier:"q",pp:12000,why:"天妇罗百名店"},
-     {n:"竹葉亭 本店",cat:"unagi",tier:"c",pp:3500,why:"江户老铺的鲷鱼茶泡饭和鳗鱼"}]},
-   {t:"12:45",kind:"spot",cat:"cafe",opt:1,n:"Café de L'Ambre",why:"1948 年只做咖啡的喫茶店"},
-   {t:"13:30",kind:"spot",cat:"dept",alsoCat:["books","designer"],n:"GINZA SIX · 茑屋书店",why:"日本设计师品牌和艺术书"},
-   {t:"14:30",kind:"spot",cat:"designer",opt:1,n:"Dover Street Market Ginza",why:"川久保玲策划的集合店"},
-   {t:"14:50",kind:"spot",cat:"temple",opt:1,n:"滨离宫 中岛御茶屋",why:"池中茶屋喝抹茶"},
-   {t:"15:15",kind:"spot",cat:"books",opt:1,n:"伊东屋",why:"12 层文具店"},
-   {t:"16:00",kind:"spot",cat:"dept",n:"银座三越 地下食品层",why:"买伴手礼"},
-   {t:"17:45",fixed:"打车去成田，22:30 EK319 起飞"}]}
-];
-
-/* ---------- 状态 ---------- */
-const S={step:0,a:{pace:null,tier:null,food:[],shop:[],monday:null,night:null}};
-const $=id=>document.getElementById(id);
-/* 自己试玩的标记：打开 game.html#me 一次，这个浏览器以后玩的每一局都会标成 tester；打开 #notme 取消 */
-let TESTER=false;
-try{ if(location.hash==="#me") localStorage.setItem("tokyoTester","1"); if(location.hash==="#notme") localStorage.removeItem("tokyoTester"); TESTER=localStorage.getItem("tokyoTester")==="1"; }catch(e){ TESTER=location.hash==="#me"; }
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const RATE=0.0425, cny=v=>Math.round(v*RATE/10)*10;
-const API=/^https?:$/.test(location.protocol)&&!/claude\.ai|claudeusercontent|anthropic/.test(location.hostname);
-
-function renderSteps(){
-  $("steps").innerHTML=Q.map((q,i)=>`<i class="${i<S.step?"done":i===S.step?"on":""}"></i>`).join("");
-  const q=Q[Math.min(S.step,Q.length-1)];
-  $("scrQ").textContent=S.step>=Q.length?"出签完成":q.title.replace(/？$/,"");
-  $("scrN").textContent=S.step>=Q.length?"券 6 / 6":`券 ${S.step+1} / ${Q.length}`;
-  if(S.step<Q.length) $("coin").hidden=true;
+'use strict';
+// Candidate IDs are stable; labels are display-only. No itinerary is inferred here.
+const CATALOG={food:[
+{id:'izakaya',name:'拉面 · 居酒屋',desc:'一碗热汤面，或小菜配一杯酒。'},
+{id:'rice',name:'丼饭 / 釜饭 / 茶泡饭',desc:'海鲜丼、亲子丼、土锅饭、鲷鱼茶泡饭。'},
+{id:'nabe',name:'涮锅 · 关东煮',desc:'涮肉、热汤、入味的萝卜与鸡蛋。'},
+{id:'fugu',name:'河豚料理',desc:'河豚刺身、河豚锅，尝一点特别的。'},
+{id:'teppanyaki',name:'铁板烧',desc:'看厨师在面前料理牛排、海鲜与时蔬。'},
+{id:'curry',name:'日式咖喱',desc:'浓郁欧风咖喱，或一碗热乎乎的汤咖喱。'},
+{id:'kaiseki',name:'怀石 · 割烹',desc:'随季节变化的精致料理，一道道慢慢吃。',returning:true},
+{id:'wagyu',name:'和牛烧肉',desc:'炭火、油花与刚刚好的熟度。',returning:true},
+{id:'yakitori',name:'烧鸟 · 烤串',desc:'鸡肉、鸡皮、肉丸，吧台前一串接一串。',returning:true},
+{id:'sushi',name:'寿司',desc:'鱼鲜与醋饭，一口一个小满足。',returning:true},
+{id:'unagi',name:'鳗鱼',desc:'蒲烧鳗鱼饭，酱香或白烧都可以。',returning:true}
+],shop:[
+{id:'craft',name:'手工艺品店',desc:'器物、织物、小工艺，挑一件带回家。',returning:true},
+{id:'culture',name:'民俗体验',desc:'温泉、茶道、歌舞伎表演。'},
+{id:'museum',name:'博物馆美术馆',desc:'东京国立博物馆、根津美术馆、Artizon。'},
+{id:'park',name:'公园放空',desc:'新宿御苑、代代木公园。走走、坐坐、发呆。'},
+{id:'themepark',name:'主题乐园',desc:'迪士尼海洋、哈利波特影城。迪士尼在千叶近郊。'},
+{id:'wander',name:'随缘，走到哪算哪',desc:'不设目的地，遇见喜欢的小店就进去。'},
+{id:'designer',name:'设计师买手店',desc:'Mame Kurogouchi、AURALEE，慢慢挑衣服与配饰。',returning:true},
+{id:'cafe',name:'咖啡 · 甜品',desc:'找家喜欢的小店，喝一杯、坐一会儿。',returning:true},
+{id:'temple',name:'寺院 · 庭园',desc:'浅草寺、增上寺、日式庭园。',returning:true},
+{id:'view',name:'看塔 · 夜景',desc:'东京塔、城市天际线、傍晚的灯光。',returning:true}
+]};
+const GROUPS=['food','shop'], LABELS={food:'吃的心动榜',shop:'逛的心动榜'}, KEY='neonDichotomy.v2', WKEY='neonWheel.v2', DAY=86400000;
+const $=id=>document.getElementById(id), esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16)});
+function read(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
+function write(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true}catch{if($('storageNote'))$('storageNote').textContent='当前浏览器无法保存进度。关闭前请下载偏好结果。';return false}}
+let TESTER=read('tokyoTester',false)===true;
+if(location.hash==='#me'){TESTER=true;write('tokyoTester',true)}
+if(location.hash==='#notme'){TESTER=false;write('tokyoTester',false)}
+function fresh(){return {v:2,runId:uid(),tester:TESTER,createdAt:new Date().toISOString(),stage:'home',groups:{food:{history:[],order:[],confirmed:false},shop:{history:[],order:[],confirmed:false}},cloud:null}}
+function pairFor(group,history){let winner=CATALOG[group][0].id;for(const h of history)winner=h.winner;return history.length<CATALOG[group].length-1?[winner,CATALOG[group][history.length+1].id]:null}
+function validHistory(group,history){if(!Array.isArray(history)||history.length>CATALOG[group].length-1)return false;for(let i=0;i<history.length;i++){const p=pairFor(group,history.slice(0,i)),h=history[i];if(!h||h.a!==p[0]||h.b!==p[1]||!p.includes(h.winner))return false}return true}
+function validState(x){return x?.v===2&&typeof x.runId==='string'&&['home','food','foodrank','shop','shoprank','result'].includes(x.stage)&&GROUPS.every(g=>{const a=x.groups?.[g],ids=CATALOG[g].map(c=>c.id);return a&&validHistory(g,a.history)&&Array.isArray(a.order)&&(a.order.length===0||(a.order.length===ids.length&&new Set(a.order).size===ids.length&&a.order.every(id=>ids.includes(id))))})&&(!(x.stage==='result')||GROUPS.every(g=>x.groups[g].confirmed&&x.groups[g].order.length===CATALOG[g].length))}
+let S=read(KEY,null);if(!validState(S))S=fresh();
+// A topological seed respects every duel. Ties are unresolved, not measured ranks.
+function suggestedOrder(group,history){const ids=CATALOG[group].map(c=>c.id),edges=Object.fromEntries(ids.map(id=>[id,[]])),incoming=Object.fromEntries(ids.map(id=>[id,0])),wins=Object.fromEntries(ids.map(id=>[id,0]));for(const h of history){const loser=h.winner===h.a?h.b:h.a;edges[h.winner].push(loser);incoming[loser]++;wins[h.winner]++}const out=[];while(out.length<ids.length){const ready=ids.filter(id=>!out.includes(id)&&incoming[id]===0).sort((a,b)=>wins[b]-wins[a]||ids.indexOf(a)-ids.indexOf(b));const next=ready[0];if(!next)throw Error('invalid comparisons');out.push(next);for(const child of edges[next])incoming[child]--}return out}
+const item=(g,id)=>CATALOG[g].find(c=>c.id===id), name=(g,id)=>item(g,id)?.name||id;
+function persist(){write(KEY,S)}
+function choose(group,winner){const state=S.groups[group],p=pairFor(group,state.history);if(!p||!p.includes(winner))return;state.history.push({a:p[0],b:p[1],winner});if(!pairFor(group,state.history)){state.order=suggestedOrder(group,state.history);S.stage=group+'rank'}persist();render()}
+function undo(group){const a=S.groups[group];a.history.pop();a.order=[];a.confirmed=false;S.stage=group;persist();render()}
+function move(group,from,to){const a=S.groups[group];if(from<0||to<0||from>=a.order.length||to>=a.order.length)return;const [id]=a.order.splice(from,1);a.order.splice(to,0,id);persist();render();document.querySelector(`[data-rank-id="${id}"]`)?.focus()}
+function confirmRank(group){S.groups[group].confirmed=true;S.stage=group==='food'?'shop':'result';persist();render();window.scrollTo({top:0,behavior:'smooth'});if(S.stage==='result')saveResult()}
+function render(){
+$('tester').hidden=!S.tester;const app=$('app');
+if(S.stage==='home'){app.innerHTML=`<section class="panel"><span class="tag">01 / 02 · 吃与逛</span><h2>两张牌，只留更喜欢的。</h2><p>赢家留到下一题，再和一个新选项对决。所有候选都会登场，跟着直觉选就好。</p><div class="homegrid"><div class="mini"><strong>吃</strong><span class="choicecount">11 个品类 / 10 题</span></div><div class="mini"><strong>逛</strong><span class="choicecount">10 个方向 / 9 题</span></div></div><p class="hint">每组结束后，整理你的 Top 6。没选中的只是这次更想让位，不代表讨厌。</p><button class="btn primary" id="start">先从吃的开始 →</button></section>`;$('start').onclick=()=>{S.stage='food';persist();render()};return}
+if(GROUPS.includes(S.stage)){const g=S.stage,a=S.groups[g],p=pairFor(g,a.history);if(!p){S.stage=g+'rank';a.order=suggestedOrder(g,a.history);persist();return render()}const total=CATALOG[g].length-1;app.innerHTML=`<section class="panel" aria-labelledby="question"><div class="spread"><span class="tag">${g==='food'?'ROUND 01 · 吃':'ROUND 02 · 逛'}</span><span class="choicecount">${a.history.length+1} / ${total}</span></div><div class="progress" role="progressbar" aria-label="本组答题进度" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${a.history.length}"><span style="width:${a.history.length/total*100}%"></span></div><h2 id="question" tabindex="-1">这两个，你更喜欢哪一个？</h2><p class="hint">选中的留场，下一个新选项来挑战。</p><div class="pair">${p.map((id,i)=>{const c=item(g,id);return `<button class="option ${i?'b':'a'}" data-pick="${id}"><span class="letter">${i?'B':'A'}</span><b>${esc(c.name)}</b><span class="desc">${esc(c.desc)}</span><span class="foot">${!i&&a.history.length?'上一题胜出':c.returning?'熟悉的选项返场':'新的可能'}</span></button>`}).join('')}</div><div class="spread"><button class="btn" id="undo" ${!a.history.length?'disabled':''}>← 撤回上一题</button><span class="versus">THIS / THAT</span></div></section>`;document.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>choose(g,b.dataset.pick));$('undo').onclick=()=>undo(g);$('question').focus({preventScroll:true});return}
+if(S.stage.endsWith('rank')){const g=S.stage.replace('rank',''),a=S.groups[g];app.innerHTML=`<section class="panel"><span class="tag">${g==='food'?'吃':'逛'} · 整理心动榜</span><h2>你的 Top 6，你来定。</h2><p class="hint">对决选出了冠军，其余先按对决结果暂排。用箭头调整，或把候补提到第六名，再确认前六。<br>未直接比较的选项没有确定先后；这一步以你的意愿为准。</p><ol class="rank">${a.order.map((id,i)=>`<li tabindex="-1" data-rank-id="${id}" class="${i>=6?'out':''} ${i===6?'cut':''}"><span class="num">${String(i+1).padStart(2,'0')}</span><span class="name">${esc(name(g,id))}${i===6?'<br><small class="muted">以下为候补</small>':''}</span><span class="tools"><button class="small" data-up="${i}" aria-label="上移${esc(name(g,id))}" ${i===0?'disabled':''}>↑</button><button class="small" data-down="${i}" aria-label="下移${esc(name(g,id))}" ${i===a.order.length-1?'disabled':''}>↓</button>${i>=6?`<button class="small" data-promote="${i}" aria-label="将${esc(name(g,id))}移入前六">前六</button>`:''}</span></li>`).join('')}</ol><div class="actions"><button class="btn" id="undo">回到最后一题</button><button class="btn primary" id="confirm">${g==='food'?'确认吃的 Top 6，开始逛 →':'确认逛的 Top 6，查看结果 →'}</button></div></section>`;document.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>move(g,+b.dataset.up,+b.dataset.up-1));document.querySelectorAll('[data-down]').forEach(b=>b.onclick=()=>move(g,+b.dataset.down,+b.dataset.down+1));document.querySelectorAll('[data-promote]').forEach(b=>b.onclick=()=>move(g,+b.dataset.promote,5));$('undo').onclick=()=>undo(g);$('confirm').onclick=()=>confirmRank(g);return}
+app.innerHTML=`<section class="panel"><span class="tag">THE WAY YOU LIKE TOKYO</span><h2>你的东京，有了偏爱的形状。</h2><p class="hint">以下是你确认的 Top 6。它们是攻略的灵感，不是必须打卡的清单。</p></section><div class="resultgrid" style="margin-top:18px">${GROUPS.map(g=>`<section class="panel"><span class="tag">${g==='food'?'01 / EAT':'02 / EXPLORE'}</span><h3>${LABELS[g]}</h3><ol>${S.groups[g].order.slice(0,6).map(id=>`<li>${esc(name(g,id))}</li>`).join('')}</ol></section>`).join('')}</div><section class="panel"><p id="saveNote" role="status">${S.cloud?'偏好已保存。':'偏好已保留在此浏览器。'}</p><div class="actions"><button class="btn" id="retry">${S.cloud?'同步奖券':'保存到云端'}</button><button class="btn" id="download">下载偏好结果</button><button class="btn" id="restart">重新玩一局</button></div><details style="margin-top:18px"><summary>查看逐题选择</summary><div class="log">${GROUPS.map(g=>`<h4>${LABELS[g]}</h4>${S.groups[g].history.map((h,i)=>`<p>${i+1}. ${esc(name(g,h.a))} / ${esc(name(g,h.b))}<br>→ ${esc(name(g,h.winner))}</p>`).join('')}`).join('')}</div></details></section><section class="panel center"><div class="spread"><span class="tag">BONUS / 大礼包</span><span class="choicecount">留一点惊喜给旅途</span></div><h2>偏好选完，幸运开转。</h2><p class="hint">朋友之间的小玩笑，抽到什么就记下来。</p><div class="wheelwrap"><div class="pin"></div><svg id="wheel" viewBox="0 0 300 300" role="img" aria-label="八格幸运转盘"></svg><div class="hub">霓虹</div></div><button class="btn primary" id="spin">转一下</button><p id="cool" class="hint" role="status"></p><div id="tickets"></div><form class="promo" id="promoForm"><h3>Promo code · 隐藏加场</h3><label for="promoInput">你最喜爱的单曲</label><div class="inputrow"><input id="promoInput" type="text" maxlength="120" autocomplete="off" placeholder="输入歌名" required><button class="btn" id="redeem" type="submit">兑换，再转一次</button></div><p id="promoNote" class="hint" role="status">答对可额外转一次。同一浏览器限领一次。</p></form><p class="hint">奖券仅供朋友间互动，不是商家权益。</p></section>`;
+$('retry').onclick=()=>saveResult();$('download').onclick=download;$('restart').onclick=()=>{if(confirm('重新开始会清空本局答题进度；奖券和兑换次数保留。要继续吗？')){S=fresh();persist();render();window.scrollTo({top:0})}};drawWheel();updateWheel();$('spin').onclick=spin;$('promoForm').onsubmit=redeem;
 }
-function isOn(q,k){ const v=S.a[q.id]; return q.multi?v.includes(k):v===k; }
-function renderQ(){
-  renderSteps();
-  const q=Q[S.step]; const box=$("qbox");
-  const ready=q.multi?S.a[q.id].length>0:!!S.a[q.id];
-  box.innerHTML=`<h2>${esc(q.title)}</h2><p class="hint">${esc(q.hint)}${q.multi?` 已选 ${S.a[q.id].length} / ${q.max}`:""}</p>
-   <div class="keys">${q.keys.map(k=>`<button type="button" class="key" style="--kc:var(${k[3]})" aria-pressed="${isOn(q,k[0])}" data-k="${k[0]}"><span class="band"></span><span class="lamp"></span><span class="kt">${esc(k[1])}</span><span class="kd">${esc(k[2])}</span></button>`).join("")}</div>
-   <div class="nav"><button type="button" class="btn" id="back" ${S.step===0?"disabled":""}>上一张</button>
-   <button type="button" class="btn go" id="next" ${ready?"":"disabled"}>${S.step===Q.length-1?"出签":"下一张"}</button></div>`;
-  box.querySelectorAll(".key").forEach(b=>b.addEventListener("click",()=>{
-    const k=b.dataset.k;
-    if(q.multi){ const arr=S.a[q.id]; const i=arr.indexOf(k); if(i>=0) arr.splice(i,1); else if(arr.length<q.max) arr.push(k); }
-    else S.a[q.id]=k;
-    renderQ(); const nb=$("qbox").querySelector(`[data-k="${k}"]`); if(nb) nb.focus();
-  }));
-  $("back").addEventListener("click",()=>{ if(S.step>0){S.step--;renderQ();} });
-  $("next").addEventListener("click",()=>{ if(S.step<Q.length-1){S.step++;renderQ();} else draw(); });
-}
-
-/* ---------- 出签：打分挑店 ---------- */
-let ROLLS=[];
-function wantTier(meal,slot){ const t=S.a.tier;
-  if(t==="dice"){ const r=1+Math.floor(Math.random()*6); ROLLS.push(r); slot._roll=r; return r%2?"c":"q"; }
-  return t==="mix"?(meal==="L"?"c":"q"):t; }
-function pickMeal(slot,used){
-  let best=null,bs=-1e9; const want=wantTier(slot.meal,slot);
-  slot.pick.forEach((c,i)=>{
-    let s=0; if(used["n:"+c.n]) s-=100;
-    if(S.a.food.includes(c.cat)) s+=4;
-    if(c.tier===want) s+=(S.a.tier==="dice"?6:5);
-    if(used[c.cat]) s-=3*used[c.cat];
-    s-=i*0.1; /* 同分时用手帐里的默认顺序 */
-    if(s>bs){bs=s;best=c;}
-  });
-  used[best.cat]=(used[best.cat]||0)+1; used["n:"+best.n]=1;
-  return best;
-}
-function spotScore(sl){ const cats=[sl.cat].concat(sl.alsoCat||[]); return cats.filter(c=>S.a.shop.includes(c)).length; }
-function buildDay(day,used){
-  let slots=day.slots.slice();
-  if(day.route){
-    let r=S.a.monday;
-    if(r==="auto"){ const na=["designer","books"].filter(c=>S.a.shop.includes(c)).length+(S.a.food.includes("wagyu")?1:0);
-      const as=["craft","temple"].filter(c=>S.a.shop.includes(c)).length+(S.a.food.includes("sukiyaki")?1:0); r=na>as?"nakameguro":"asakusa"; }
-    day.chosenRoute=r; slots=slots.concat(day.routes[r]);
-  }
-  const pace=S.a.pace, night=S.a.night;
-  const cap=pace==="lazy"?2:pace==="mid"?4:99;
-  const spots=slots.filter(s=>s.kind==="spot");
-  const ranked=spots.map(s=>({s,sc:spotScore(s)+(s.opt?0:0.5)})).sort((a,b)=>b.sc-a.sc);
-  const keepSpots=new Set();
-  ranked.forEach(({s,sc},i)=>{ if(!s.opt||s.keep) keepSpots.add(s); else if(pace==="max") keepSpots.add(s); else if(keepSpots.size<cap&&(sc>0||pace==="mid")) keepSpots.add(s); });
-  if(pace==="lazy") ranked.filter(x=>!x.s.opt).forEach(x=>keepSpots.add(x.s));
-  const sideSc=k=>spots.filter(s=>s.side===k).reduce((a,s)=>a+spotScore(s),0);
-  if(spots.some(s=>s.side)){ const lose=sideSc("B")>sideSc("A")?"A":"B"; spots.filter(s=>s.side===lose).forEach(s=>keepSpots.delete(s)); }
-  const out=[]; let shift=0;
-  const tm=t=>{ const [h,m]=t.split(":").map(Number); const v=h*60+m+shift; return Math.floor(v/60)+":"+String(v%60).padStart(2,"0"); };
-  const late=t=>day.latest&&shift&&(()=>{ const [h,m]=t.split(":").map(Number), [lh,lm]=day.latest.split(":").map(Number); return h*60+m+shift>lh*60+lm; })();
-  slots.forEach(s=>{
-    if(s.fixed){ out.push({t:s.t,n:s.fixed,fixed:1}); return; }
-    if(s.kind==="meal"){ const c=pickMeal(s,used); if(c.shift) shift=c.shift; out.push({t:c.t||s.t,n:c.n,why:(s._roll?`骰子掷出 ${s._roll} 点，吃${s._roll%2?"亲民":"品质"} · `:"")+c.why,meal:1,pp:c.pp,tier:c.tier,cat:c.cat}); return; }
-    if(late(s.t)) return;
-    const T=shift?tm(s.t):s.t;
-    if(s.kind==="spot"){ if(keepSpots.has(s)) out.push({t:T,n:s.n,why:s.why,cats:[s.cat].concat(s.alsoCat||[])}); return; }
-    if(s.kind==="bar"){
-      if(s.keep){ out.push({t:T,n:s.n,why:s.why,bar:1}); return; }
-      if(s.meeting){ if(night!=="early"&&S.a.shop.includes("view")) out.push({t:T,n:s.n,why:s.why+"（19:25 前要走）",bar:1}); return; }
-      if(night==="early") return; if(s.second&&night!=="two") return;
-      out.push({t:T,n:s.n,why:s.why,bar:1});
-    }
-  });
-  return out;
-}
-function persona(){
-  const p=S.a.pace, t=S.a.tier, f=S.a.food, sh=S.a.shop;
-  const name={lazy:{q:"松弛贵妇",c:"巷子老饕",mix:"慢游美食家",dice:"随缘松弛派"},mid:{q:"精致城市漫步者",c:"东京生活家",mix:"会吃会逛的行家",dice:"命运美食家"},max:{q:"米其林特种兵",c:"暴走老饕",mix:"全能打卡王",dice:"赌神级吃货"}}[p][t];
-  const lines=[];
-  if(sh.includes("designer")) lines.push("衣柜会比来时满"); if(sh.includes("craft")) lines.push("会带回一把刻名的刀或一只杯子");
-  if(sh.includes("view")) lines.push("相册里东京塔至少 30 张"); if(f.includes("wagyu")||f.includes("sukiyaki")) lines.push("和牛是这趟的主线");
-  if(f.includes("sushi")) lines.push("久兵卫的吧台等你"); if(S.a.night==="two") lines.push("榜单酒吧一家不落");
-  if(!lines.length) lines.push("按自己的节奏，舒服最重要");
-  const LOTS=[["大吉",20,"天气晴好，稻村崎能看到富士山"],["吉",30,"想订的店都有位"],["中吉",30,"排队不超过 20 分钟"],["平吉",20,"慢慢逛，舒服最重要"]];
-  let r=Math.random()*100, lot=LOTS[LOTS.length-1];
-  for(const l of LOTS){ if(r<l[1]){ lot=l; break; } r-=l[1]; }
-  const kichi=lot[0]; lines.unshift(lot[2]);
-  return {name,lines,kichi};
-}
-let LAST=null;
-function draw(){
-  S.step=Q.length; renderSteps(); $("qbox").hidden=true;
-  ROLLS=[]; const used={}; const plan=DAYS.map(d=>({d:d.d,wd:d.wd,note:d.note,route:d.route?(S.a.monday==="auto"?d:null):null,items:buildDay(d,used),chosenRoute:d.chosenRoute}));
-  const per=persona();
-  const meals=plan.flatMap(d=>d.items.filter(x=>x.meal));
-  const cost=meals.reduce((a,m)=>a+m.pp,0);
-  const stops=plan.reduce((a,d)=>a+d.items.filter(x=>!x.fixed&&!x.meal&&!x.bar).length,0);
-  const bars=plan.reduce((a,d)=>a+d.items.filter(x=>x.bar).length,0);
-  $("coin").textContent=`6 天正餐每人 ¥${cost.toLocaleString()}（约 ${cny(cost).toLocaleString()} 元）`; $("coin").hidden=false;
-  const hit=S.a.food.filter(c=>meals.some(m=>m.cat===c)).length;
-  LAST={tester:TESTER,answers:JSON.parse(JSON.stringify(S.a)),persona:per.name,kichi:per.kichi,
-    rolls:ROLLS.slice(),plan:plan.map(d=>({d:d.d,route:d.chosenRoute||null,items:d.items.map(x=>x.t+" "+x.n)})),foodCost:cost,stops,bars,v:1};
-  const ans=[LABEL["pace:"+S.a.pace],LABEL["tier:"+S.a.tier]].concat(S.a.food.map(k=>LABEL["food:"+k]),S.a.shop.map(k=>LABEL["shop:"+k]),[LABEL["monday:"+S.a.monday],LABEL["night:"+S.a.night]]);
-  const res=$("result"); res.hidden=false;
-  res.innerHTML=`<article class="slip" aria-label="你的东京签">
-    <div class="fortune"><div class="kichi">${per.kichi}</div><div class="persona"><h3>你是「${esc(per.name)}」</h3><p>${esc(per.lines.join("；"))}。</p>
-    <div class="chips">${ans.map(a=>`<span class="chip">${esc(a)}</span>`).join("")}</div></div></div>
-    <div class="sum"><div><b>¥${cost.toLocaleString()}</b><span>6 天正餐每人合计（约 ${cny(cost).toLocaleString()} 元）</span></div><div><b>${stops}</b><span>要逛的店和景点</span></div><div><b>${hit} / ${S.a.food.length}</b><span>想吃的品类吃到了</span></div></div>
-    <div class="days">${plan.map(d=>`<section class="day"><h4><span class="d">${d.d}</span>${d.wd}<small>${esc(d.note)}${d.chosenRoute?` · 下午走${d.chosenRoute==="asakusa"?"浅草":"中目黑、代官山"}`:""}</small></h4><ol>${d.items.map(x=>`<li class="${x.meal?"meal":x.bar?"bar":""}"><span class="t">${esc(x.t)}</span><span><span class="n">${esc(x.n)}</span>${x.why?`<span class="why">${esc(x.why)}${x.pp?` · 人均 ¥${x.pp.toLocaleString()}（约 ${cny(x.pp).toLocaleString()} 元）`:""}</span>`:""}</span></li>`).join("")}</ol></section>`).join("")}</div>
-    <div class="stamp" aria-hidden="true">吉</div></article>
-   <section class="wheelbox"><h3>抽完签，再转一份大礼包</h3><p class="sub">8 份大礼包里装着什么，转到才知道。抽到就出示给对方兑现。</p>
-    <div class="wheel" id="wheelView"><span class="pin" aria-hidden="true"></span><canvas id="wheel" width="600" height="600" role="img" aria-label="幸运转盘，8 份大礼包"></canvas><span class="hub" aria-hidden="true">礼</span></div>
-    <button type="button" class="btn go" id="spin">转！</button>
-    <p class="note" id="cool" hidden></p>
-    <div class="tickets" id="tickets" aria-live="polite"></div></section>
-   <section class="fb"><h3>这张签合不合你心意？</h3>
-    <div class="stars" id="stars">${[1,2,3,4,5].map(n=>`<button type="button" aria-pressed="false" data-r="${n}">${n} 分</button>`).join("")}</div>
-    <label for="cmt" class="note">哪里想改？想加什么店？（可不填）</label>
-    <textarea id="cmt" maxlength="500" placeholder="比如：周日想多逛一会儿器物店；烧肉可以换成涮涮锅"></textarea>
-    <div class="nav"><button type="button" class="btn" id="again">重新抽一次</button><button type="button" class="btn go" id="send">提交打分</button></div>
-    <p class="note" id="saveNote"></p></section>`;
-  res.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
-  let rating=null;
-  res.querySelectorAll("#stars button").forEach(b=>b.addEventListener("click",()=>{ rating=+b.dataset.r; res.querySelectorAll("#stars button").forEach(x=>x.setAttribute("aria-pressed",String(+x.dataset.r===rating))); }));
-  $("again").addEventListener("click",()=>{ S.step=0; S.a={pace:null,tier:null,food:[],shop:[],monday:null,night:null}; res.hidden=true; $("qbox").hidden=false; renderQ(); window.scrollTo({top:0}); });
-  $("send").addEventListener("click",async()=>{
-    const note=$("saveNote"); const comment=$("cmt").value.trim();
-    if(!rating&&!comment){ note.textContent="先点一个分数，或者写一句想改的地方。"; return; }
-    if(!API||!LAST.id){ note.textContent=API?"这一局还没存上，稍后再点一次提交。":"这是预览版，打分只会保存在公开网址上的游戏里。"; return; }
-    $("send").disabled=true; note.textContent="正在提交……";
-    try{ const r=await fetch("/api/feedback",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:LAST.id,rating,comment})});
-      const j=await r.json(); if(!j.ok) throw new Error(j.error);
-      note.innerHTML='<span class="ok">已提交，谢谢！</span> 你的选择和留言会帮下一版行程改得更好。';
-    }catch(e){ $("send").disabled=false; note.textContent="没提交上，检查一下网络再点一次。"; }
-  });
-  save(); initWheel();
-}
-/* ---------- 大礼包转盘 ---------- */
-const PRIZES=[
- ["请 J 人喝咖啡券","J人真棒！谢谢J人！"],
- ["新增会邀 ×1 券","Hello Chelsea，快速对一下"],
- ["合作方全部请假券","一觉醒来巴西公共假期增加 10000 倍"],
- ["P人续杯券","P人免费酒精一杯，谁是P人你别管"],
- ["谢谢惠顾","这个人很幸运，什么都没有抽到"],
- ["再转一次","手气不错，马上再转一次"],
- ["P人当导游券","P人真棒！谢谢P人！"],
- ["J人隐藏款","出示本券让J人现挂"]];
-const AGAIN=5, COLORS=["--k1","--k4","--k2","--k6","--k5","--k3","--accent","--k7"], COOL_KEY="tokyoGiftUntil", DAY=24*3600*1000;
-let ROT=0, SPUN=[], chain=0, busy=false, ORDER=[], REVEAL=-1, coolTimer=null;
-function cssv(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||"#888"; }
-function coolUntil(){ try{ return +localStorage.getItem(COOL_KEY)||0; }catch(e){ return 0; } }
-function setCool(){ try{ localStorage.setItem(COOL_KEY,String(Date.now()+DAY)); }catch(e){} }
-function coolLeft(){ return Math.max(0,coolUntil()-Date.now()); }
-function drawWheel(){
-  const cv=$("wheel"), x=cv.getContext("2d"), N=PRIZES.length, R0=300, seg=2*Math.PI/N;
-  x.clearRect(0,0,600,600);
-  ORDER.forEach((pi,i)=>{ const a0=-Math.PI/2+i*seg, a1=a0+seg;
-    x.beginPath(); x.moveTo(R0,R0); x.arc(R0,R0,R0-4,a0,a1); x.closePath(); x.fillStyle=cssv(COLORS[i]); x.fill();
-    x.strokeStyle="#ffffff"; x.lineWidth=4; x.stroke();
-    x.save(); x.translate(R0,R0); x.rotate(a0+seg/2); x.textAlign="right"; x.textBaseline="middle";
-    x.fillStyle="#ffffff"; x.font='700 30px -apple-system,"PingFang SC","Noto Sans SC",sans-serif';
-    x.shadowColor="rgba(0,0,0,.35)"; x.shadowBlur=4; x.fillText(i===REVEAL?PRIZES[pi][0].replace(/券$/,""):"大礼包 "+(i+1),R0-30,0); x.restore(); });
-  x.beginPath(); x.arc(R0,R0,R0-3,0,2*Math.PI); x.lineWidth=6; x.strokeStyle="#ffffff"; x.stroke();
-}
-function initWheel(){
-  ROT=0; SPUN=[]; chain=0; busy=false; REVEAL=-1;
-  ORDER=PRIZES.map((_,i)=>i).sort(()=>Math.random()-.5);
-  drawWheel();
-  const cv=$("wheel"); cv.style.transition="none"; cv.style.transform="rotate(0deg)"; void cv.offsetWidth; cv.style.transition="";
-  $("tickets").innerHTML=""; $("spin").onclick=go; checkCool();
-}
-function checkCool(){
-  clearInterval(coolTimer);
-  const left=coolLeft(), btn=$("spin"), c=$("cool");
-  if(!left){ btn.disabled=false; c.hidden=true; if(!busy) btn.textContent="转！"; return; }
-  btn.disabled=true; btn.textContent="喜欢您再来"; c.hidden=false;
-  const tickc=()=>{ const l=coolLeft(); if(!l){ clearInterval(coolTimer); checkCool(); return; }
-    const h=Math.floor(l/3600000), m=Math.floor(l%3600000/60000); c.textContent=`每 24 小时能转一次，还要等 ${h} 小时 ${m} 分。`; };
-  tickc(); coolTimer=setInterval(tickc,30000);
-}
-function roll(){ const N=PRIZES.length; let pi=Math.floor(Math.random()*N);
-  if(pi===AGAIN&&chain>=2) pi=(pi+1+Math.floor(Math.random()*(N-1)))%N; return pi; }
-const reduce=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
-function go(){
-  if(busy||coolLeft()) return; busy=true; const pi=roll(); $("spin").disabled=true; $("spin").textContent="转动中……";
-  const N=PRIZES.length, i=ORDER.indexOf(pi), deg=360/N, center=i*deg+deg/2, jitter=(Math.random()-.5)*deg*0.6;
-  const cur=((ROT%360)+360)%360; ROT+=360*5+((360-center-jitter)-cur+720)%360;
-  $("wheel").style.transform=`rotate(${ROT}deg)`;
-  setTimeout(()=>{ REVEAL=i; drawWheel(); landed(pi); }, reduce()?50:3300);
-}
-function landed(pi){
-  const p=PRIZES[pi]; const no="No."+String(1000+Math.floor(Math.random()*9000)); SPUN.push(p[0]);
-  const col=COLORS[ORDER.indexOf(pi)];
-  const t=document.createElement("div"); t.className="ticket"; t.style.setProperty("--tc",`var(${col})`);
-  t.innerHTML=`<span class="tn">${esc(p[0])}</span><span class="no">${no}</span><span class="ts">${esc(p[1])}</span><span class="tv">${pi===AGAIN?"马上再转一次":"有效期 10.8–10.13 · 出示给对方即可兑现"}</span>`;
-  $("tickets").prepend(t); busy=false;
-  if(pi===AGAIN){ chain++; $("spin").textContent="再转一次"; setTimeout(go,900); return; }
-  setCool(); saveSpins(); checkCool();
-}
-async function saveSpins(){
-  if(LAST) LAST.spins=SPUN.slice();
-  if(!API||!LAST||!LAST.id) return;
-  try{ await fetch("/api/spin",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:LAST.id,spins:SPUN})}); }catch(e){}
-}
-async function save(){
-  const note=$("saveNote");
-  if(!API){ note.textContent="这是预览版，不会保存记录；公开网址上的每一局都会记下来。"; return; }
-  try{ const r=await fetch("/api/play",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(LAST)});
-    const j=await r.json(); if(j.ok){ LAST.id=j.id; note.textContent="这一局已经记下来了。"; } else note.textContent="记录暂时没存上（后台还没设置好）。";
-  }catch(e){ note.textContent="记录暂时没存上，不影响看签。"; }
-}
-
-renderQ(); if(TESTER) $("testerTag").hidden=false;
-})();
-</script>
-</body></html>
+function payload(run=S){return {v:2,game:'neon-dichotomy',candidateVersion:'2026-09-29',runId:run.runId,tester:run.tester,createdAt:run.createdAt,answers:Object.fromEntries(GROUPS.map(g=>[g,run.groups[g].order.slice(0,6)])),duels:Object.fromEntries(GROUPS.map(g=>[g,run.groups[g].history])),rankings:Object.fromEntries(GROUPS.map(g=>[g,{all:run.groups[g].order,top6:run.groups[g].order.slice(0,6),confirmed:run.groups[g].confirmed,seed:suggestedOrder(g,run.groups[g].history)}])),rankingMethod:'pairwise-seed-user-confirmed',catalog:Object.fromEntries(GROUPS.map(g=>[g,CATALOG[g].map(c=>({id:c.id,name:c.name}))]))}}
+const API=/^https?:$/.test(location.protocol);
+async function post(path,body){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);try{const r=await fetch(path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body),signal:controller.signal});let j;try{j=await r.json()}catch{throw Error('unavailable')}if(!r.ok||!j.ok)throw Error(j.error||'unavailable');return j}finally{clearTimeout(timer)}}
+let saving=false;
+async function saveResult(){if(saving||S.stage!=='result')return;const run=S,note=$('saveNote');if(!API){note.textContent='离线文件：可下载完整偏好结果；在线站点部署后可云端保存。';return}saving=true;$('retry').disabled=true;note.textContent='正在保存偏好……';try{if(!run.cloud){const j=await post('/api/play',payload(run));run.cloud=j.id;if(S===run)persist()}if(S===run){note.textContent='偏好已保存。';if(W.tickets.some(t=>t.runId===run.runId))await syncSpins(run)}}catch{if(S===run)note.textContent='云端暂未保存成功，偏好仍在当前浏览器。可重试或下载结果。'}finally{saving=false;if(S===run&&$('retry')){$('retry').disabled=false;$('retry').textContent=run.cloud?'同步奖券':'重试保存'}}}
+function download(){const data={...payload(),cloudId:S.cloud,prizes:W.tickets.filter(t=>t.runId===S.runId)};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='霓虹二分法-'+S.runId.slice(0,8)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+const PRIZES=[['请 J 人喝咖啡券','J人真棒！谢谢J人！'],['新增会邀 ×1 券','Hello Chelsea，快速对一下'],['合作方全部请假券','一觉醒来巴西公共假期增加 10000 倍'],['P人续杯券','P人免费酒精一杯，谁是P人你别管'],['谢谢惠顾','这个人很幸运，什么都没有抽到'],['再转一次','手气不错，再来一局！'],['P人当导游券','P人真棒！谢谢P人！'],['J人隐藏款','出示本券让J人现挂']];
+let W=read(WKEY,null);if(!W||!Array.isArray(W.tickets)||!Array.isArray(W.grants)||typeof W.clientId!=='string')W={clientId:uid(),until:Number(read('tokyoGiftUntil',0))||0,credits:0,grants:[],tickets:[],chain:0};write(WKEY,W);
+let spinning=false,rotation=0;
+const colors=['#c45345','#8c72b4','#378579','#cb9350','#476d93','#ab5d85','#638552','#82674e'];
+function drawWheel(){const svg=$('wheel');if(!svg)return;svg.innerHTML=PRIZES.map((p,i)=>{const a=(i*45-90)*Math.PI/180,b=((i+1)*45-90)*Math.PI/180,x1=150+146*Math.cos(a),y1=150+146*Math.sin(a),x2=150+146*Math.cos(b),y2=150+146*Math.sin(b),mid=(a+b)/2,x=150+95*Math.cos(mid),y=150+95*Math.sin(mid);return `<path d="M150 150 L${x1} ${y1} A146 146 0 0 1 ${x2} ${y2} Z" fill="${colors[i]}" stroke="#fff" stroke-width="2"/><text x="${x}" y="${y}" fill="white" text-anchor="middle" dominant-baseline="middle" font-size="13" font-family="sans-serif" transform="rotate(${i*45+22.5} ${x} ${y})">礼物 ${i+1}</text>`}).join('');svg.style.transform=`rotate(${rotation}deg)`}
+function updateWheel(){if(!$('spin'))return;const left=Math.max(0,W.until-Date.now());$('spin').disabled=spinning||(!W.credits&&left>0);$('spin').textContent=spinning?'幸运正在靠近……':W.credits?'使用额外机会 · '+W.credits:'转一下';$('cool').textContent=W.credits?`你还有 ${W.credits} 次额外机会。`:left?`本浏览器基础机会每24小时一次，还需 ${Math.ceil(left/3600000)} 小时。`:'今天的基础机会已就绪。';$('tickets').innerHTML=W.tickets.slice(-12).reverse().map(t=>`<div class="ticket"><strong>${esc(PRIZES[t.prize][0])}</strong><span>${esc(PRIZES[t.prize][1])}</span><br><small>${new Date(t.at).toLocaleString('zh-CN',{timeZone:'Asia/Tokyo'})} · 东京时间</small></div>`).join('')}
+function randomInt(n){const data=new Uint32Array(1),max=Math.floor(4294967296/n)*n;do{crypto.getRandomValues(data)}while(data[0]>=max);return data[0]%n}
+function spin(){if(spinning||(W.until>Date.now()&&!W.credits))return;spinning=true;if(W.credits>0)W.credits--;else{W.until=Date.now()+DAY;write('tokyoGiftUntil',W.until)}let prize=randomInt(8);if(prize===5&&W.chain>=2)prize=[0,1,2,3,4,6,7][randomInt(7)];if(prize===5){W.credits++;W.chain++}else W.chain=0;W.tickets.push({prize,at:new Date().toISOString(),runId:S.runId});W.tickets=W.tickets.slice(-60);write(WKEY,W);const target=360-(prize*45+22.5);rotation+=1440+((target-rotation%360+360)%360);const svg=$('wheel');if(svg)svg.style.transform=`rotate(${rotation}deg)`;const button=$('spin');button.disabled=true;button.textContent='幸运正在靠近……';const run=S;setTimeout(()=>{spinning=false;updateWheel();if(S===run&&run.cloud)syncSpins(run)},matchMedia('(prefers-reduced-motion: reduce)').matches?10:2900)}
+async function syncSpins(run){try{await post('/api/spin',{id:run.cloud,spins:W.tickets.filter(t=>t.runId===run.runId).slice(-30).map(t=>PRIZES[t.prize][0])})}catch{if(S===run&&$('saveNote'))$('saveNote').textContent='偏好已保存；奖券云端同步失败，仍保留在本浏览器。可点“同步奖券”重试。'}}
+async function redeem(e){e.preventDefault();const note=$('promoNote'),button=$('redeem'),input=$('promoInput');if(!API){note.textContent='兑换需要联网，在发布后的游戏网址中使用。';return}if(spinning){note.textContent='等转盘停下，再来兑换。';return}button.disabled=true;note.textContent='正在听你的答案……';try{const j=await post('/api/promo',{code:input.value,clientId:W.clientId});if(W.grants.includes(j.grant)){note.textContent='这份隐藏机会已经领过啦。';return}W.grants.push(j.grant);W.credits++;write(WKEY,W);input.value='';note.textContent='答对了！多给你一次心动的机会。';updateWheel()}catch(err){note.textContent=err.message==='wrong_code'?'还差一点，再想想你最喜爱的单曲。':err.message==='promo_unconfigured'?'隐藏加场还未开启，晚点再试。':'暂时没连上，检查网络后再试。'}finally{button.disabled=false}}
+$('theme').onclick=()=>{const current=document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=current==='dark'?'light':'dark'};
+render();if(S.stage==='result'&&!S.cloud)saveResult();setInterval(updateWheel,60000);
+</script></body></html>
