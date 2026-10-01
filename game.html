@@ -49,9 +49,9 @@ async function redeem(e){
  if(spinning){note.textContent='等转盘停下，再来兑换。';return}
  button.disabled=true;note.textContent='正在核对你的答案……';
  try{
-  const code=input.value.normalize('NFKC').trim().toLowerCase().replace(/\s+/g,' ');
+  const code=input.value.normalize('NFKC').trim().toLowerCase().replace(/\s+/g,'');
   const hash=[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(code)))].map(n=>n.toString(16).padStart(2,'0')).join('');
-  if(hash!=='0c466df991c21c73ef08f476d7acf13845b4e5b914410b9aeac8cbff4f587320'){note.textContent='还差一点，再想想DBMS 的全称。';return}
+  if(!["3bc3ac36fa9764f20f62a4c8bd0ea4a321eed307012fedc567e750c7e26bc8d2", "f0cb992ba5a61a3d92884a7e7430dc92b48e8c5137f55701963805c6f31611b2"].includes(hash)){note.textContent='还差一点，再想想商圈是什么的最小单元。';return}
   const latest=read(WKEY,null);if(latest&&latest.clientId===W.clientId&&Array.isArray(latest.grants))W=latest;
   if(W.grants.length){note.textContent='这份隐藏机会已经领过啦。';return}
   W.grants.push('neon-song-v1');W.credits++;write(WKEY,W);input.value='';
@@ -59,7 +59,7 @@ async function redeem(e){
  }catch{note.textContent='当前浏览器无法完成兑换，请用新版 Chrome 或 Safari 打开。'}
  finally{button.disabled=false}
 }
-const lotteryMarkup="<section class=\"panel center\"><div class=\"spread\"><span class=\"tag\">BONUS / 大礼包</span></div><h2>今天请J人做什么好呢</h2><div class=\"wheelwrap\"><div class=\"pin\"></div><svg id=\"wheel\" viewBox=\"0 0 300 300\" role=\"img\" aria-label=\"八格幸运转盘\"></svg><div class=\"hub\">霓虹</div></div><button class=\"btn primary\" id=\"spin\">转一下</button><p id=\"cool\" class=\"hint\" role=\"status\"></p><div id=\"tickets\"></div><form class=\"promo\" id=\"promoForm\"><h3>Promo code · 隐藏加场</h3><label for=\"promoInput\">DBMS 的全称</label><div class=\"inputrow\"><input id=\"promoInput\" type=\"text\" maxlength=\"120\" autocomplete=\"off\" placeholder=\"输入英文全称\" required><button class=\"btn\" id=\"redeem\" type=\"submit\">兑换，再转一次</button></div><p id=\"promoNote\" class=\"hint\" role=\"status\">答对可额外转一次。同一浏览器限领一次。</p></form><p class=\"hint\">出示本券即可兑换哦</p><p class=\"hint\">谢谢惠顾基础概率 5%；抽中后，下一次必出其他选项。</p></section>";
+const lotteryMarkup="<section class=\"panel center\"><div class=\"spread\"><span class=\"tag\">BONUS / 大礼包</span></div><h2>今天请J人做什么好呢</h2><div class=\"wheelwrap\"><div class=\"pin\"></div><svg id=\"wheel\" viewBox=\"0 0 300 300\" role=\"img\" aria-label=\"八格幸运转盘\"></svg><div class=\"hub\">霓虹</div></div><button class=\"btn primary\" id=\"spin\">转一下</button><p id=\"cool\" class=\"hint\" role=\"status\"></p><div id=\"tickets\"></div><form class=\"promo\" id=\"promoForm\"><h3>Promo code · 隐藏加场</h3><label for=\"promoInput\">商圈是什么的最小单元？</label><div class=\"inputrow\"><input id=\"promoInput\" type=\"text\" maxlength=\"120\" autocomplete=\"off\" placeholder=\"输入你的答案\" required><button class=\"btn\" id=\"redeem\" type=\"submit\">兑换，再转一次</button></div><p id=\"promoNote\" class=\"hint\" role=\"status\">答对可额外转一次。同一浏览器限领一次。</p></form><p class=\"hint\">出示本券即可兑换哦</p><p class=\"hint\">谢谢惠顾基础概率 5%；抽中后，下一次必出其他选项。</p></section>";
 
 let mode='arcade';
 const WINDOW_MS=12*60*60*1000;
