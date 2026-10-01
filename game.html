@@ -31,7 +31,18 @@ const colors=['#c45345','#8c72b4','#378579','#cb9350','#476d93','#ab5d85','#6385
 function drawWheel(){const svg=$('wheel');if(!svg)return;svg.innerHTML=PRIZES.map((p,i)=>{const a=(i*45-90)*Math.PI/180,b=((i+1)*45-90)*Math.PI/180,x1=150+146*Math.cos(a),y1=150+146*Math.sin(a),x2=150+146*Math.cos(b),y2=150+146*Math.sin(b),mid=(a+b)/2,x=150+95*Math.cos(mid),y=150+95*Math.sin(mid);return `<path d="M150 150 L${x1} ${y1} A146 146 0 0 1 ${x2} ${y2} Z" fill="${colors[i]}" stroke="#fff" stroke-width="2"/><text x="${x}" y="${y}" fill="white" text-anchor="middle" dominant-baseline="middle" font-size="13" font-family="sans-serif" transform="rotate(${i*45+22.5} ${x} ${y})">礼物 ${i+1}</text>`}).join('');svg.style.transform=`rotate(${rotation}deg)`}
 function updateWheel(){if(!$('spin'))return;const left=Math.max(0,W.until-Date.now());$('spin').disabled=spinning||(!W.credits&&left>0);$('spin').textContent=spinning?'严肃品鉴中':W.credits?'使用额外机会 · '+W.credits:'转一下';$('cool').textContent=W.credits?`你还有 ${W.credits} 次额外机会。`:left?`本浏览器基础机会每24小时一次，还需 ${Math.ceil(left/3600000)} 小时。`:'今天的基础机会已就绪。';$('tickets').innerHTML=W.tickets.slice(-12).reverse().map(t=>`<div class="ticket"><strong>${esc(PRIZES[t.prize][0])}</strong><span>${esc(PRIZES[t.prize][1])}</span><br><small>${new Date(t.at).toLocaleString('zh-CN',{timeZone:'Asia/Tokyo'})} · 东京时间</small></div>`).join('')}
 function randomInt(n){const data=new Uint32Array(1),max=Math.floor(4294967296/n)*n;do{crypto.getRandomValues(data)}while(data[0]>=max);return data[0]%n}
-function spin(){if(spinning||(W.until>Date.now()&&!W.credits))return;spinning=true;if(W.credits>0)W.credits--;else{W.until=Date.now()+DAY;write('tokyoGiftUntil',W.until)}let prize=randomInt(8);if(prize===5&&W.chain>=2)prize=[0,1,2,3,4,6,7][randomInt(7)];if(prize===5){W.credits++;W.chain++}else W.chain=0;W.tickets.push({prize,at:new Date().toISOString(),runId:S.runId});W.tickets=W.tickets.slice(-60);write(WKEY,W);const target=360-(prize*45+22.5);rotation+=1440+((target-rotation%360+360)%360);const svg=$('wheel');if(svg)svg.style.transform=`rotate(${rotation}deg)`;const button=$('spin');button.disabled=true;button.textContent='严肃品鉴中';const run=S;setTimeout(()=>{spinning=false;updateWheel();},matchMedia('(prefers-reduced-motion: reduce)').matches?10:2900)}
+// Base probabilities: 15%,12%,12%,16%,5%,12%,14%,14%.
+const PRIZE_WEIGHTS=[15,12,12,16,5,12,14,14];
+function pickPrize(){
+ const protectedDraw=W.tickets.at(-1)?.prize===4;
+ // Empty prize remains exactly 5% when eligible, even if extra-spin chains are capped.
+ if(!protectedDraw&&randomInt(100)<5)return 4;
+ const weights=PRIZE_WEIGHTS.map((w,i)=>i===4||(i===5&&W.chain>=2)?0:w);
+ let draw=randomInt(weights.reduce((sum,w)=>sum+w,0));
+ for(let i=0;i<weights.length;i++){if(draw<weights[i])return i;draw-=weights[i]}
+ throw Error('Invalid prize weights');
+}
+function spin(){if(spinning||(W.until>Date.now()&&!W.credits))return;spinning=true;if(W.credits>0)W.credits--;else{W.until=Date.now()+DAY;write('tokyoGiftUntil',W.until)}const prize=pickPrize();if(prize===5){W.credits++;W.chain++}else W.chain=0;W.tickets.push({prize,at:new Date().toISOString(),runId:S.runId});W.tickets=W.tickets.slice(-60);write(WKEY,W);const target=360-(prize*45+22.5);rotation+=1440+((target-rotation%360+360)%360);const svg=$('wheel');if(svg)svg.style.transform=`rotate(${rotation}deg)`;const button=$('spin');button.disabled=true;button.textContent='严肃品鉴中';const run=S;setTimeout(()=>{spinning=false;updateWheel();},matchMedia('(prefers-reduced-motion: reduce)').matches?10:2900)}
 // Single-file promo: no extra server endpoint or deployment needed.
 async function redeem(e){
  e.preventDefault();const note=$('promoNote'),button=$('redeem'),input=$('promoInput');
@@ -48,7 +59,7 @@ async function redeem(e){
  }catch{note.textContent='当前浏览器无法完成兑换，请用新版 Chrome 或 Safari 打开。'}
  finally{button.disabled=false}
 }
-const lotteryMarkup="<section class=\"panel center\"><div class=\"spread\"><span class=\"tag\">BONUS / 大礼包</span></div><h2>今天请J人做什么好呢</h2><div class=\"wheelwrap\"><div class=\"pin\"></div><svg id=\"wheel\" viewBox=\"0 0 300 300\" role=\"img\" aria-label=\"八格幸运转盘\"></svg><div class=\"hub\">霓虹</div></div><button class=\"btn primary\" id=\"spin\">转一下</button><p id=\"cool\" class=\"hint\" role=\"status\"></p><div id=\"tickets\"></div><form class=\"promo\" id=\"promoForm\"><h3>Promo code · 隐藏加场</h3><label for=\"promoInput\">DBMS 的全称</label><div class=\"inputrow\"><input id=\"promoInput\" type=\"text\" maxlength=\"120\" autocomplete=\"off\" placeholder=\"输入英文全称\" required><button class=\"btn\" id=\"redeem\" type=\"submit\">兑换，再转一次</button></div><p id=\"promoNote\" class=\"hint\" role=\"status\">答对可额外转一次。同一浏览器限领一次。</p></form><p class=\"hint\">出示本券即可兑换哦</p></section>";
+const lotteryMarkup="<section class=\"panel center\"><div class=\"spread\"><span class=\"tag\">BONUS / 大礼包</span></div><h2>今天请J人做什么好呢</h2><div class=\"wheelwrap\"><div class=\"pin\"></div><svg id=\"wheel\" viewBox=\"0 0 300 300\" role=\"img\" aria-label=\"八格幸运转盘\"></svg><div class=\"hub\">霓虹</div></div><button class=\"btn primary\" id=\"spin\">转一下</button><p id=\"cool\" class=\"hint\" role=\"status\"></p><div id=\"tickets\"></div><form class=\"promo\" id=\"promoForm\"><h3>Promo code · 隐藏加场</h3><label for=\"promoInput\">DBMS 的全称</label><div class=\"inputrow\"><input id=\"promoInput\" type=\"text\" maxlength=\"120\" autocomplete=\"off\" placeholder=\"输入英文全称\" required><button class=\"btn\" id=\"redeem\" type=\"submit\">兑换，再转一次</button></div><p id=\"promoNote\" class=\"hint\" role=\"status\">答对可额外转一次。同一浏览器限领一次。</p></form><p class=\"hint\">出示本券即可兑换哦</p><p class=\"hint\">谢谢惠顾基础概率 5%；抽中后，下一次必出其他选项。</p></section>";
 
 let mode='arcade';
 const WINDOW_MS=12*60*60*1000;
