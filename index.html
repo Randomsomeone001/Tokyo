@@ -847,6 +847,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .choice button.on{border-color:var(--c);box-shadow:inset 0 0 0 1px var(--c);background:color-mix(in srgb,var(--c) 10%,var(--surface))}
 .choice button.on b{color:var(--c)}
 .tm small.optk{display:inline-block;margin-top:4px;padding:0 5px;border-radius:4px;background:var(--c);color:#fff;font-weight:700}
+
+.day8food{margin-top:16px;padding:14px}.day8food summary{font-weight:700;cursor:pointer}.day8food p{font-size:13px;color:var(--muted)}.foodscroll{overflow:auto}.day8food table{border-collapse:collapse;width:100%;min-width:540px;font-size:13px}.day8food td,.day8food th{padding:10px;border-bottom:1px solid var(--line);text-align:left}.day8food th{background:var(--soft)}.shot .lk{display:inline-block;margin:5px 0}.rmb{white-space:normal}
 </style>
 
 <div class="wrap">
@@ -921,10 +923,10 @@ const enc = encodeURIComponent;
 const G = q => "https://www.google.com/maps/search/?api=1&query=" + enc(q);
 const NAVTO = (q,mode) => "https://www.google.com/maps/dir/?api=1&destination=" + enc(q) + "&travelmode=" + (mode||"transit");
 const MULTI = arr => "https://www.google.com/maps/dir/" + arr.map(enc).join("/");
-const RATE=0.0425; /* 100 日元 ≈ 4.25 元，2026.9.28 */
-const cny=v=>{ const n=+String(v).replace(/,/g,"")*RATE; return n>=100?(Math.round(n/10)*10).toLocaleString("en-US"):Math.max(1,Math.round(n)).toString(); };
+const RATE=0.0425; /* 100 日元 ≈ 4.25 元，2026.10.2 */
+const cny=v=>{ const n=+String(v).replace(/,/g,"")*RATE; return n>=100?(Math.round(n)).toLocaleString("en-US"):Math.max(1,Math.round(n)).toString(); };
 const esc0 = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const esc = s => esc0(s).replace(/¥\s?([\d,]+)(?:\s*[–-]\s*¥?([\d,]+))?(?![\d,]*\s*（约)/g,(m,a,b)=>`${m}<span class="rmb">（约 ${cny(a)}${b?"–"+cny(b):""} 元）</span>`);
+const esc = s => esc0(s).replace(/¥\s?([\d,]+)(?:\s*[–-]\s*¥?([\d,]+))?(?![\d,]*\s*（约)/g,(m,a,b)=>`${m}<span class="rmb">（约人民币 ${cny(a)}${b?"–"+cny(b):""} 元）</span>`);
 const fmt = (d,opt) => new Intl.DateTimeFormat("zh-CN",Object.assign({timeZone:TZ,hour12:false},opt)).format(d);
 const bj = d => new Intl.DateTimeFormat("zh-CN",{timeZone:"Asia/Shanghai",hour:"2-digit",minute:"2-digit",hour12:false}).format(d);
 const LINE = {keisei:["京成 Access","#1D4E9E"],oedo:["大江户线","#B6007A"],asakusa:["浅草线","#E85298"],ginza:["银座线","#F39700"],jr:["JR","#1F8A3B"],yokosuka:["横须贺线","#0067C0"],enoden:["江之电","#0C7C59"],taxi:["打车","#5B696E"],walk:["步行","#8A979C"],hibiya:["日比谷线","#8F9A9E"],metro:["地铁","#486B8C"]};
@@ -940,6 +942,7 @@ tod(); setInterval(tod,60000);
 /* ---------- 地点（经纬度为近似值，用于手绘图） ---------- */
 const HOTEL="mesm Tokyo, Autograph Collection";
 const P = {
+"lpq":{"q": "ル・パン・コティディアン 芝公園店 芝公園3-3-1", "ll": [35.6581988, 139.7501097], "n": "Le Pain 芝公园"},"byron":{"q": "バイロンベイコーヒー 大門店 浜松町1-23-9", "ll": [35.6574979, 139.7564332], "n": "BYRON BAY 大门"},"lit":{"q": "LIT COFFEE & TEA STAND 芝2-15-15", "ll": [35.6509255, 139.7524161], "n": "LIT COFFEE & TEA"},"okurindo":{"q": "炭火焼濃厚中華そば 奥倫道 港区芝大門2-1-18", "ll": [35.656, 139.7517], "n": "奥倫道"},"thank":{"q": "鶏ポタ ラーメン THANK 大門 芝大門2-1-13", "ll": [35.6559, 139.7516], "n": "THANK"},"photopark":{"q": "芝公園 増上寺", "ll": [35.6554, 139.7488], "n": "芝公园（示意）"},"photojizo":{"q": "増上寺 千躰子育地蔵菩薩", "ll": [35.6581, 139.7479], "n": "树荫机位（地标）"},
  hotel:{q:HOTEL,ll:[35.65701,139.76190],n:"mesm Tokyo"},
  nrt:{q:"成田国際空港 第2ターミナル",out:"nrt",n:"成田 T2"},
  zojoji:{q:"増上寺",ll:[35.65728,139.74834],n:"增上寺"},
@@ -1100,48 +1103,7 @@ const P = {
 
 /* ---------- 行程 ---------- */
 const DAYS=[
-{id:"8",wd:"周四",color:"--d8",title:"到酒店休息 → 鳗鱼 / 烧鸟三选一 → 日比谷蓝染或增上寺，体力好再看塔",
- tags:[["","中国上班日"],["free","可玩 15:00–19:30"]],
- lead:"行李多，落地直接打车到酒店。饭按累不累三选一：放下行李就饿了选 1.a（15:15 有乐町鳗鱼，下午不休息），想歇一小会儿选 1.b（16:00 银座烧鸟），想先睡一觉选 1.c（17:00 东京塔脚下的野田岩）。三家都是百名店，离增上寺打车不到 10 分钟。大门一带的百名店下午都休息到 17:00，所以 1.a、1.b 只能去新桥、有乐町那边。每顿饭上方的「主打 / Plan B」可以切换：主打按 Tabelog 不低于 3.5，优先 3.7 以上，3.9 以上优选；Google 评价交叉核对，备选同样需达门槛。19:45 前回酒店开会。",
- work:[["大垣书店 咖啡区","大垣書店 麻布台ヒルズ店","麻布台之丘 Tower Plaza 4F，11:00–20:00，适合回邮件"],["王子公园塔 1F 大堂酒廊","ザ・プリンス パークタワー東京 ロビーラウンジ","平日 10:00–20:00，可以谈公事，看得到东京塔"]],
- plan:[
-  {t:"12:30",p:"hotel",k:"move",n:"落地成田 T2 → 打车去酒店",lines:["taxi"],note:"入境加取行李约 1 小时。到达大厅外 28 或 31-A 号出租车站排队，上车前说「港区まで定額でお願いします」：港区定额 ¥31,500 或 ¥32,500，高速费另付约 ¥3,000，合计约 ¥35,000，车程 70–90 分钟，约 15:00 到酒店。"},
-  {t:"15:00",p:"hotel",n:"mesm Tokyo 入住",kind:"酒店",note:"放下行李。跟前台确认 10.13 晚退房和行李寄存（也可提前发邮件 reservation@mesm.jp）。",meta:["港区海岸 1-10-30 · +81-3-5777-1111"]},
-  {choice:"1",label:"1 · 什么时候吃",opts:[
-   {k:"1.a",name:"放下行李就去 · 15:15 有乐町鳗鱼",stops:[
-    {t:"15:05",p:"unafuji",k:"move",n:"放下行李，打车去有乐町",lines:["taxi"],note:"约 10 分钟，日比谷 OKUROJI 高架桥下。"},
-    {t:"15:15",p:"unafuji",k:"key",n:"炭焼 うな富士 有楽町店",kind:"鳗鱼 · 百名店 2022/24/26",r:[["Tabelog","3.68 · 2,952"]],book:"https://tabelog.com/tokyo/A1301/A130103/13250032/",bookN:"Tabelog / 050-5457-0685（也能直接去）",
-     note:"大门一带的百名店下午全都休息到 17:00，这家是附近唯一 11:00–22:00 不休息、又过 3.6 的百名店。名古屋系地烧鳗鱼，皮脆肉厚，点「肝入り特上ひつまぶし」一份三吃，再加一串肝烧。73 个座位，下午基本不用等。吃完打车 7 分钟到增上寺，正好赶上日落。",meta:["每天 11:00–22:00（21:00 最后点单），不定休 · 千代田区内幸町 1-7-1 日比谷 OKUROJI H12","上ひつまぶし ¥5,950，肝入り ¥7,830，特上 ¥8,550；人均 ¥6,000–10,000"],pay:"刷卡、交通卡、PayPay、支付宝、微信",lines:["taxi"]}]},
-   {k:"1.b",name:"歇一小会儿 · 16:00 银座烧鸟",stops:[
-    {t:"15:50",p:"toriyoshig",k:"move",n:"打车去银座 7 丁目（新桥旁）",lines:["taxi"],note:"约 10 分钟。"},
-    {t:"16:00",p:"toriyoshig",k:"key",n:"焼鳥 鳥よし 銀座店",kind:"烧鸟 · 百名店 2018–2025",r:[["Tabelog","3.66 · 730"]],book:"https://tabelog.com/tokyo/A1301/A130101/13016582/",bookN:"Tabelog 网上预约",
-     note:"中目黑名店鳥よし的银座分店，小红书「东京平价美食 28 件套」里也有它：烧鸟宗师池川义辉修炼过的店。每天 16:00 开门，开门就坐，点 omakase 串烧。吃完打车 7 分钟到增上寺，看东京塔亮灯。",meta:["每天 16:00–22:00（21:20 最后点单）· 中央区银座 7-2 银座 Corridor 街 1F","人均 ¥8,000–10,000，另收座位费"],pay:"只能刷卡",lines:["taxi"]}]},
-   {k:"1.c",name:"先睡一觉 · 17:00 东京塔脚下鳗鱼",stops:[
-    {t:"16:45",p:"nodaiwa",mk:"8D",k:"move",n:"歇一会儿，打车去东麻布",lines:["taxi"],note:"约 10 分钟。",c:{p:"tomidokoro",n:"歇一会儿，打车去御成门",note:"约 5 分钟。"}},
-    {t:"17:00",p:"nodaiwa",mk:"8D",k:"key",n:"五代目 野田岩 麻布飯倉本店",kind:"鳗鱼 · 百名店 2018–2026 · 米其林推荐",r:[["Tabelog","3.66 · 1,547"]],book:"",bookN:"只能电话 03-3583-7852",
-     note:"两百多年的江户鳗鱼老铺，就在东京塔脚下，吃完走 10 分钟到塔下，不用绕路。17:00 开门就坐，点鳗重（うな重），想尝原味再加一份白烧（志ら焼）。两个人只能订别馆的桌位，尽早打电话。",meta:["午餐 11:00–14:30 · 晚餐 17:00–21:00，周日休 · 港区东麻布 1-5-4","鳗重 ¥3,100–8,500（菜单价未核实），加酒人均 ¥10,000 上下"],pay:"刷卡（VISA / Master / JCB / AMEX / Diners）；不收电子钱和二维码",lines:["taxi"],
-     alt:[["正泰苑 芝大门店（和牛烧肉，Tabelog 3.67 百名店）","正泰苑 芝大門店","大门站旁，17:00 开门，一般能直接进；打车 5 分钟到增上寺"],["串焼 大助（烧鸟，Tabelog 3.64 百名店）","串焼 大助 芝大門","17:30 开门，电话 03-3436-7660"]],
-     c:{p:"tomidokoro",n:"冨所",kind:"寿司 · Tabelog 铜奖 2026",r:[["Tabelog","3.85 · 647"]],book:"https://www.tablecheck.com/en/tomidokoro",bookN:"TableCheck / 一休",note:"御成门站旁的江户前寿司，每天营业，17:00 开晚市。离增上寺走路 5 分钟，比野田岩分数高，但这趟寿司已经排了两顿，所以放在 Plan B。点握寿司套餐，约 1 小时 15 分。",meta:["每天 17:00 起 · 港区新桥 6-13-3（御成门站 3 分钟）","握寿司套餐 ¥26,000，omakase ¥33,000"],pay:"刷卡"}},
-   ]}]},
-  {choice:"2",label:"吃完随便逛逛",opts:[
-   {k:"2.a",name:"日比谷蓝染小店 → 增上寺，累了直接回酒店",stops:[
-    {t:"16:40",skipIf:["1.b","1.c"],p:"mizuno",n:"水野染工場 日比谷OKUROJI",kind:"蓝染手工艺",note:"与うな富士同在高架桥下，看看手染围巾和小物，坐过长途航班只逛 20–30 分钟。",meta:["营业情况以店铺当天公告为准 · 日比谷OKUROJI"],lines:["walk"]},
-    {t:"17:20",tIf:{"1.b":"17:30","1.c":"18:15"},p:"zojoji",n:"增上寺（有精力才去）",kind:"寺院 · 看东京塔",note:"从餐厅打车约 8–10 分钟；晚到只看外观，不把闭殿当成入殿。觉得累就直接回酒店。",meta:["大殿通常到 17:30 · 港区芝公园 4-7-35"],lines:["taxi"]},
-    {t:"19:25",p:"hotel",k:"move",n:"打车回酒店准备开会",lines:["taxi"],note:"尽量留出 20:00 开会前的缓冲。"}]},
-   {k:"2.c",name:"体力好：增上寺 + 东京塔 + 看塔酒吧",stops:[
-    {t:"16:30",tIf:{"1.b":"17:20"},skipIf:["1.c"],p:"zojoji",n:"增上寺",kind:"寺院 · 看塔",note:"德川将军家的菩提寺，山门前就是「古寺 + 东京塔」的经典构图。大殿开到 17:30，这天 17:16 日落，正好看着天色暗下来、东京塔亮灯。",meta:["大殿 6:00–17:30 · 港区芝公园 4-7-35"],lines:["taxi"],
-     shot:["三解脱门正对大殿，东京塔在大殿右后方；蓝调时刻（17:15–17:40）最好看","增上寺 东京塔 机位"]},
-    {t:"17:10",tIf:{"1.b":"17:50","1.c":"18:20"},p:"tower",n:"东京塔 Main Deck",kind:"地标 · 150 米",note:"现场买票，上 150 米看城市慢慢亮起来。选 1.c 就从野田岩走 10 分钟过来，看完再去增上寺。",meta:["9:00–23:00（22:30 停止入场）· 成人 ¥1,500"],lines:["walk"],
-     shot:["芝公园 4 号地（东京塔正下方的草坪）仰拍整座塔","芝公园 东京塔 拍照"]},
-    {t:"19:00",skipIf:["1.a","1.b"],p:"zojoji",n:"增上寺（夜）",kind:"寺院 · 看塔",note:"从东京塔穿过芝公园走 7 分钟。大殿关了但院子可以走，大殿和背后的东京塔都亮着灯。",meta:["港区芝公园 4-7-35"],lines:["walk"]},
-    {t:"18:15",skipIf:["1.b","1.c"],p:"stellar",n:"Sky Bar & Dining Stellar Garden（33F）",kind:"今晚这一杯 · 看塔酒吧",r:[["小红书","最热门的看塔机位"]],book:"https://www.tablecheck.com/en/princehotels-parktower-stellargarden/reserve",bookN:"TableCheck 预约",note:"选 1.a 时间最宽裕，从东京塔走 8–10 分钟到王子公园塔，坐靠窗位正对亮灯的东京塔喝一杯再回去开会。",meta:["17:00 后座位费每人 ¥2,000，靠窗 ¥3,000，另收服务费","两杯人均约 ¥8,000–9,500"],pay:"刷卡、Suica、PayPay",lines:["walk"]},
-    {t:"19:25",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 5–10 分钟。"}]},
-   {k:"2.b",name:"麻布台之丘逛店",stops:[
-    {t:"16:40",tIf:{"1.b":"17:25","1.c":"18:20"},p:"azabudai",n:"麻布台之丘 Azabudai Hills",kind:"设计 · 看塔",note:"挑几家逛：Tower Plaza 3F The Conran Shop、2F The Store by C'、B1 Nicolai Bergmann 花店。Garden Plaza A 户外台阶可以免费看亮灯的东京塔。打车过去；选 1.c 的话从野田岩走 8 分钟（上坡）。",meta:["商店大多 11:00–20:00 · 港区麻布台 1-3-1"],lines:["taxi"],
-     shot:["Garden Plaza 中央广场的台阶，东京塔在楼缝里","麻布台之丘 东京塔 机位"]},
-    {t:"19:25",p:"hotel",k:"move",n:"打车回酒店",lines:["taxi"],note:"约 10 分钟。"}]}]},
-  {t:"20:00",p:"hotel",k:"move",n:"开会",meeting:1,note:"北京 19:00 起，到次日东京 12:00。"}
- ]},
+{"id": "8", "wd": "周四", "color": "--d8", "title": "到酒店休息 → 选一顿饭 → 芝公园・增上寺・东京塔", "tags": [["", "中国上班日"], ["free", "只走这一线 · 拍照约30–45分钟"]], "lead": "12:30落地后带行李打车去mesm，入住后再出门，不赶午餐尾场。芝公园线推荐Le Pain轻食慢坐；BYRON BAY作轻食补位，LIT作下午茶备选，三家只选一家。银座／有乐町用餐分支继续保留。游玩只走芝公园—增上寺—东京塔；草坪顺路才拍，累了只留寺塔同框和树荫机位。以下时刻为弹性参考，20:00会议不动，19:25动身回酒店。", "plan": [{"t": "12:30", "p": "hotel", "n": "成田T2落地 → 打车去mesm Tokyo", "note": "入境、取行李后乘出租车；行李多不转地铁。原攻略交通预算约¥35,000／车，实际计费和高速费向司机确认。约15:00到店仅为估计，晚到就顺延游玩。", "k": "move", "lines": ["taxi"]}, {"t": "15:00", "p": "hotel", "n": "mesm Tokyo 入住、放行李、休息", "note": "先安顿和补水，不要求15:00准时出门。抵店后再决定吃饭分支。", "kind": "已订酒店"}, {"choice": "8meal", "label": "吃饭路线 · 点选后同步下方行程与地图", "opts": [{"k": "8.lpq", "name": "芝公园线 · 轻食慢坐（推荐）", "stops": [{"t": "15:30", "p": "lpq", "n": "从酒店打车去Le Pain Quotidien 芝公园店", "note": "休息好再出门，车程估计约5–10分钟，以实时路况为准。", "k": "move", "lines": ["taxi"]}, {"t": "15:45", "p": "lpq", "n": "Le Pain Quotidien 芝公园店", "kind": "西式轻食 · 下午主备选", "r": [["Tabelog", "3.70 · 约3,389条"], ["Google", "3.8 · 2,008条"]], "note": "面包、开放式三明治、沙拉与咖啡。适合落地后坐下来吃一顿轻食；可现场候位，不保证即时入座或指定露台。吃完直接去增上寺，不绕到公园南端找草坪。", "meta": ["07:30–21:00，L.O.20:00 · 芝公园3-3-1", "人均预算 ¥2,000–3,000；按实际点单结算"], "lines": ["taxi"], "refs": [["门店信息与菜单", "https://www.lepainquotidien.com/jp/ja/stores/Shibakoen"]]}, {"t": "16:35", "p": "zojoji", "n": "增上寺 · 寺庙与东京塔同框", "note": "参观与拍照共约 20–30 分钟。建筑先拍一张，人物站画面侧边；晚到以外观为主，不把闭殿后安排成入殿参观。", "kind": "机位② · 主要停留", "lines": ["walk"], "refs": [["吴好甜｜图2：寺塔同框", "https://xhslink.cn/o/7hnbLynavd8"], ["Zin｜正文标注图11，图号有重复", "https://xhslink.cn/o/8Hi76kLVpVY"]]}, {"t": "17:05", "p": "photojizo", "n": "千躰子育地蔵菩薩附近 · 绿树框塔", "note": "导航到地标后，在附近可通行的路旁寻找树冠框住东京塔的角度；拍摄位置不是地藏像前。停 10 分钟，不占车道。第二篇封面可直接参考构图。", "kind": "机位③ · 人像首选", "lines": ["walk"], "refs": [["吴好甜｜图1／封面样片", "https://xhslink.cn/o/7hnbLynavd8"]]}, {"t": "17:25", "p": "tower", "n": "东京塔 · 塔下看景 / 有体力再登塔", "note": "塔下随意拍即可；Main Deck 当天看体力、排队和会议时间再决定，不提前把登塔锁死。顺路备选：原とうふ屋うかい旁小斜坡；餐厅已于2026年3月31日停业，旧门墙和道路通行情况未确认，不为旧机位绕路。", "kind": "机位④备选 · 东京塔", "meta": ["Main Deck 原攻略票价：成人 ¥1,500／人，购票前核对现价；塔下公共区域不购登塔票"], "lines": ["walk"], "refs": [["Yunique｜图4／封面右上：原UKAI旁小斜坡", "https://xhslink.cn/o/3mupETtfNs5"]]}]}, {"k": "8.byron", "name": "大门线 · 咖啡轻食补位", "stops": [{"t": "15:30", "p": "byron", "n": "从酒店打车去BYRON BAY COFFEE 大门店", "note": "休息好再出门，车程估计约5–10分钟，以实时路况为准。", "k": "move", "lines": ["taxi"]}, {"t": "15:45", "p": "byron", "n": "BYRON BAY COFFEE 大门店", "kind": "咖啡轻食 · 顺路补位", "r": [["Tabelog", "3.59 · 595条"], ["Google", "4.2 · 998条"]], "note": "热三明治、吐司、烘焙与咖啡；轻食垫肚子，具体热食品项和余量到店确认。约12席，可walk-in；不为等位耽误休息。", "meta": ["周四07:30–18:00 · 浜松町1-23-9", "人均预算 ¥1,000–2,000；按实际点单结算"], "lines": ["taxi"], "refs": [["门店信息与菜单", "https://tabelog.com/tokyo/A1314/A131401/13201172/"]]}, {"t": "16:35", "p": "zojoji", "n": "增上寺 · 寺庙与东京塔同框", "note": "参观与拍照共约 20–30 分钟。建筑先拍一张，人物站画面侧边；晚到以外观为主，不把闭殿后安排成入殿参观。", "kind": "机位② · 主要停留", "lines": ["walk"], "refs": [["吴好甜｜图2：寺塔同框", "https://xhslink.cn/o/7hnbLynavd8"], ["Zin｜正文标注图11，图号有重复", "https://xhslink.cn/o/8Hi76kLVpVY"]]}, {"t": "17:05", "p": "photojizo", "n": "千躰子育地蔵菩薩附近 · 绿树框塔", "note": "导航到地标后，在附近可通行的路旁寻找树冠框住东京塔的角度；拍摄位置不是地藏像前。停 10 分钟，不占车道。第二篇封面可直接参考构图。", "kind": "机位③ · 人像首选", "lines": ["walk"], "refs": [["吴好甜｜图1／封面样片", "https://xhslink.cn/o/7hnbLynavd8"]]}, {"t": "17:25", "p": "tower", "n": "东京塔 · 塔下看景 / 有体力再登塔", "note": "塔下随意拍即可；Main Deck 当天看体力、排队和会议时间再决定，不提前把登塔锁死。顺路备选：原とうふ屋うかい旁小斜坡；餐厅已于2026年3月31日停业，旧门墙和道路通行情况未确认，不为旧机位绕路。", "kind": "机位④备选 · 东京塔", "meta": ["Main Deck 原攻略票价：成人 ¥1,500／人，购票前核对现价；塔下公共区域不购登塔票"], "lines": ["walk"], "refs": [["Yunique｜图4／封面右上：原UKAI旁小斜坡", "https://xhslink.cn/o/3mupETtfNs5"]]}]}, {"k": "8.lit", "name": "芝公园南侧 · 下午茶轻逛", "stops": [{"t": "15:30", "p": "lit", "n": "从酒店打车去LIT COFFEE & TEA STAND", "note": "休息好再出门，车程估计约5–10分钟，以实时路况为准。", "k": "move", "lines": ["taxi"]}, {"t": "15:45", "p": "lit", "n": "LIT COFFEE & TEA STAND", "kind": "日本茶 · 咖啡甜品备选", "r": [["Tabelog", "3.59 · 558条"], ["Google", "4.1 · 353条"]], "note": "咖啡、日本茶与甜品，符合偏好。仅作不太饿时的下午茶，不代替正餐。官网明确不接受预约，先到先安排；从公园南侧开始逛，避免折返。", "meta": ["08:00–19:00 · 芝2-15-15", "人均预算 ¥1,000–2,000；按实际点单结算"], "lines": ["taxi"], "refs": [["门店信息与菜单", "https://www.lit-coffeeandtea-stand.com/"]]}, {"t": "16:25", "p": "photopark", "n": "芝公园 · 草坪与树荫", "note": "只走靠近增上寺、顺路的一小段，拍 10 分钟环境人像。不绕公园找同款草坪；作者图9–10的精确站位尚未核实，地图只标区域。", "kind": "机位① · 可跳过", "lines": ["walk"], "refs": [["Zin｜图8树下、图9–10草坪", "https://xhslink.cn/o/8Hi76kLVpVY"]]}, {"t": "16:45", "p": "zojoji", "n": "增上寺 · 寺庙与东京塔同框", "note": "参观与拍照共约 20–30 分钟。建筑先拍一张，人物站画面侧边；晚到以外观为主，不把闭殿后安排成入殿参观。", "kind": "机位② · 主要停留", "lines": ["walk"], "refs": [["吴好甜｜图2：寺塔同框", "https://xhslink.cn/o/7hnbLynavd8"], ["Zin｜正文标注图11，图号有重复", "https://xhslink.cn/o/8Hi76kLVpVY"]]}, {"t": "17:15", "p": "photojizo", "n": "千躰子育地蔵菩薩附近 · 绿树框塔", "note": "导航到地标后，在附近可通行的路旁寻找树冠框住东京塔的角度；拍摄位置不是地藏像前。停 10 分钟，不占车道。第二篇封面可直接参考构图。", "kind": "机位③ · 人像首选", "lines": ["walk"], "refs": [["吴好甜｜图1／封面样片", "https://xhslink.cn/o/7hnbLynavd8"]]}, {"t": "17:35", "p": "tower", "n": "东京塔 · 塔下看景 / 有体力再登塔", "note": "塔下随意拍即可；Main Deck 当天看体力、排队和会议时间再决定，不提前把登塔锁死。顺路备选：原とうふ屋うかい旁小斜坡；餐厅已于2026年3月31日停业，旧门墙和道路通行情况未确认，不为旧机位绕路。", "kind": "机位④备选 · 东京塔", "meta": ["Main Deck 原攻略票价：成人 ¥1,500／人，购票前核对现价；塔下公共区域不购登塔票"], "lines": ["walk"], "refs": [["Yunique｜图4／封面右上：原UKAI旁小斜坡", "https://xhslink.cn/o/3mupETtfNs5"]]}]}, {"k": "8.ginza", "name": "银座线 · 下午鳗鱼", "stops": [{"t": "15:30", "p": "unafuji", "n": "打车去有乐町吃鳗鱼", "note": "银座／有乐町只吃饭，不安排购物。车程按实时路况确认。", "k": "move", "lines": ["taxi"]}, {"t": "15:45", "p": "unafuji", "n": "炭焼 うな富士 有楽町店", "note": "符合偏好。午后连续营业，选鳗鱼饭或一份三吃。Walk-in席位不能保证，到酒店后可请礼宾电话问候位。", "kind": "鳗鱼 · 银座／有乐町", "r": [["Tabelog", "3.68"]], "meta": ["11:00–22:00，L.O.21:00 · 日比谷OKUROJI", "人均预算 ¥6,000–10,000；酒水、加点另计"], "lines": ["taxi"]}, {"t": "16:45", "p": "photopark", "n": "打车去芝公园／增上寺一线", "note": "正常先顺路看草坪；若用餐拖晚则直接去增上寺，跳过草坪。", "k": "move", "lines": ["taxi"]}, {"t": "16:55", "p": "photopark", "n": "芝公园 · 草坪与树荫", "note": "只走靠近增上寺、顺路的一小段，拍 10 分钟环境人像。不绕公园找同款草坪；作者图9–10的精确站位尚未核实，地图只标区域。", "kind": "机位① · 可跳过", "lines": ["walk"], "refs": [["Zin｜图8树下、图9–10草坪", "https://xhslink.cn/o/8Hi76kLVpVY"]]}, {"t": "17:05", "p": "zojoji", "n": "增上寺 · 寺庙与东京塔同框", "note": "参观与拍照共约 20–30 分钟。建筑先拍一张，人物站画面侧边；晚到以外观为主，不把闭殿后安排成入殿参观。", "kind": "机位② · 主要停留", "lines": ["walk"], "refs": [["吴好甜｜图2：寺塔同框", "https://xhslink.cn/o/7hnbLynavd8"], ["Zin｜正文标注图11，图号有重复", "https://xhslink.cn/o/8Hi76kLVpVY"]]}, {"t": "17:35", "p": "photojizo", "n": "千躰子育地蔵菩薩附近 · 绿树框塔", "note": "导航到地标后，在附近可通行的路旁寻找树冠框住东京塔的角度；拍摄位置不是地藏像前。停 10 分钟，不占车道。第二篇封面可直接参考构图。", "kind": "机位③ · 人像首选", "lines": ["walk"], "refs": [["吴好甜｜图1／封面样片", "https://xhslink.cn/o/7hnbLynavd8"]]}, {"t": "17:55", "p": "tower", "n": "东京塔 · 塔下看景 / 有体力再登塔", "note": "塔下随意拍即可；Main Deck 当天看体力、排队和会议时间再决定，不提前把登塔锁死。顺路备选：原とうふ屋うかい旁小斜坡；餐厅已于2026年3月31日停业，旧门墙和道路通行情况未确认，不为旧机位绕路。", "kind": "机位④备选 · 东京塔", "meta": ["Main Deck 原攻略票价：成人 ¥1,500／人，购票前核对现价；塔下公共区域不购登塔票"], "lines": ["walk"], "refs": [["Yunique｜图4／封面右上：原UKAI旁小斜坡", "https://xhslink.cn/o/3mupETtfNs5"]]}]}, {"k": "8.tori", "name": "银座线 · 16:00烧鸟", "stops": [{"t": "15:45", "p": "toriyoshig", "n": "打车去银座", "note": "只吃饭，之后直接去增上寺。", "k": "move", "lines": ["taxi"]}, {"t": "16:00", "p": "toriyoshig", "n": "鳥よし 銀座店", "note": "烧鸟作为低于鳗鱼的平行备选。若希望进入增上寺大殿，控制用餐并先去寺院，草坪跳过。", "kind": "烧鸟 · 银座", "meta": ["16:00起营业；当日席位需确认", "人均预算 ¥8,000–10,000；座位费、酒水按店家菜单确认"], "lines": ["taxi"]}, {"t": "17:15", "p": "photopark", "n": "芝公园 · 草坪与树荫", "note": "只走靠近增上寺、顺路的一小段，拍 10 分钟环境人像。不绕公园找同款草坪；作者图9–10的精确站位尚未核实，地图只标区域。", "kind": "机位① · 可跳过", "lines": ["walk"], "refs": [["Zin｜图8树下、图9–10草坪", "https://xhslink.cn/o/8Hi76kLVpVY"]]}, {"t": "17:25", "p": "zojoji", "n": "增上寺 · 寺庙与东京塔同框", "note": "参观与拍照共约 20–30 分钟。建筑先拍一张，人物站画面侧边；晚到以外观为主，不把闭殿后安排成入殿参观。", "kind": "机位② · 主要停留", "lines": ["walk"], "refs": [["吴好甜｜图2：寺塔同框", "https://xhslink.cn/o/7hnbLynavd8"], ["Zin｜正文标注图11，图号有重复", "https://xhslink.cn/o/8Hi76kLVpVY"]]}, {"t": "17:55", "p": "photojizo", "n": "千躰子育地蔵菩薩附近 · 绿树框塔", "note": "导航到地标后，在附近可通行的路旁寻找树冠框住东京塔的角度；拍摄位置不是地藏像前。停 10 分钟，不占车道。第二篇封面可直接参考构图。", "kind": "机位③ · 人像首选", "lines": ["walk"], "refs": [["吴好甜｜图1／封面样片", "https://xhslink.cn/o/7hnbLynavd8"]]}, {"t": "18:15", "p": "tower", "n": "东京塔 · 塔下看景 / 有体力再登塔", "note": "塔下随意拍即可；Main Deck 当天看体力、排队和会议时间再决定，不提前把登塔锁死。顺路备选：原とうふ屋うかい旁小斜坡；餐厅已于2026年3月31日停业，旧门墙和道路通行情况未确认，不为旧机位绕路。", "kind": "机位④备选 · 东京塔", "meta": ["Main Deck 原攻略票价：成人 ¥1,500／人，购票前核对现价；塔下公共区域不购登塔票"], "lines": ["walk"], "refs": [["Yunique｜图4／封面右上：原UKAI旁小斜坡", "https://xhslink.cn/o/3mupETtfNs5"]]}]}, {"k": "8.unagi", "name": "芝公园线 · 先轻逛，17:00鳗鱼", "stops": [{"t": "15:40", "p": "photopark", "n": "打车去芝公园", "note": "先在酒店休息；本方案先看寺和塔，再在东京塔西侧吃早晚餐。饿了请直接选Le Pain轻食或有乐町鳗鱼。", "k": "move", "lines": ["taxi"]}, {"t": "15:50", "p": "photopark", "n": "芝公园 · 草坪与树荫", "note": "只走靠近增上寺、顺路的一小段，拍 10 分钟环境人像。不绕公园找同款草坪；作者图9–10的精确站位尚未核实，地图只标区域。", "kind": "机位① · 可跳过", "lines": ["walk"], "refs": [["Zin｜图8树下、图9–10草坪", "https://xhslink.cn/o/8Hi76kLVpVY"]]}, {"t": "16:05", "p": "zojoji", "n": "增上寺 · 寺庙与东京塔同框", "note": "参观与拍照共约 20–30 分钟。建筑先拍一张，人物站画面侧边；晚到以外观为主，不把闭殿后安排成入殿参观。", "kind": "机位② · 主要停留", "lines": ["walk"], "refs": [["吴好甜｜图2：寺塔同框", "https://xhslink.cn/o/7hnbLynavd8"], ["Zin｜正文标注图11，图号有重复", "https://xhslink.cn/o/8Hi76kLVpVY"]]}, {"t": "16:30", "p": "photojizo", "n": "千躰子育地蔵菩薩附近 · 绿树框塔", "note": "导航到地标后，在附近可通行的路旁寻找树冠框住东京塔的角度；拍摄位置不是地藏像前。停 10 分钟，不占车道。第二篇封面可直接参考构图。", "kind": "机位③ · 人像首选", "lines": ["walk"], "refs": [["吴好甜｜图1／封面样片", "https://xhslink.cn/o/7hnbLynavd8"]]}, {"t": "16:45", "p": "tower", "n": "东京塔 · 塔下看景 / 有体力再登塔", "note": "塔下随意拍即可；Main Deck 当天看体力、排队和会议时间再决定，不提前把登塔锁死。顺路备选：原とうふ屋うかい旁小斜坡；餐厅已于2026年3月31日停业，旧门墙和道路通行情况未确认，不为旧机位绕路。", "kind": "机位④备选 · 东京塔", "meta": ["Main Deck 原攻略票价：成人 ¥1,500／人，购票前核对现价；塔下公共区域不购登塔票"], "lines": ["walk"], "refs": [["Yunique｜图4／封面右上：原UKAI旁小斜坡", "https://xhslink.cn/o/3mupETtfNs5"]]}, {"t": "17:00", "p": "nodaiwa", "n": "五代目 野田岩 麻布飯倉本店", "note": "从塔下到店步行约10分钟。17:00开始晚市，不能当作14:30–17:00随到随吃的店；建议先由礼宾确认席位。先吃鳗重，白烧按胃口加点。", "kind": "鳗鱼 · 东京塔脚下", "meta": ["平日午餐最后点单13:30，晚市17:00起 · 电话03-3583-7852", "人均预算 ¥8,000–10,000；另收10%服务费，按实际点单结算"], "lines": ["walk"]}]}]}, {"t": "19:25", "p": "hotel", "n": "打车回mesm，准备开会", "note": "目标19:45前回房间，留好连接网络和设备的缓冲。晚餐或登塔拖延时缩短游玩。", "k": "move", "lines": ["taxi"]}, {"t": "20:00", "p": "hotel", "n": "开会", "note": "北京时间19:00起；会议时间保持原安排。", "k": "move", "meeting": 1}]},
 {id:"9",wd:"周五",color:"--d9",title:"新宿割烹午餐 → BEAMS 与咖啡 → 南极装备 → 银座烧鸟 → Virtù",
  tags:[["","中国上班日"],["free","12:00 起，晚上不开会"]],
  lead:"中午工作结束后直接去新宿，不跨区追寿司。中嶋吃沙丁鱼料理，BEAMS 和 AALIYA 相邻；新宿御苑与伊势丹只选其一，16:00–17:35 的南极采购固定。装备先送回酒店，银座晚餐选本区的鳥よし，河豚改到 10.12 的上野／汤岛可选线，不为吃饭专程跨区；つぼみ寿司保留在中目黑线的低优选。",
@@ -1256,7 +1218,7 @@ const DAYS=[
    ]},
    {k:"路线 2",name:"惠比寿器物 → 代官山茶歇 → 中目黑咖啡 / 烧鸟",stops:[
     {t:"13:15",p:"sml",k:"move",n:"入谷 → 惠比寿（日比谷线）",lines:["hibiya"],note:"地铁直达，不为一块鲷鱼烧在六本木出站；OYOGE 原点保留在路过六本木时的低优备选。"},
-    {t:"14:00",p:"sml",n:"工藝 器と道具 SML",kind:"日本陶器 · 玻璃",note:"惠比寿西的日本手工器物店，适合她喜欢的工艺选品。",meta:["约 12:00–19:00 · 惠比寿西 1-33-3"],lines:["walk"],alt:[["OYOGE 六本木（3.51）","OYOGE 六本木店","若换乘路过可买外带，不要专程出站"]]},
+    {t:"14:00",p:"sml",n:"工藝 器と道具 SML",kind:"日本陶器 · 玻璃",note:"惠比寿西的日本手工器物店，工艺选品符合偏好。",meta:["约 12:00–19:00 · 惠比寿西 1-33-3"],lines:["walk"],alt:[["OYOGE 六本木（3.51）","OYOGE 六本木店","若换乘路过可买外带，不要专程出站"]]},
     {t:"14:40",p:"kamawanu",n:"かまわぬ 代官山",kind:"手染手拭",note:"从 SML 可短车去代官山，选有设计感的手拭巾。",meta:["猿乐町 23-1 · 节假日营业请核对"],lines:["taxi"],alt:[["OKURA","OKURA 代官山","附近蓝染服装原备选"]]},
     {t:"15:15",p:"ivy",n:"IVY PLACE / 代官山 T-SITE",kind:"咖啡 · 坐下休息",r:[["Tabelog","3.69"]],note:"喝咖啡翻书，坐够了再走；与 ONIBUS 二选一即可。",lines:["walk"]},
     {t:"16:15",p:"ldk",n:"1LDK / 目黑川（随缘）",kind:"独立买手店 · 河边散步",note:"从代官山搭一站东横线到中目黑，沿河看一小段。1LDK、Vase 任选一家，不用两家都赶。",lines:["metro"],alt:[["Vase","Vase 中目黒","河边服装和陶器店，随兴替换 1LDK"],["ONIBUS COFFEE","ONIBUS COFFEE 中目黒","若不坐 IVY，这里喝咖啡；营业到约 18:00"]]},
@@ -1279,7 +1241,7 @@ const DAYS=[
   {t:"11:35",p:"hotel",k:"move",n:"退房，行李寄存在酒店",lines:["taxi"],note:"提前确认晚间取行李；前往银座。"},
   {choice:"G",label:"离境日 · 银座为主",opts:[
    {k:"银座慢线",name:"うかい亭 → 咖啡 → 老铺 → 三越",stops:[
-    {t:"12:00",p:"ukai",k:"key",n:"銀座うかい亭",kind:"铁板烧 · 和牛",r:[["Tabelog","3.95"],["Google","4.6 · 1,480"]],book:"https://www.ukai.co.jp/ginza/",bookN:"官网预约 / 电话",note:"她新入选的铁板烧，高分且整段都留在银座。午餐约两小时，先约 12:00 位并向店家核对时长和套餐。",meta:["银座 5-15-8 · 周二午市约 12:00–16:00，末次点单约 13:30"],lines:["walk"],alt:[["銀座 鮨 かねさか 本店（3.91）","銀座 鮨 かねさか 本店","原高分寿司，已订则保留，不与铁板烧叠加","https://omakase.in/en/r/qu523011"],["銀座 久兵衛 本店（3.66）","銀座 久兵衛 本店","原低优寿司备选"],["鮨 太一（3.76）","鮨 太一 銀座","原同区午餐备选"],["日本料理 山崎（4.06）","日本料理 山崎 京橋","原鳗鱼饭备选，京桥另一方向，不算银座步行即时替补"]]},
+    {t:"12:00",p:"ukai",k:"key",n:"銀座うかい亭",kind:"铁板烧 · 和牛",r:[["Tabelog","3.95"],["Google","4.6 · 1,480"]],book:"https://www.ukai.co.jp/ginza/",bookN:"官网预约 / 电话",note:"铁板烧符合偏好，高分且整段都留在银座。午餐约两小时，先约 12:00 位并向店家核对时长和套餐。",meta:["银座 5-15-8 · 周二午市约 12:00–16:00，末次点单约 13:30"],lines:["walk"],alt:[["銀座 鮨 かねさか 本店（3.91）","銀座 鮨 かねさか 本店","原高分寿司，已订则保留，不与铁板烧叠加","https://omakase.in/en/r/qu523011"],["銀座 久兵衛 本店（3.66）","銀座 久兵衛 本店","原低优寿司备选"],["鮨 太一（3.76）","鮨 太一 銀座","原同区午餐备选"],["日本料理 山崎（4.06）","日本料理 山崎 京橋","原鳗鱼饭备选，京桥另一方向，不算银座步行即时替补"]]},
     {t:"14:15",p:"lambre",n:"Café de L’Ambre",kind:"老派喫茶店",r:[["Tabelog","3.77"]],note:"1948 年的银座咖啡馆，铁板烧后坐一会儿。排队长就略过。",meta:["银座 8 丁目 · 支付方式以现场为准"],lines:["walk"]},
     {t:"14:50",p:"natsuno",n:"銀座夏野 本店",kind:"筷子与手工艺",note:"看日本各地筷子，可问刻字时间，别等现场加工耽误机场。",meta:["银座 6-7-4"],lines:["walk"]},
     {t:"15:20",p:"kyukyodo",n:"鳩居堂 銀座本店",kind:"香 · 和纸",note:"老铺线香、信笺与小礼物，比冲刺式逛百货更合手艺偏好。",meta:["银座 5-7-4"],lines:["walk"],alt:[["Dover Street Market Ginza","Dover Street Market Ginza","原设计师选品，若真想看服装可在银座 6 丁目顺路替换夏野"]]},
@@ -1406,7 +1368,6 @@ const RISKS=[
   ["早晚温差和海风","10 月东京白天约 20–24°C，傍晚在海边和高楼露台会凉，带一件薄外套。"]]],
  ["行程规划",[
   ["会议窗口：东京 20:00–次日 12:00","巴西（UTC−3）比东京慢 12 小时。10.9、10.10 晚不开会；巴西 10.12 放假，所以东京 10.12 中午到 10.13 中午都空，只剩 10.8 和 10.13 晚上要开。"],
-  ["去程航班和晨会重叠","HU439 北京 08:00–11:30 在飞机上，正好是会议窗口的最后几小时，提前跟团队打招呼。"],
   ["10.10–10.12 是日本三连休","镰仓和浅草都会很挤，江之电镰仓站和长谷站可能排队 30–60 分钟；时间紧就从长谷直接打车到七里滨。"],
   ["店铺休息日和现金","已避开：のだや 10 月 5–9 日和 13 日休；おみ乃 椿 11、12 日休；かねさか周日周一休；有涯周三周日休；新宿御苑周一休；照隅周三周四休。只收现金的有：とみやま午餐、初小川、鳥よし中目黑、ゴトー、力餅家、ふじ屋、L'Ambre；おみ乃 椿反过来不收现金。带 ¥20,000 现金。"]]],
  ["预订",[
@@ -1423,11 +1384,14 @@ document.getElementById("risks").innerHTML=RISKS.map(g=>`<h4 class="grp">${esc(g
 /* ---------- 逐日 ---------- */
 const nav=document.getElementById("nav"), main=document.getElementById("days");
 DAYS.forEach(d=>{ const a=document.createElement("a"); a.href="#d"+d.id; a.style.setProperty("--c",col(d.color)); a.innerHTML=`<b>10.${d.id}</b>${d.wd}`; nav.appendChild(a); });
+
+const DAY8_FOOD=[["银座／有乐町", "うな富士", "鳗鱼 · Top 2", "¥6,000–10,000／人", "下午连续营业，偏好优先"], ["银座／有乐町", "鳥よし 银座店", "烧鸟", "¥8,000–10,000／人", "16:00起；酒水／座位费另核"], ["芝公园／增上寺", "Le Pain Quotidien 芝公园店", "贝式轻食 · 下午主备选 · Tabelog 3.70", "¥2,000–3,000／人", "07:30–21:00，L.O.20:00 · 芝公园3-3-1；可walk-in，席位及余量以现场为准"], ["芝公园／增上寺", "BYRON BAY COFFEE 大门店", "咖啡轻食 · 顺路补位 · Tabelog 3.59", "¥1,000–2,000／人", "周四07:30–18:00 · 浜松町1-23-9；可walk-in，席位及余量以现场为准"], ["芝公园／增上寺", "LIT COFFEE & TEA STAND", "日本茶 · 咖啡甜品备选 · Tabelog 3.59", "¥1,000–2,000／人", "08:00–19:00 · 芝2-15-15；可walk-in，席位及余量以现场为准"], ["芝公园／增上寺", "奥倫道 · 暂停营业，不安排", "拉面", "¥1,000–2,000／人", "10月2日核对：Google标注暂停营业；访客称9月12日起施工休业，复业日未确认。预算为历史参考"], ["芝公园／增上寺", "THANK 大门 · 新增", "拉面", "¥1,000–2,000／人", "仅14:30左右到店才考虑；15:00–18:00休市"], ["东京塔脚下", "野田岩 麻布饭仓本店", "鳗鱼 · Top 2", "¥8,000–10,000／人", "17:00起；另收10%服务费"], ["芝公园／增上寺", "正泰苑 芝大门店", "和牛烧肉 · Top 1", "¥6,000–8,000／人", "17:00起；留作早晚餐备选，不能保证直接入座"], ["芝公园／增上寺", "串焼 大助", "烧鸟", "¥8,000–10,000／人", "原攻略17:30起，晚于本次目标窗口"], ["御成门", "冨所", "寿司 · 低优预约备选", "¥26,000–33,000／人", "原攻略套餐预算，现价待核；不作为walk-in补位"]];
+function day8Food(){return `<details class="panel day8food" open><summary>两组餐厅选品 · 人均日元 / 人民币</summary><p>预算为选店参考，不是统一套餐报价；酒水、加点及服务费按店家实际结算。参考换算：100日元≈4.25元人民币。</p><div class="foodscroll"><table><thead><tr><th>区域</th><th>餐厅 / 品类</th><th>人均预算</th><th>时间与使用方式</th></tr></thead><tbody>${DAY8_FOOD.map(r=>`<tr><td>${esc(r[0])}</td><td><a href="${G(r[1])}" target="_blank" rel="noopener">${esc(r[1])} ↗</a><br><small>${esc(r[2])}</small></td><td>${esc(r[3])}</td><td>${esc(r[4])}</td></tr>`).join('')}</tbody></table></div><p>奥倫道已从导航与用餐分支撤下，恢复营业前不安排前往。下午轻食首选Le Pain，BYRON BAY作补位，LIT仅作下午茶，三家只选一家。想吃鳗鱼可选うな富士；17:00才吃可选野田岩／正泰苑。THANK不作为15:00后的替补。新增三家已交叉核对Google营业状态，评分与菜单可能更新。</p></details>`}
 function renderDay(d){
   const s=document.createElement("section"); s.className="day"; s.id="d"+d.id; s.style.setProperty("--c",col(d.color));
   const stopsQ=[]; d.stops.forEach(st=>{ const q=P[st.p].q; if(stopsQ[stopsQ.length-1]!==q) stopsQ.push(q); });
   let h=`<div class="dh"><div class="dt">10.${d.id}</div><div><h3>${esc(d.wd)} · ${esc(d.title)}</h3><div class="tags">${d.tags.map(t=>`<span class="tag ${t[0]}">${esc(t[1])}</span>`).join("")}</div></div></div>
-   <p class="lead">${esc(d.lead)}</p>
+   <p class="lead">${esc(d.lead)}</p>${d.id==="8"?day8Food():""}
    <details class="daymap"><summary>展开当日路线图</summary><div class="panel"><div class="rmhost" hidden></div>${dayMap(d)}<div class="mapkey">${[...numbering(d)].map(([p,n])=>`<span><b style="background:${col(d.color)}">${n}</b>${esc(p.n)}</span>`).join("")}</div></div></details>
    <div class="daytools"><a class="btn solid" target="_blank" rel="noopener" href="${MULTI(stopsQ)}">一键打开全天多点导航 ↗</a></div>
    ${d.work?`<div class="workbox"><b>随时要上班：就近能开电脑的咖啡店</b><ul>${d.work.map(w=>`<li><a target="_blank" rel="noopener" href="${NAVTO(w[1],"walking")}">${esc(w[0])} ↗</a><span>${esc(w[2])}</span></li>`).join("")}</ul><p class="etq">日本咖啡店里一般不打电话：接电话时走到门外或电梯厅，两三分钟内说完；每 1–1.5 小时点一杯饮料；工作日 12:00–13:00 午餐高峰先不开电脑。不确定就问店员「PC作業してもいいですか？」</p></div>`:""}
@@ -1449,6 +1413,7 @@ function renderDay(d){
       if(st.meta) h+=`<div class="meta">${st.meta.map(m=>`<span>${esc(m)}</span>`).join("")}</div>`;
       if(st.pay) h+=`<div class="pay"><b>支付</b>${esc(st.pay)}</div>`;
       h+=`<div class="links"><a class="lk go" target="_blank" rel="noopener" href="${NAVTO(p.q)}">导航${ln(st.lines)} ↗</a><a class="lk" target="_blank" rel="noopener" href="${G(p.q)}">照片与评价 ↗</a>${st.book?`<a class="lk" target="_blank" rel="noopener" href="${st.book}">${esc(st.bookN||"预约")} ↗</a>`:""}<button class="lk" type="button" data-copy="${esc(p.q)}">复制地名</button></div>`;
+      if(st.refs) h+=`<div class="alt shot"><b>拍照样片</b>${st.refs.map(r=>`<a class="lk" target="_blank" rel="noopener" href="${r[1]}">${esc(r[0])} ↗</a>`).join(' ')}<p>参考帖正文与封面已阅读；部分轮播未加载，图号按作者标注，精确站位以现场可通行区域为准。</p></div>`;
       if(st.shot) h+=`<div class="alt shot"><b>拍照</b>${esc(st.shot[0])} · <a target="_blank" rel="noopener" href="https://www.xiaohongshu.com/search_result?keyword=${enc(st.shot[1])}">小红书样片 ↗</a></div>`;
       (st.alt||[]).forEach(a=>{ h+=`<div class="alt"><b>备选</b><a target="_blank" rel="noopener" href="${NAVTO(a[1])}">${esc(a[0])} ↗</a>${a[2]?` · ${esc(a[2])}`:""}${a[3]?` · <a target="_blank" rel="noopener" href="${a[3]}">预约 ↗</a>`:""}</div>`; });
     }
@@ -1488,7 +1453,7 @@ document.getElementById("todos").innerHTML=TODO.map(g=>`<h4 class="grp">${esc(g[
 document.getElementById("tipbox").innerHTML=`
  <div class="panel"><b class="h">交通</b><ul><li>机场往返：大门站 ⇄ 成田 T2 坐京成 Access 特急，不换乘，约 80 分钟。</li><li>市内：Suica 刷地铁、JR、江之电和便利店；打车用 GO 或 Uber，市内 10–20 分钟约 ¥1,500–4,000。</li><li>酒店最近的站：都营大门站（浅草线、大江户线）、JR 滨松町站。</li></ul></div>
  <div class="panel"><b class="h">时间</b><ul><li>页面所有时间都是东京时间（JST, UTC+9），北京时间减 1 小时。</li><li>会议窗口：北京 19:00–次日 11:00 = 东京 20:00–次日 12:00。</li><li>10 月中旬日落约 17:15，东京塔 24:00 关灯。</li></ul></div>
- <div class="panel"><b class="h">钱和退税</b><ul><li>页面里的人民币按 100 日元 ≈ 4.25 元（9.28 市场汇率）换算，刷卡实际会略高一点。</li><li>支付方式写在每家店的「支付」一栏。「只收现金」的店不少，身上常备 ¥20,000 现金，便利店 ATM 可以用银联卡取现。</li><li>支付宝、微信支付：出租车（大公司基本都能扫）、伊势丹、银座三越、BEAMS 可用；餐厅里只有少数能用。</li><li>同一家店当天消费满 ¥5,000（不含税）可免税，带护照原件；南极要用的消耗品注意免税封袋出境前不能拆，结账时跟店员说明。</li><li>刀具只能托运。</li></ul></div>
+ <div class="panel"><b class="h">钱和退税</b><ul><li>页面里的人民币按 100 日元 ≈ 4.25 元（10.2 查询的参考汇率）换算，实际以支付机构结算汇率为准。</li><li>支付方式写在每家店的「支付」一栏。「只收现金」的店不少，身上常备 ¥20,000 现金，便利店 ATM 可以用银联卡取现。</li><li>支付宝、微信支付：出租车（大公司基本都能扫）、伊势丹、银座三越、BEAMS 可用；餐厅里只有少数能用。</li><li>同一家店当天消费满 ¥5,000（不含税）可免税，带护照原件；南极要用的消耗品注意免税封袋出境前不能拆，结账时跟店员说明。</li><li>刀具只能托运。</li></ul></div>
  <div class="panel"><b class="h">天气</b><ul><li>白天约 22°C，早晚约 15°C，带一件薄外套；镰仓海边风大。</li></ul></div>
  <div class="panel"><b class="h">紧急电话</b><ul>
   <li>日本报警 <span class="tel">110</span> · 急救 / 消防 <span class="tel">119</span></li>
@@ -1600,7 +1565,7 @@ function addHotel(m){ L.marker(P.hotel.ll,{icon:houseIcon,zIndexOffset:1000}).bi
 function initOverview(){
   const el=document.getElementById("realmap"); el.hidden=false; document.getElementById("bigmap").hidden=true;
   if(window.__ovm){ window.__ovm.remove(); }
-  document.querySelector("#overview + .mapwrap .mapnote").textContent="实景底图来自 OpenStreetMap，步行和打车段是按真实道路算的路线，虚线是电车。点数字看店名和导航；双指或按钮缩放。镰仓在各日地图里单独放大。";
+  document.querySelector("#overview + .mapwrap .mapnote").textContent="地图点位与连线用于行程示意；新增机位为地标或区域定位，非精确站位。实际步行、驾车路线请点 Google 地图导航。双指或按钮缩放。";
   const m=makeMap(el); window.__ovm=m; addHotel(m); const all=[];
   DAYS.forEach(d=>{ const r=drawDay(m,d,{pill:true,small:true,far:true,below:DAYS.indexOf(d)%2===1}); r.bounds.forEach(b=>all.push(b)); });
   m.fitBounds(all,{padding:[18,18]});
@@ -1633,4 +1598,6 @@ tryReal();
 
 </script>
 
-</body></html>
+<script>
+(function(){function dualStatic(){const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);for(const n of nodes){if(n.parentElement.closest('script,style,.rmb,svg'))continue;if(n.nextSibling?.nodeType===1&&n.nextSibling.classList.contains('rmb'))continue;if(!/¥[\d,]+/.test(n.textContent))continue;n.textContent=n.textContent.replace(/¥\s?([\d,]+)(?:\s*[–-]\s*¥?([\d,]+))?/g,(m,a,b)=>m+'（约人民币 '+cny(a)+(b?'–'+cny(b):'')+' 元）')}}dualStatic();})();
+</script></body></html>
