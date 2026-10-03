@@ -854,6 +854,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .access{display:inline-block;font-size:.82em;line-height:1.6;margin-right:6px}.access.required,.access-legend .required{color:#b91c1c;font-weight:800}.access.walk,.access-legend .walk{color:#147348;font-weight:650}.access.closed{color:#666}.access-legend{font-size:12px;line-height:1.7;margin:10px 0 18px;opacity:.95}@media(prefers-color-scheme:dark){.access.required,.access-legend .required{color:#ff8f98}.access.walk,.access-legend .walk{color:#76d8a0}}
 
 .route-tag{display:inline-block;font-weight:800;font-size:12px;padding:3px 6px;border-radius:6px;margin-right:5px;background:#eef3f3;color:#355454}.route-tag.best{background:#fff0aa;color:#684d00;border:1px solid #cfaa2a}.route-tag.detour{background:#fff0e2;color:#914000}.route-detail{font-size:12px;line-height:1.7}.route-note{padding:9px 11px;margin:9px 0;border-left:3px solid #c6aa64;background:rgba(183,161,102,.08);border-radius:5px}.route-note.compact{margin:5px 0 0}.route-option{display:block;margin-top:7px;text-align:left;white-space:normal}.route-legend{font-size:12px;line-height:1.7;margin:12px 0}.route-legend summary{cursor:pointer;color:var(--muted)}@media(prefers-color-scheme:dark){.route-tag.best{background:#5a4715;color:#ffe38b}.route-tag.detour{background:#4a301c;color:#ffc28c}.route-tag.near,.route-tag.context{background:#243d3c;color:#b1ddda}}
+
+.d10option{border:1px solid var(--line,#d6d3cc);border-radius:14px;padding:16px;margin:14px 0}.d10option p{margin:8px 0}.d10choices{border:0;padding:12px 0;margin:0}.d10choices legend{font-weight:700}.d10choices .chb{display:flex;flex-wrap:wrap;gap:8px}.d10choices button{white-space:normal;text-align:left;max-width:100%}
 </style>
 
 <div class="wrap">
@@ -1285,9 +1287,7 @@ Object.assign(P,{
 const UDON={t:'12:20',p:'oniyanma',n:'おにやんま 新橋店',access:'walk',kind:'新桥顺路简餐 · 站食',r:[['Tabelog','3.70 · 3,997条']],note:'乌冬百名店2024；不接受预约，排队站食，不能代替坐下来休息。只在新桥换乘时补一餐，不专程去五反田。去原宿前13:00结束，仍为14:15抵达理发店留足缓冲。',meta:['新桥3-16-23 · 人均预算 ¥600–1,000'],lines:['metro'],refs:[['食べログ与营业时间','https://tabelog.com/tokyo/A1301/A130103/13162575/']]};
 const JAZZ={t:'20:10',p:'tableaux',n:'TABLEAUX LOUNGE · 20:30首场',access:'walk',kind:'指定爵士体验 · 评分例外',r:[['Tabelog','3.40 · 204条，低于3.5门槛'],['Google收录快照','4.5 · 375条（Restaurant Guru）']],note:'适合坐着听现场音乐；室内允许雪茄，介意烟味就选Bar Trench。按20:10入座、20:30听首场、21:15离店规划；替换当晚酒吧，不连喝两家。建议提前预约并询问远离吸烟客的位置，但不能保证无烟。10月12日具体演出阵容与收费仍需店方确认。',meta:['营业20:00–02:00；常规演出20:30/21:30/22:30/23:30，每场约30分钟','音乐费平日 ¥2,750；周五六/节前 ¥3,300；普通鸡尾酒参考 ¥1,200–1,760（官网仍链接2024菜单，非当日报价）','一至两杯含音乐费暂留 ¥5,000–8,000／人；沙发位最低消费另问，不含雪茄','猿乐町11-6 B1F · 无现金支付 · 050-5444-5127'],book:'https://yoyaku.toreta.in/tableaux-lounge/',bookN:'官方预约／询问当日演出与收费',lines:['taxi'],route:['context','中目黑晚餐后短车约5–10分钟；与原Bar Trench终点相比，多坐车约0–10分钟（估算）。从浅草专程来则增加跨城交通，不作为即时备选。'],refs:[['官网与照片','https://tableauxlounge.jp/'],['演出日历','https://tableauxlounge.jp/events/'],['Tabelog收费与吸烟规则','https://tabelog.com/tokyo/A1303/A130303/13004824/'],['Google评价收录','https://restaurantguru.com/Tableaux-Lounge-Shibuya']]};
 const SOBA={t:'12:15',p:'namiki',n:'並木藪蕎麦',access:'walk',kind:'浅草本区 · 无需预约的简餐',r:[['Tabelog','3.66 · 2,633条'],['Google收录旧快照','4.1 · 1,966条']],note:'老铺荞麦面；不接受预约，现场候位。用于鳗鱼没订到、预算降低或晚餐烧肉没有席位的情形；午晚餐二选一，不需要吃两遍。',meta:['雷门2-11-9 · 周一11:00–19:30，L.O.19:00，周三四休','人均预算 ¥1,000–3,000；天妇罗等加点另计'],lines:['walk'],route:['best','已在浅草时步行衔接雷门／浅草寺；从入谷出发仍需短车，不是入谷店门口的步行替补。'],refs:[['门店营业与预约政策','https://tabelog.com/tokyo/A1311/A131102/13003650/'],['Google收录来源','https://wanderlog.com/place/details/381114/']]};
-// Jazz is an optional parallel route, not a detour appended to Asakusa.
-const r12=day(12).plan.find(x=>x.choice==='R');const jazz=clone(r12.opts.find(x=>x.k==='路线 2'));
-jazz.k='路线 4 · 爵士';jazz.name='中目黑／代官山慢逛 → TABLEAUX首场';jazz.stops=jazz.stops.filter(x=>!['trench','hotel'].includes(x.p));jazz.stops.push(clone(JAZZ),home('21:15'));r12.opts.push(jazz);
+// Jazz moved to October 10.
 // Put new fallback lunch into custom options too.
 const lunch10=day(10).plan.splice(0,2);day(10).plan.unshift({choice:'10lunch',label:'剪发前午餐 · 固定14:15签到不变',opts:[{k:'和牛午餐',name:'已确认13:40前结束才选',stops:lunch10},{k:'新桥乌冬',name:'预算简餐 → 地铁去原宿',stops:[clone(UDON)]}]});
 const lunch12=day(12).plan.shift();day(12).plan.unshift({choice:'12lunch',label:'午餐 · 鳗鱼 / 浅草简餐',opts:[{k:'鳗鱼',name:'原鳗鱼选品',stops:[lunch12]},{k:'浅草荞麦',name:'没订上时直接去浅草',stops:[clone(SOBA)]}]});
@@ -1297,7 +1297,7 @@ const cases={
 9:['午餐排队：中嶋换東京ドミニカ；咖啡没座：COVERT换VERVE，不横穿到西口找咖啡。','烧肉无位／超预算：牛たん荒，仍从南口步行去B&F；B&F满座就回酒店。','东西很多或临时有会：切自选的“回酒店再去银座”；工作优先，别带大量装备硬撑酒吧。'],
 10:['西麻布午餐不能确认13:40结束：在出发前改新桥乌冬，13:00前吃完；不可到13:40才横跨城区补餐。','17:30才剪完／下雨：跳过CIBONE与日落，直接去银座；14:15签到、14:30剪发不动。','六雁未订成／超预算：うな富士；如已有套餐预约，先按取消规则处理，不能直接放鸽子。'],
 11:['已到镰仓遇雨：保留午餐，只去长谷一处；取消海岸和富士山期待，提早回东京。','出发前已知强风暴雨／交通异常：不去镰仓，在酒店休息或工作，保留东京晚餐；不要套用已出发的B线。','とみやま候位过久：原つるや鳗鱼备选须先询位；东京烧肉没席位时先电话问正泰苑，未获确认不绕去赤坂。'],
-12:['鳗鱼无位：出发前改並木藪蕎麦；若已到入谷，先短车约5–10分钟到浅草，不能称为步行替补。','小雨：浅草寺＋有顶商店街短逛；大雨：跳过寺院外景和合羽桥，餐后回酒店。','本とさや无位／预算降低：19:00末单前改並木藪蕎麦；如果午餐已吃过，优先询位原釜めしむつみ，不重复硬吃。','TABLEAUX仅用于中目黑／代官山自选线：有临时会议、无演出、没席位或介意烟味就不去。'],
+12:['鳗鱼无位：出发前改並木藪蕎麦；若已到入谷，先短车约5–10分钟到浅草，不能称为步行替补。','小雨：浅草寺＋有顶商店街短逛；大雨：跳过寺院外景和合羽桥，餐后回酒店。','本とさや无位／预算降低：19:00末单前改並木藪蕎麦；如果午餐已吃过，优先询位原釜めしむつみ，不重复硬吃。','TABLEAUX已安排在10号；12号不重复爵士行程。'],
 13:['うかい亭未订成：换うな富士；现场也久候则直接转新桥乌冬，别把午餐拖到下午很晚。','下雨／行李多：只留三越或GINZA SIX一个室内点，省掉老铺散步。','16:45结束购物，17:20取行李、17:50去成田、20:00会议、22:30航班全部不动。']};
 function setPreset(id,key,title,lead,stops){PRESET[id]??={};PRESET[id][key]={title,lead,stops:clone(stops)}}
 let a=flat(8);setPreset(8,'a','芝公园轻食 → 增上寺 → 东京塔','抵达日优先少移动与休息；只选一顿饭、两个主要停留点，拍照机位随缘。',a);
@@ -1315,7 +1315,169 @@ b=flat(13,{'G':'银座鳗鱼备选'}).filter(x=>!['natsuno','kyukyodo'].includes
 // Refreshes must never overwrite the independent custom selections.
 const originalExpand=expand;
 expand=function(d){if((MODE[d.id]||'a')==='custom'){d.title=ORIGINAL[d.id].title;d.lead=ORIGINAL[d.id].lead;originalExpand(d)}else{const p=PRESET[d.id][MODE[d.id]||'a'];d.title=p.title;d.lead=p.lead;d.stops=clone(p.stops)} };
-function modePanel(d){const mode=MODE[d.id]||'a';return `<div class="planmodes" role="group" aria-label="当日方案">${[['a','Plan A','少移动 · 符合偏好'],['b','Plan B','突发情况 · 即时替换'],['custom','自选 Plan','保留全部多选路线']].map(([k,n,t])=>`<button aria-pressed="${mode===k}" class="${mode===k?'on':''}" data-mode="${d.id}|${k}"><b>${n}</b><small>${t}</small></button>`).join('')}</div><details class="panel"><summary>这一天遇到变化，怎么替换？</summary><ul>${cases[d.id].map(t=>`<li>${esc(t)}</li>`).join('')}</ul><p>Plan B不是已确认席位。仅有一项变化时只替换对应项目；不要取消已生效预约或重走已经完成的路。点击“自选 Plan”可逐项组合。</p></details>${d.id==='12'?`<details class="panel"><summary>TABLEAUX LOUNGE · 爵士加入方案</summary><p>${esc('选“自选 Plan → 路线4·爵士”：代官山／中目黑逛街、17:30晚饭、20:10到店、20:30首场、21:15回酒店。它替代Bar Trench，不叠加。Tabelog 3.40：按指定体验例外保留；室内允许雪茄。人均先留 ¥5,000–8,000。')}</p><button class="btn" data-jazz>采用中目黑／代官山爵士线</button></details>`:''}${['9','13'].includes(d.id)?`<details class="panel"><summary>新桥乌冬 · 顺路简餐补位</summary><p>${accessBadge(UDON)}${esc(UDON.n+' · Tabelog 3.70 · 预算 ¥600–1,000。站着吃，只在新桥换乘或原餐厅未能入座时使用；不额外去五反田。')}</p><a class="lk" target="_blank" href="${NAVTO(P.oniyanma.q)}">导航与照片 ↗</a></details>`:''}`}
+function modePanel(d){const mode=MODE[d.id]||'a';return `<div class="planmodes" role="group" aria-label="当日方案">${[['a','Plan A','少移动 · 符合偏好'],['b','Plan B','突发情况 · 即时替换'],['custom','自选 Plan','保留全部多选路线']].map(([k,n,t])=>`<button aria-pressed="${mode===k}" class="${mode===k?'on':''}" data-mode="${d.id}|${k}"><b>${n}</b><small>${t}</small></button>`).join('')}</div><details class="panel"><summary>这一天遇到变化，怎么替换？</summary><ul>${cases[d.id].map(t=>`<li>${esc(t)}</li>`).join('')}</ul><p>Plan B不是已确认席位。仅有一项变化时只替换对应项目；不要取消已生效预约或重走已经完成的路。点击“自选 Plan”可逐项组合。</p></details>${['9','13'].includes(d.id)?`<details class="panel"><summary>新桥乌冬 · 顺路简餐补位</summary><p>${accessBadge(UDON)}${esc(UDON.n+' · Tabelog 3.70 · 预算 ¥600–1,000。站着吃，只在新桥换乘或原餐厅未能入座时使用；不额外去五反田。')}</p><a class="lk" target="_blank" href="${NAVTO(P.oniyanma.q)}">导航与照片 ↗</a></details>`:''}`}
+/* October 10: independent themes; fixed lunch and salon anchors. */
+let D10THEME='life', D10END='16:30';
+const D10OLD=allStops(day(10).plan);
+const D10HAIR=clone(D10OLD.find(s=>s.p==='haruka'&&s.t==='14:30'));
+D10HAIR.access='required';
+D10HAIR.meta.push('费用（日元／人民币）：以已订服务确认页为准，未提供订单金额');
+const D10LUNCH=clone(D10OLD.find(s=>s.p==='innocent'&&s.k!=='move'));
+Object.assign(D10LUNCH,{t:'12:15',access:'required',n:'The INNOCENT CARVERY · 已预约',note:'12:15固定预约。建议11:35从mesm打车出发，车程约20–30分钟，另留找店缓冲；周六拥堵以实时导航为准。入席时说明14:15须抵达Tierra，请确认13:35–13:40前能结束套餐。这里不再提供替换午餐。',meta:['港区西麻布1-4-28 · 午餐参考预算 ¥8,000–10,000／人；实际以已订套餐为准'],route:['context','固定预约：mesm→西麻布→原宿。午餐结束后打车约10–20分钟到Tierra，不能按必然10分钟安排。']});
+delete D10LUNCH.c;delete D10LUNCH.mk;
+const D10ANCHORS=[{t:'11:35',p:'innocent',k:'move',n:'建议从mesm打车出发去已订午餐',note:'注意原工作窗口到东京12:00：与此出发时间仍重叠25分钟。这里保留原工作安排并明确冲突，请提前协调这25分钟；不默认为已经免会。',lines:['taxi']},D10LUNCH,{t:'13:40',p:'haruka',k:'move',n:'午餐结束后直达Tierra',note:'建议13:35结账、最晚13:40出发；车程估算10–20分钟，14:15抵店签到。',lines:['taxi']},{t:'14:15',p:'haruka',k:'move',n:'Tierra 原宿签到',note:'14:30预约不动。',lines:['walk']},D10HAIR];
+const D10={};
+function item10(id,name,q,ll,kind,note,meta,score,url,access='walk',route='同区替换，具体衔接以所选路线为准。'){
+ P[id]={n:name,q,ll};D10[id]={p:id,n:name,kind,note,meta,access,r:score||[],book:url,bookN:'官网／详情与预约入口',refs:url?[['核对来源',url]]:[],lines:['walk'],route:['context',route]};return D10[id];
+}
+const tb=(area,id)=>`https://tabelog.com/tokyo/${area}/${id}/`;
+item10('philo10','PHILOCOFFEA 表参道','PHILOCOFFEA 表参道 北青山3-8-15',[35.6646,139.71],'咖啡主推 · 手冲 / 奶咖','优先咖啡本身而非拍照装潢；有座位，比站饮更适合剪发后休息。只选一间咖啡，不连续打卡。',['10:00–19:00 · 饮品预算 ¥1,000–2,000／人'],[['Tabelog','3.50 · 85条'],['Google','本轮未取得可靠分数及评论数']], 'https://philocoffea.com/pages/shop-omotesando','walk','【最优路线】Tierra→表参道南侧→代官山分支顺向；从Tierra约步行10–15分钟。');
+D10.philo10.refs.push(['Tabelog',tb('A1306/A130602','13305925')]);
+item10('mameya10','KOFFEE MAMEYA','KOFFEE MAMEYA 神宮前4-15-3',[35.6673,139.7108],'手冲 · 站饮','精品浅焙和选豆交流值得去，但没有座位，不算休息站。18:00关门，结束晚就跳过。',['10:00–18:00 · 饮品预算 ¥1,000–2,500；可选FastPass ¥390，非必须'],[['Tabelog','3.51 · 209条'],['Google','分数与评论数未可靠复核']], 'https://www.tablecheck.com/ja/shops/koffee-mameya/reserve','walk','相对PHILO在北侧绕入小巷，再向南去代官山预计多走约5–10分钟。');
+D10.mameya10.refs.push(['Tabelog',tb('A1306/A130602','13204760')]);
+item10('wood10','WOODBERRY COFFEE 代官山','WOODBERRY COFFEE 代官山 猿楽町23-4',[35.6492,139.7027],'奶咖 / 手冲 · 代官山','原PERCH店。咖啡优先的代官山落脚点，座位少；只有剪发结束早、预计17:20前能到才安排，不冲闭店。',['8:30–18:00 · 饮品预算 ¥700–1,200'],[['Tabelog','3.09，按咖啡Google例外入选'],['Google收录快照','4.6 · 391条（Wanderlog，非实时）']], 'https://www.woodberrycoffee.com/pages/shop-info','walk','直接从原宿短车约15–25分钟到代官山，再接materiaali步行约5分钟；不再回表参道。');
+D10.wood10.refs.push(['Google收录','https://wanderlog.com/place/details/4993129/perch-by-woodberry-coffee-daikanyama']);
+item10('blue10','Blue Bottle Coffee 青山','Blue Bottle Coffee 青山 南青山3-13-14',[35.6641,139.7145],'奶咖 / 手冲 · 有座备选','座位比小店宽裕，适合想坐下来或剪完较晚时使用；不保证周六能立即入座。',['8:00–19:00 · 饮品预算 ¥700–1,200'],[['Tabelog','3.32，按咖啡Google例外入选'],['Google收录快照','4.2 · 3,057条（Postcard，非实时）']], 'https://store.bluebottlecoffee.jp/pages/aoyama','walk','【最优路线】在根津／Spiral→青山晚餐分支内顺路；相对PHILO向东多走约5–8分钟。');
+D10.blue10.refs.push(['Google收录','https://www.postcard.inc/places/blue-bottle-coffee-aoyama-cafe-tokyo-DXtAelSEHOF']);
+item10('yoyogi10','代代木公园 · 入口短线','代々木公園 原宿門',[35.6706,139.7028],'公园 · 20分钟即可','只走原宿门附近树荫和草地，不穿越全园。它与明治神宫是不同入口和不同开放规则；不把公园开放当作神宫可入内。',['常时开放 · 门票 ¥0 · 日落后不安排深入林间'],[], 'https://www.tokyo-park.or.jp/park/yoyogi/','walk','Tierra→原宿门步行约10–15分钟；之后去青山建议短车约10–15分钟，较直接去表参道多约15–25分钟交通。');
+item10('nezu10','根津美术馆 · 提前结束限定','根津美術館 南青山6-5-1',[35.6623,139.7173],'美术馆 + 庭园 · 优先参考','仅剪发15:45前结束才建议启用，直接打车，争取16:00入馆；16:30末入、17:00闭馆。正常16:30–17:30结束就去不了，不压缩造型硬赶。当天为陶瓷展「やきもの名品紀行 中国・日本・朝鮮半島」。',['成人线上 ¥1,400；现场 ¥1,600（余票不保证）· 为留足参观时间，本攻略按提前购票安排'],[], 'https://www.e-tix.jp/nezu-muse/','required','从Tierra直接短车约10–15分钟；不先逛表参道。比留GYRE多一段车程，接青山晚餐仍同区。');
+D10.nezu10.refs.push(['展览与开放','https://www.nezu-muse.or.jp/jp/exhibitions/current/']);
+item10('meiji10','明治神宫 · 提前结束限定','明治神宮 南参道入口',[35.6715,139.7027],'神社 · 本次偏好优先','10月16:40闭门；建议剪发15:30前结束才启用，15:45左右到南入口，再留往返参道约30分钟及参拜时间。正常剪发结束时间不适用。必须先神宫，再青山，不能反向压轴。',['参拜 ¥0；御苑等另收费区域不纳入此短线'],[], 'https://www.meijijingu.or.jp/sanpai/2.php','walk','Tierra到南入口约步行10–15分钟，寺社内部步行另计；之后去青山短车约10–15分钟，较直接表参道多约20–30分钟交通。');
+item10('spiral10','Spiral Garden / Spiral Market','スパイラル 南青山5-6-23',[35.6615,139.7126],'艺术空间 + 生活器物 · 雨天','看当期展览与建筑，再选器物；不是根津同量级的博物馆替代。撤展布展时Garden可能关闭，此时只逛Market，不把未公布展览写成已确定。',['通常11:00–19:00 · 普通空间浏览 ¥0；收费活动另计'],[], 'https://www.spiral.co.jp/shoplist/spiral_garden','walk','【最优路线】表参道南侧接青山川上庵／青山晚餐同区步行约5–12分钟，无须先往北折返。');
+item10('cibone10','CIBONE · GYRE B1F','CIBONE GYRE 神宮前5-10-1',[35.6672,139.7083],'设计器物 · 手工艺','器物、灯具和生活用品优先；不重复9号的百货与装备购物。选一两件慢看，不把整栋商场刷完。',['11:00–20:00 · 浏览 ¥0，购物按商品标价'],[], 'https://www.cibone.com/ext/stores.html','walk','【最优路线】Tierra后步行约5–10分钟，同表参道轴线；若随后咖啡应先CIBONE再往南。');
+item10('mater10','minä perhonen materiaali','minä perhonen materiaali 猿楽町29-10',[35.6482,139.7026],'布料 / 器物 · 生活方式首选','比再逛时装商场更符合手工艺兴趣：布料、抱枕与器物。与一芯、TABLEAUX同一小片区；有余力才在周边加一家。',['11:00–19:00 · 周三休 · 浏览 ¥0'],[], 'https://www.mina-perhonen.jp/store_information/materiaali/','walk','【最优路线】代官山本区接一芯或TABLEAUX步行约5–10分钟；表参道→代官山是一次必要跨区，打车约15–25分钟。');
+item10('sml10','SML · 民艺选物（新址）','SML 恵比寿西1-33-3 光雲閣310',[35.6476,139.7041],'民艺器物 · 备用','陶器、漆器、玻璃。2026年已搬至代官山附近新址，别导航到旧中目黑店。10月10日特别营业尚未确认，出发前看公告；未确认时用materiaali。',['通常12:00–19:00 · 浏览 ¥0'],[], 'https://sm-l.jp/english/','walk','距代官山站约2分钟；与materiaali互换预计多走约3–8分钟，不返回旧址。');
+D10.sml10.refs.push(['当月营业公告','https://sm-l.jp/news/']);
+item10('kamawanu10','かまわぬ 代官山店','かまわぬ 代官山店 猿楽町23-1',[35.6498,139.7025],'手拭 / 小纪念品','轻巧、实用、有日本工艺感；比再买一件商业大牌更贴近这天主题。和materiaali二选一也足够。',['周六通常11:00–19:00 · 浏览 ¥0，购物另计'],[], 'https://kamawanu-store.jp/blogs/news/event-daikanyama39th','walk','【最优路线】与materiaali／TABLEAUX同片区，互换预计只差约3–5分钟步行。');
+item10('river10','中目黑 · 目黑川短散步','中目黒駅 目黒川',[35.6446,139.6992],'街区生活 · 20分钟短逛','只走车站附近河段，不追樱花季照片；10月没有樱花。由代官山下坡过去，再去河豚晚餐最顺；晚饭后回爵士吧建议短车，不爬坡赶路。',['全天公共街道 · ¥0 · 雨天跳过'],[], 'https://www.gotokyo.org/en/destinations/western-tokyo/nakameguro/index.html','walk','代官山→中目黑步行约15–20分钟略超目标，改一站电车（含进出站约10–15分钟）或短车5–10分钟；不再走回头路。');
+item10('issai10','代官山 いっさい喝采','代官山 いっさい喝采 猿楽町2-5',[35.6528,139.7031],'晚餐主推 · 和食 / 割烹','季节和食、鱼菜与酒，避开午餐和牛；是较轻松的割烹，不冒充正式怀石。吃完仍在代官山听爵士，订席时询问套餐时长，预留约2小时。',['周六17:00–22:30 · 晚餐预算 ¥10,000–15,000／人；席费 ¥800及服务费5%按实际结算确认'],[['Tabelog','3.57 · 172条'],['Google收录快照','4.5 · 123条（Wanderlog，非实时）']], 'https://issai-kassai.com/','required','【最优路线】代官山购物→割烹→TABLEAUX均在本区，各段步行约8–15分钟；无需绕惠比寿或回银座。');
+D10.issai10.refs.push(['Tabelog',tb('A1303/A130303','13267989')],['Google收录','https://wanderlog.com/ja/place/details/6097706/']);
+item10('isshin10','ごはんや一芯 代官山','ごはんや一芯 代官山 猿楽町30-3',[35.6481,139.7021],'预算备选 · 季节和食 / 米饭','刺身、季节小菜与米饭，适合割烹没位或想降低预算；不是正式怀石。可现场询位，但周六晚很受欢迎，提前电话问更稳。',['17:00–23:00，料理末单22:00 · 晚餐预算 ¥5,000–8,000／人'],[['Tabelog','3.63 · 1,802条'],['Google','未取得可靠分数与评论数，暂不作双平台已验证']], tb('A1303/A130303','13163239'),'walk','【最优路线】materiaali附近约3–5分钟，饭后TABLEAUX约5–10分钟；与いっさい喝采可在同区替换。');
+item10('fugu10','焼ふぐ夢鉄砲 中目黑','焼ふぐ夢鉄砲 青葉台1-25-13',[35.6468,139.6945],'偏好补充 · 烤河豚','以烤河豚为特色，梦套餐覆盖河豚刺身、烤物、炸物与锅。仍不是便宜的一餐，明确价格后再选；不把低于3.5的廉价河豚补进来。预留约2小时。',['周六16:30–23:00 · 夢套餐 ¥12,800／人（含税），酒水另计；更高价套餐不主推'],[['Tabelog','3.52 · 212条'],['Google','有4.2收录但评论数未核实，暂不作充分交叉验证']], tb('A1317/A131701','13209219'),'required','中目黑河段→餐厅约步行10–15分钟；饭后回TABLEAUX短车约5–10分钟。比留代官山晚餐多约10–20分钟总交通。');
+item10('taichi10','御料理 太いち','御料理 太いち 南青山3-4-6 AOYAMA346 102',[35.6658,139.7175],'高预算 · 日本料理 / 割烹','以出汁、季节料理与收尾荞麦为特色，符合怀石割烹偏好。官网基本套餐五品加荞麦，不含甜点，追加另计；贵则直接切川上庵。',['10月起16:30–23:00，最晚入店20:30 · 完全预约制 · 基本套餐 ¥22,000／人（税及服务费含），加点另计'],[['Tabelog','3.68 · 61条'],['Google','分数和评论数未可靠复核']], 'https://www.tokyotaichi.com/','required','青山咖啡后步行约8–15分钟；饭后到代官山爵士需短车约15–25分钟，较代官山晚餐方案多约10–20分钟交通。');
+D10.taichi10.refs.push(['Tabelog',tb('A1306/A130603','13297490')]);
+item10('jin10','青山 仁','青山 仁 南青山3-9-1',[35.6644,139.7162],'高预算 · 日本料理','安静的季节日本料理，符合怀石偏好；预算与太いち接近，仅订其中一家。营业场次与当日菜单请店方确认，不承诺有席。',['晚餐预算 ¥20,000–30,000／人 · 完全预约制 · 周日及节假日休'],[['Tabelog','3.57 · 81条'],['Google收录快照','4.5 · 55条（Restaurant Guru，非实时）']], 'https://www.aoyama-jin.jp/','required','青山本区与太いち替换，多走约0–5分钟；饭后去代官山约15–25分钟车程，跨区成本相同。');
+D10.jin10.refs.push(['Tabelog',tb('A1306/A130602','13152874')],['Google收录','https://restaurantguru.jp/Aoyama-Jin-Minato']);
+item10('kawakami10','青山 川上庵','青山 川上庵 南青山3-14-1',[35.6634,139.715],'青山低预算备选 · 天丼 / 天妇罗 / 荞麦','想降低餐费、临时没订上时就近吃好；天丼贴近米饭类偏好，荞麦与天妇罗是扩展备选。无需为了吃便宜一些再跨去代官山。',['11:00–23:00，料理末单22:00 · 晚餐预算 ¥4,000–8,000／人（点酒及菜数影响较大）'],[['Tabelog','3.55 · 1,638条'],['Google收录快照','4.2 · 997条（ste-map，非实时）']], 'https://www.kawakamian.com/shops/aoyama.php','walk','【最优路线】根津／Spiral／Blue Bottle之后，表参道南侧步行约5–12分钟；替换青山高价割烹不跨区。');
+D10.kawakami10.refs.push(['Tabelog',tb('A1306/A130602','13033164')],['Google收录','https://ste-map.com/place/ChIJre8PMp6MGGARXXwrhXr7_Ek']);
+item10('omoukai10','表参道うかい亭','表参道うかい亭 GYRE 5F',[35.6672,139.7083],'铁板烧 · 低优备选','铁板烧符合偏好，但中午已吃和牛，且13号已有银座铁板烧选项，因此不作为10号默认晚餐。确实想吃再替换，不能两顿晚餐。',['晚餐预算 ¥20,000–30,000／人；税服及当日套餐以预约页为准'],[['Tabelog','3.68 · 1,121条'],['Google','分数和评论数未可靠复核']], 'https://www.ukai.co.jp/omotesando/menu/','required','【最优路线】若选择CIBONE，两者同楼无需地面交通；若已到青山再回来，多走约10–15分钟。');
+D10.omoukai10.refs.push(['Tabelog',tb('A1306/A130601','13044361')]);
+item10('edo10','大江戸 南青山店','大江戸 南青山2-14-22',[35.6701,139.7204],'鳗鱼 · 低优保留','若8号已吃鳗鱼，今天不重复；只在仍想吃鳗鱼时用。位置偏外苑前，不是表参道南侧的即时门口替补。',['晚餐16:30–20:30 · 预算 ¥8,000–10,000／人'],[['Tabelog','3.52 · 248条'],['Google','评论数未可靠复核']], tb('A1306/A130603','13012964'),'walk','相对青山川上庵，多一段约5–10分钟短车；之后去代官山又向南折返，不标最优。');
+D10.jazz10={...clone(JAZZ),p:'tableaux',n:'TABLEAUX LOUNGE · 爵士之夜',access:'required',note:'已移到10号，不再安排12号重复。建议21:00–21:15入座听21:30场，单晚只选这一家。室内允许雪茄，介意烟味请改Bar Trench或回酒店。10月10日演出阵容、场次、最低消费仍须店方确认；本页尚未替你订位。',meta:['营业20:00–02:00；常规场次20:30/21:30/22:30/23:30，具体以当晚为准','周六音乐费 ¥3,300／人；饮品旧菜单参考 ¥1,200–1,760（2024菜单，非当日报价）','一至两杯含音乐费暂留 ¥5,000–8,000／人；沙发低消另问'],route:['context','代官山晚餐后步行约5–15分钟；从青山来打车约15–25分钟。后者不是10分钟内的邻店，属于指定爵士体验的一次跨区。']};
+D10.trench10={...stop(12,'trench'),p:'trench',access:'walk',n:'Bar Trench · 替换爵士，不叠加',route:['detour','代官山晚餐后前往惠比寿，短车约5–10分钟；与TABLEAUX相比增加约5–10分钟交通。']};
+D10.trench10.note+=' 本日仅在不听爵士、无法订位或介意雪茄时替换；请确认实时营业。';
+D10.none10={p:'hotel',n:'留白 · 休息，不再加打卡',kind:'可跳过',note:'这是空白时段，不需要去某一家店；导航中不加入新目的地。',meta:[],route:['best','省去这一段移动。']};
+const D10CHOICE={life:{coffee:['philo10','mameya10','blue10','wood10'],visit:['mater10','sml10','kamawanu10','river10','cibone10','spiral10'],dinner:['issai10','fugu10','isshin10','taichi10','jin10','kawakami10','omoukai10','edo10']},park:{visit:['yoyogi10','nezu10','meiji10','spiral10','cibone10'],coffee:['philo10','blue10','mameya10'],dinner:['taichi10','jin10','kawakami10','omoukai10','issai10','fugu10','isshin10','edo10']}};
+const D10SELECT={life:{coffee:'philo10',visit:'mater10',dinner:'issai10',bar:'jazz10'},park:{visit:'yoyogi10',coffee:'philo10',dinner:'taichi10',bar:'jazz10'}};
+function d10Pick(){if(MODE['10']==='custom')return {...D10SELECT[D10THEME]};if(D10THEME==='life')return MODE['10']==='b'?{coffee:'philo10',visit:'mater10',dinner:'isshin10',bar:'jazz10'}:{coffee:'philo10',visit:'mater10',dinner:'issai10',bar:'jazz10'};return MODE['10']==='b'?{visit:'spiral10',coffee:'blue10',dinner:'kawakami10',bar:'jazz10'}:{visit:'yoyogi10',coffee:'philo10',dinner:'taichi10',bar:'jazz10'};}
+function d10At(id,t){return {...clone(D10[id]),t};}
+function d10Effective(){const z=d10Pick();if((z.visit==='nezu10'&&D10END>'15:45')||(z.visit==='meiji10'&&D10END>'15:30')){z.visit=D10END==='17:30'?'spiral10':'yoyogi10';}return z;}
+const baseExpand10=expand,baseModePanel10=modePanel;
+expand=function(d){if(d.id!=='10'){baseExpand10(d);return;}const z=d10Effective();let early=['nezu10','meiji10'].includes(z.visit);d.title=(D10THEME==='life'?'生活方式：表参道 → 代官山 / 中目黑':'公园美术：原宿 → 青山')+' → 爵士';d.lead='固定12:15西麻布午餐、14:30原宿剪发。剪发后只挑一间咖啡、一个逛街/参观点、一顿晚餐；9号采购，10号看器物、艺术和街区，不重复逛百货。路线中的时间为预计，预约仅午餐与剪发已确认。';d.stops=clone(D10ANCHORS);
+ if(D10THEME==='park'){
+  d.stops.push(d10At(z.visit,z.visit==='meiji10'?'15:45':z.visit==='nezu10'?'16:00':z.visit==='yoyogi10'?'16:45':'17:00'));
+  if(z.coffee!=='none10')d.stops.push(d10At(z.coffee,early?'17:15':z.visit==='yoyogi10'?'17:30':'17:45'));
+ }else{
+  if(z.visit==='cibone10'){d.stops.push(d10At(z.visit,'16:45'));if(z.coffee!=='none10')d.stops.push(d10At(z.coffee,'17:20'));}
+  else {if(z.coffee!=='none10')d.stops.push(d10At(z.coffee,z.coffee==='wood10'?'17:10':'16:50'));d.stops.push(d10At(z.visit,z.visit==='river10'?'18:00':'18:00'));}
+ }
+ if(D10END==='17:30'){d.stops=clone(D10ANCHORS);const v=['nezu10','meiji10','yoyogi10'].includes(z.visit)?'spiral10':z.visit;d.stops.push(d10At(v,'18:00'));}
+ let dinnerTime=D10THEME==='park'?'18:45':'18:45';d.stops.push(d10At(z.dinner,dinnerTime));
+ if(z.bar!=='none10')d.stops.push(d10At(z.bar,'21:15'));
+ d.stops.push(home(z.bar==='none10'?'21:00':'22:15'));
+ for(let i=1;i<d.stops.length;i++){const st=d.stops[i],pr=d.stops[i-1],a=P[pr.p]?.ll,b=P[st.p]?.ll;if(a&&b&&Math.hypot((a[0]-b[0])*111,(a[1]-b[1])*90)>0.85)st.lines=['taxi'];}
+ d.plan=d.stops;d.tags=[['','中国调休上班日'],['free','晚上不开会'],['','12:15午餐 / 14:30剪发已确定']];
+};
+function d10Cards(ids){return ids.map(id=>{const x=D10[id],p=P[x.p];return `<article class="d10option"><b>${accessBadge(x)}${esc(x.n)}</b><p>${esc(x.kind||'')}</p>${x.r?.length?`<div class="rates">${x.r.map(r=>`<span class="rate">${esc(r.join(' · '))}</span>`).join('')}</div>`:''}<p>${esc(x.note)}</p><p>${(x.meta||[]).map(esc).join('<br>')}</p><p>${routeLabel(x.route)}</p><div class="links"><a class="lk" target="_blank" rel="noopener" href="${NAVTO(p.q)}">地图 / 导航 ↗</a><a class="lk" target="_blank" rel="noopener" href="${G(p.q)}">照片 / 评价 ↗</a>${x.book?`<a class="lk" target="_blank" rel="noopener" href="${x.book}">官网 / 预约 ↗</a>`:''}${(x.refs||[]).map(r=>`<a class="lk" target="_blank" rel="noopener" href="${r[1]}">${esc(r[0])} ↗</a>`).join('')}</div></article>`}).join('');}
+modePanel=function(d){if(d.id!=='10')return baseModePanel10(d);const z=d10Pick(),early=['nezu10','meiji10'].includes(z.visit);return `<div class="panel"><h4>10号先选主题，再选方案</h4><div class="planmodes"><button data-d10theme="park" aria-pressed="${D10THEME==='park'}" class="${D10THEME==='park'?'on':''}"><b>公园美术</b><small>代代木 / 根津 / 明治神宫 · 青山</small></button><button data-d10theme="life" aria-pressed="${D10THEME==='life'}" class="${D10THEME==='life'?'on':''}"><b>生活方式逛街</b><small>手冲 · 器物 · 代官山 / 中目黑</small></button></div><div class="planmodes">${[['a','Plan A','符合偏好 · 主线'],['b','Plan B','雨天 / 没订上 / 降预算'],['custom','自选 Plan','咖啡 · 逛街 · 晚餐 · 酒吧']].map(([k,n,t])=>`<button data-mode="10|${k}" aria-pressed="${MODE['10']===k}" class="${MODE['10']===k?'on':''}"><b>${n}</b><small>${t}</small></button>`).join('')}</div><div class="planmodes">${[['15:30','提前15:30'],['15:45','提前15:45'],['16:30','预计16:30'],['17:30','延长17:30']].map(([v,n])=>`<button data-d10end="${v}" aria-pressed="${D10END===v}" class="${D10END===v?'on':''}">${n}剪完</button>`).join('')}</div><p>上面按剪发实际结束时间切换；“提前”只是条件模拟，不代表店家已确认。17:30模式自动取消咖啡，仅保留一个逛点与晚餐；根津／明治神宫超过对应截止时间会自动换成公园或Spiral。</p><p><b>新宿和原宿不是同一个地方。</b>9号保留装备与百货采购，10号以艺术、手工器物、小街和爵士为主；不安排竹下通大扫街、涩谷商场巡游或重逛BEAMS。</p><p><strong class="required">固定预约：12:15 The INNOCENT CARVERY；14:30 Tierra。建议11:35酒店出发。</strong>原工作窗口到东京12:00，与出发重叠25分钟，需你协调，页面没有擅自删除会议。</p><p><b>根津与明治神宫保留在自选里，二选一。</b>根津要求15:45前剪完并直达；明治神宫建议15:30前剪完（10月16:40关门）。正常预计16:30–17:30剪完，因此默认A/B不会硬塞闭馆项目。</p>${early?`<p class="required"><b>当前是提前结束限定路线：${esc(D10[z.visit].n)}。尚未确认剪发能这么早结束，请勿把这条当作确定能执行的行程，也不要为了参观压缩造型。</b></p>`:''}<p><b>17:30才剪完：</b>公园线改Spiral / CIBONE一个室内点，取消公园和第二杯咖啡；生活方式线只喝PHILO后直接去晚餐，或直接去代官山选一家店。18:00后才结束则取消全部逛街，只保留已订晚餐。晚餐若已订，先按取消规则联系店方，不直接放鸽子。</p><p><b>晚餐与爵士：</b>A/B都把TABLEAUX留在当晚；没有座位、演出不适合或介意雪茄时，自选切Bar Trench或直接回酒店。青山晚餐到TABLEAUX约15–25分钟车程，是指定体验造成的跨区例外；最省移动的是代官山晚餐。</p></div>${MODE['10']==='custom'?`<div class="panel"><h4>点选后更新时间线、地图与导航</h4>${Object.entries(D10CHOICE[D10THEME]).concat([['bar',['jazz10','trench10','none10']]]).map(([slot,ids])=>`<fieldset class="d10choices"><legend>${({coffee:'咖啡只选一间',visit:'逛街 / 参观只选一处',dinner:'晚餐只订一家',bar:'酒吧 / 回酒店'})[slot]}</legend><div class="chb">${ids.map(id=>`<button class="${z[slot]===id?'on':''}" data-d10pick="${slot}|${id}" aria-pressed="${z[slot]===id}">${esc(D10[id].n)}</button>`).join('')}</div></fieldset>`).join('')}<p>跨主题自由组合可能增加交通：例如青山晚餐后到代官山听爵士需15–25分钟车程；中目黑不要步行爬坡赶回代官山。门店名可点开照片与地图，下面选品库保留全部详情。</p></div>`:''}<details class="panel"><summary>看全量精选：咖啡4家 · 晚餐8家 · 公园艺术与器物9处 · 酒吧2家</summary><p>这是本日走廊内的精选候选，不是要求全部去。价位均为每人参考，100日元≈4.25元人民币，非实时汇率。Tabelog与Google收录快照核对于本次更新；标“未核实”的项目尚未完成双平台交叉验证。评分和席位会变化，绿色不保证有座。</p><h4>咖啡 · 优先手冲与奶咖品质</h4>${d10Cards(['philo10','mameya10','wood10','blue10'])}<h4>晚餐 · 割烹 / 河豚优先，鳗鱼与重复和牛低优</h4>${d10Cards(['issai10','fugu10','taichi10','jin10','isshin10','kawakami10','omoukai10','edo10'])}<h4>逛 · 寺社庭园 / 美术 / 手作器物</h4>${d10Cards(['nezu10','meiji10','yoyogi10','spiral10','cibone10','mater10','sml10','kamawanu10','river10'])}<h4>喝 · 只选一家</h4>${d10Cards(['jazz10','trench10'])}</details><details class="panel"><summary>马上需要预约什么？临时怎么替换？</summary><ul><li>午餐与剪发已确认，核对套餐时长和订单即可，不重复订。</li><li>选定后优先询位：いっさい喝采／太いち／青山仁／焼ふぐ夢鉄砲，只订实际选中的一家，建议18:45。尚未查询10月10日实时空位，不能把预约入口当作有席。</li><li>TABLEAUX请立即问10月10日21:00–21:15入座、21:30演出、座位最低消费与烟味安排。晚餐订位时同时确认能在20:45前结束；超时就放弃首个计划场次，不催赶套餐。</li><li>青山餐厅没位／太贵：川上庵同区替换。代官山没位／太贵：一芯同区替换；仍要先询位，不能保证即时有席。</li><li>根津只有确认能提前结束造型才买票；明治神宫普通参拜无需预约。下雨不走河边、不穿公园，用Spiral / CIBONE。</li><li>旧六雁、Punch Room及虎之门黄昏不列入本日导航，避免回银座或追时间；未替你取消任何既有订单。</li></ul></details><details class="panel"><summary>参考的小红书线路 · 留下灵感，不照搬暴走清单</summary><p>提取PHILOCOFFEA、materiaali、SML与原宿—代官山—中目黑街区思路；舍去全天跨区扫店、重复百货和上坡赶路。帖子为风格参考，营业与分数优先核对门店官方／Tabelog。</p>${['6BlPZwWQhPn','3DEWmTCFIk9','5NjSbHDOLRB','1VMfFNgAEH3','5qHUukPtLte','AMgn2rVJwBl','67OSoGCKBUn','9sJKb0eCJdv'].map((v,i)=>`<a class="lk" target="_blank" rel="noopener" href="https://xhslink.cn/o/${v}">参考帖子 ${i+1} ↗</a>`).join('')}</details>`;};
+
+/* October 11 / 12 themes, preserving existing coast and sunny-day stops. */
+const SAVED11={plan:clone(day(11).plan),a:clone(PRESET[11].a),b:clone(PRESET[11].b)};
+const SAVED12={plan:clone(day(12).plan),a:clone(PRESET[12].a),b:clone(PRESET[12].b)};
+const THEME1112={11:'north',12:'sun'};
+let NIGHT11='auto';
+const N11={};
+function n11(id,n,km,kind,note,meta,book,route,r=[]){P[id]={n,q:n+' 鎌倉',km};N11[id]={p:id,n,kind,note,meta,book,bookN:'官方详情 / 预约',refs:book?[['核对来源',book]]:[],route,r,access:'walk',lines:['walk']};return N11[id];}
+P.kita11={n:'北镰仓站',q:'北鎌倉駅',km:[35.3377,139.5451]};
+n11('engaku11','圆觉寺',[35.3364,139.5482],'禅寺 · 庭园','北镰仓站旁的大寺，山门与方丈周边足够看一小时；不爬洪钟高台，不追遍所有堂宇。小雨可看庭院，但寺内并非全程有顶，暴雨不执行。',['10月8:30–16:30（按寺院官网保守安排）· 成人 ¥500，带现金'],'https://www.engakuji.or.jp/',['best','【最优路线】北镰仓站到入口约1–3分钟；适合短线首站或返程前一站。']);
+n11('meigetsu11','明月院',[35.3354,139.5514],'圆窗 · 静谧庭园','以圆窗、石径和庭院为主，停留40–50分钟。10月不是绣球季，也不承诺红叶；本堂后庭特别开放不纳入本次普通票路线。',['9:00–16:00 · 成人 ¥500，带现金'],'https://www.trip-kamakura.com/facility/detail.php?area=2&genre=%E8%A6%B3%E3%82%8B&id=70&subcategory=1',['near','北镰仓站步行约10–15分钟；接建长寺需步行约20分钟，超出目标，改短车约5–10分钟（叫车等待另计）。']);
+n11('kencho11','建长寺',[35.3321,139.5553],'禅宗建筑 · 方丈庭园','四篇攻略里反复推荐的古寺。只看三门、法堂和方丈庭园；仏殿修缮至2027年8月，不能入内看地藏。不登半僧坊、不接天园徒步。安排约45分钟；比继续人挤人的八幡宫与小町通更符合本日偏好。',['8:30–16:30 · 成人 ¥500，带现金'],'https://www.kamakura-arts.or.jp/kamakuraart/event/te03/',['best','【最优路线】明月院→建长寺→镰仓站向南衔接；下一段公交约10–15分钟或短车约5–10分钟，节假日堵车另留余量。']);
+n11('jochi11','净智寺',[35.3347,139.5451],'苔与古木 · 替换选项','较自然的绿意与古木，台阶和石径较多。替换一座寺院，不在两寺主线上再追加。',['9:00–16:30 · 成人 ¥300'],'https://jochiji.com/',['near','北镰仓站步行约8–12分钟；接明月院比站旁出发多走约5–10分钟。']);
+n11('tokei11','东庆寺',[35.3361,139.5458],'历史 · 安静参拜','以救济女性的历史和安静参拜为主；遵守寺院摄影规则，不作为人像摆拍机位。官方目前列9:00–16:00，优先于旧英文页时间。',['9:00–16:00 · 常规参拜不收门票，随喜供奉；按 ¥0计算，不含供奉'],'https://tokeiji.com/guide',['near','北镰仓站步行约4分钟；可替换圆觉寺，交通差约0–5分钟。']);
+n11('gentou11','幻董庵 · 北镰仓茶寮',[35.3405,139.5421],'日本料理 / 怀石 · 午餐主选','古民家内慢慢吃季节料理，器皿也值得看。12:00一齐开餐，官网要求预留2–2.5小时；餐后只选一寺，不再加远处小店。先确认10月11日两人席与14:30前结束的节奏，不催餐。',['午餐套餐含税 ¥6,600 / ¥9,900；每人另需至少一杯饮品，价格以菜单为准','完全预约 · 电话0467-43-5695 · 山ノ内823；最后一段小巷车辆不能通行'],'https://gentouan.jp/menu',['context','北镰仓站步行约8–12分钟。吃完去明月院步行可能20–25分钟，改主路上车约5–10分钟＋两端短步行；比站旁午餐多约10–15分钟衔接。'],[['Tabelog','3.62 · 151条'],['Google','本轮未取得可靠评分与评论量，暂不视为双平台验证完成']]);
+N11.gentou11.access='required';N11.gentou11.refs.push(['Tabelog','https://tabelog.com/kanagawa/A1404/A140401/14010528/'],['套餐时间与预约','https://gentouan.jp/']);
+n11('minka11','喫茶ミンカ',[35.3354,139.5483],'古民家咖啡 · 轻食备选','可坐下休息的古民家喫茶。预算较低时用店内轻食作午餐替换，不把它说成怀石；饮品与轻食售罄情况现场确认。不接受预约，排队久就减少寺院数量，不靠饿着赶路。',['周日11:30–17:30 · 轻食/咖啡合计预算 ¥1,000–2,000／人'],'https://tabelog.com/kanagawa/A1404/A140401/14031654/',['best','【最优路线】站周边→ミンカ→明月院同片区；各段约5–15分钟，少一次去住宅深处的往返。'],[['Tabelog','3.55'],['Google收录','4.3（Tanotim），评论总量未复核']]);
+N11.minka11.refs.push(['Google收录（非实时）','https://tanotim.com/place/25668/']);
+n11('hokoku11','报国寺 · 竹庭',[35.3194,139.5693],'东镰仓整段替换 · 不混入北镰仓','第一篇推荐的竹林在东镰仓，不在北镰仓步行轴线上。只在自选中整段替换北镰仓两寺；不要北线逛完再赶来。',['9:00–16:00 · 竹庭 ¥400；休耕庵抹茶干果子另 ¥600，茶券15:30截止，可能限量'],'https://houkokuji.or.jp/guide/',['detour','镰仓站短车官网约7分钟，假日可能15–25分钟；从北镰仓直接跨来预计15–25分钟车程，超出10分钟目标。']);
+n11('jomyo11','净妙寺 · 喜泉庵',[35.3215,139.5701],'枯山水 · 庭院茶席','接报国寺的一组东侧替换线；赏庭院、听水琴窟。茶席按文化体验保留，不用餐厅评分冒充美食品质背书。官网9月21日停观公告仅针对当日台风，并非持续停业。',['寺院9:00–16:30 · 门票 ¥200（2026年3月已调价）','喜泉庵10:00–16:30，末单16:15；抹茶＋干果子 ¥660 / 季节生果子 ¥1,100'],'https://www.tokasan-jomyoji.com/kisenan.html',['best','【最优路线】仅在东侧替换线中：报国寺→净妙寺步行约8–12分钟；之后直接回镰仓站，不再去北镰仓。']);
+const at11=(id,t)=>({...clone(N11[id]),t});
+const startNorth={t:'10:30',p:'kita11',k:'move',n:'mesm → 滨松町 → 品川 → 北镰仓',note:'酒店出发到北镰仓按约70–85分钟留量，争取11:40前后到。若订12:00幻董庵，提前一晚按JR时刻表核对；晚点及时联系餐厅。',lines:['jr','yokosuka']};
+const returnNorth={t:'16:40',p:'kamakura',k:'move',n:'结束寺庙段 → 镰仓站 → 东京',note:'建长寺到镰仓站优先公交／短车；再乘JR回东京，争取18:15–18:45到酒店休息。不经过小町通挤人群。',lines:['taxi','jr','yokosuka']};
+const northA=[clone(startNorth),at11('gentou11','12:00'),at11('meigetsu11','14:50'),{...clone(returnNorth),t:'16:00',p:'kita11',n:'返回北镰仓站 → 东京',note:'明月院回站约10–15分钟；留足返程与酒店休息，不再加建长寺。'}];
+const northB=[clone(startNorth),at11('engaku11','11:45'),at11('minka11','13:00'),at11('meigetsu11','14:15'),{t:'15:30',p:'kita11',k:'move',n:'返回北镰仓站 → 东京，提前休息',note:'两寺足够；小雨选圆觉寺一个，暴雨或铁路受影响则不出发。',lines:['walk','jr']}];
+const northEast=[{...clone(startNorth),p:'kamakura',n:'mesm → 品川 → 镰仓站（东侧庭院替换线）'},stop(11,'tomiyama','11:45'),at11('hokoku11','13:30'),at11('jomyo11','14:45'),{...clone(returnNorth),t:'16:00',note:'公交／短车回镰仓站，然后JR回东京；不再折返北镰仓，也不接海岸。'}];
+const northSmall=[clone(startNorth),at11('engaku11','11:45'),at11('minka11','13:00'),at11('jochi11','14:15'),{...clone(returnNorth),t:'15:30',p:'kita11',n:'北镰仓站 → 东京',note:'从净智寺回北镰仓站约8–12分钟，再乘JR。'}];
+const northPlan=[{choice:'N11',label:'北镰仓寺庙线 · 只选一组完整组合',opts:[{k:'怀石＋一寺',name:'幻董庵→明月院',stops:northA},{k:'轻食慢线',name:'圆觉寺→ミンカ→明月院',stops:northB},{k:'绿意短线',name:'圆觉寺→ミンカ→净智寺',stops:northSmall},{k:'东侧庭院替换',name:'整段改报国寺＋净妙寺；不是北镰仓加站',stops:northEast}]}];
+northPlan[0].opts.splice(1,0,{k:'怀石＋建长',name:'幻董庵→建长寺（替换明月院）',stops:[clone(startNorth),at11('gentou11','12:00'),at11('kencho11','15:00'),{...clone(returnNorth),t:'16:10'}]});
+const old11Night=SAVED11.a.stops.filter(s=>s.t>='19:00');
+const budget11Night=[{...clone(SAVED11.b.stops.find(s=>s.p==='shoutaien')),t:'19:30'},home('21:00')];
+const star11={...stop(9,'starbar9','22:00'),note:'从原10号银座酒吧备选迁来。若9号已经去过就不重复，改Tokyo Confidential或回酒店。营业列表覆盖周日，但不定休与当晚席位仍须确认。',route:['best','【最优路线】仅在银座晚餐分支内，吃完留本区喝一杯，再回mesm；不回头去大手町。']};
+star11.refs=[...(star11.refs||[]),['周日营业列表','https://tabelog.com/tokyo/A1301/A130101/13002270/']];
+const ginza11Night=[{...stop(8,'unafuji','19:30'),note:'原10号有乐町晚餐备选迁入。若8号已吃鳗鱼则低优，不为了酒吧重复吃；席位需再确认。'},star11,home('23:15')];
+P.tnm12={n:'东京国立博物馆',q:'東京国立博物館',ll:[35.7188,139.7765]};
+P.chazen12={n:'茶禅 浅草',q:'茶禅 浅草 台東区浅草1-4-7',ll:[35.711,139.7944]};
+const museum12={t:'13:30',p:'tnm12',n:'东京国立博物馆 · 日本艺术精选',access:'walk',kind:'雨天主线 · 室内人文',note:'10月12日周一为日本假日，按官网规则开放，次日休馆。只看本馆日本艺术，约2–2.5小时；不追全馆。10月14日才开幕的大德寺特展不在本次范围。门口和馆间移动仍需雨具。',meta:['9:30–17:00，16:30停止入馆；常设综合文化展成人 ¥1,000，特展另计'],book:'https://www.tnm.jp/modules/r_free_page/index.php?id=113',bookN:'官网开放日 / 购票',route:['best','【最优路线】入谷午餐→博物馆短车约5–10分钟→汤岛晚餐短车约10分钟；省掉雨中公园与汤岛天神。'],lines:['taxi']};
+const tea12={t:'14:00',p:'chazen12',n:'茶禅 浅草 · 茶道体验',access:'required',kind:'民俗体验 · 45分钟',note:'须事先确认时段并完成预约；不是下雨后保证有位的walk-in项目。穿袜子，可拍照但不可录像。普通体验提前7天内取消50%、前日及当日100%；私人场取消规则更严格，不要预订后仅凭天气决定是否参加。',meta:['10:00–17:00整点时段，以确认邮件为准；一般体验 ¥3,500／人；私人体验 ¥5,000／人，至少2人'],book:'https://www.chazen-co.jp/asakusa/',bookN:'官网预约',route:['best','【最优路线】浅草简餐→茶禅→ゴトー→浅草晚餐；都在同一片区，不跨去上野。'],lines:['walk']};
+const rainMuseum=[stop(12,'nodaya','12:00'),museum12,{t:'16:00',p:'tnm12',n:'馆内休息／自由缓冲',k:'move',note:'坐下休息，可继续看最感兴趣的一个展室；累了直接回酒店，取消未预约的晚餐。若保留19:00河豚，16:30后短车去汤岛并找室内坐下，不硬塞雨中景点。',lines:['taxi']},{...stop(12,'kikuchi','19:00'),access:'required'},home('21:15')];
+const rainTea=[{...clone(SOBA),t:'12:15'},tea12,stop(12,'goto','15:00'),stop(12,'hontosaya','17:30'),home('19:00')];
+const sunCustom=clone(SAVED12.plan).map(s=>s.choice==='R'?{...s,label:'浅草晴天完整线路',opts:s.opts.filter(o=>o.k==='路线 1')}:s);
+const baseExpand1112=expand, basePanel1112=modePanel;
+expand=function(d){if(!['11','12'].includes(d.id))return baseExpand1112(d);const m=MODE[d.id]||'a',theme=THEME1112[d.id];
+ if(d.id==='11'){
+  d.title=theme==='north'?'北镰仓寺庙线 → 东京晚餐':'海岸富士山线 → 东京晚餐';
+  d.lead=theme==='north'?'Plan A怀石＋一寺，Plan B轻食＋两寺；坐下休息优先。先订幻董庵，午餐预留2–2.5小时；未订到则改轻食，不赶关门。自选保留圆觉寺、净智寺和东侧庭院整段替换。':'沿用原海岸方案；富士山可见度取决于天气。Plan A只去长谷一寺和七里滨，Plan B提前回东京，自选保留原长线。';
+  if(m==='custom'){d.plan=theme==='north'?clone(northPlan):clone(SAVED11.plan).filter(s=>s.choice||s.t<'18:00');originalExpand(d);}else d.stops=theme==='north'?clone(m==='a'?northA:northB):clone(SAVED11[m].stops).filter(s=>s.t<'19:00');
+  const eve=NIGHT11==='ginza'?ginza11Night:NIGHT11==='near'||(NIGHT11==='auto'&&m==='b')?budget11Night:old11Night;d.stops.push(...clone(eve));
+ }else{
+  d.title=theme==='sun'?'不下雨的浅草寺 · 寺院与江户手艺':'下雨的博物馆／民俗体验 · 室内慢线';d.lead=theme==='sun'?'沿用浅草路线，不追加跨区购物。Plan A入谷鳗鱼后进入浅草，Plan B直接浅草简餐，自选保留原午餐备选。':'Plan A东京国立博物馆，Plan B已预约茶禅时整段留浅草；没有茶道确认席位就选博物馆。河豚店节假日营业、价格及席位必须先电话确认。';
+  if(m==='custom'){d.plan=theme==='sun'?clone(sunCustom):[{choice:'RAIN12',label:'雨天选一条完整室内组合',opts:[{k:'博物馆',name:'入谷→国立博物馆→汤岛河豚',stops:rainMuseum},{k:'茶道',name:'浅草简餐→茶禅→甜品→浅草晚餐',stops:rainTea}]}];originalExpand(d);}else d.stops=clone(theme==='sun'?SAVED12[m].stops:m==='a'?rainMuseum:rainTea);
+ }
+};
+function cards1112(xs){return xs.map(x=>`<article class="d10option"><b>${accessBadge(x)}${esc(x.n)}</b><p>${esc(x.note||'')}</p><p>${(x.meta||[]).map(esc).join('<br>')}</p><p>${(x.r||[]).map(r=>esc(r.join(' · '))).join(' / ')}</p><p>${x.route?routeLabel(x.route):''}</p><div class="links"><a class="lk" target="_blank" href="${NAVTO(P[x.p].q)}">导航 ↗</a><a class="lk" target="_blank" href="${G(P[x.p].q)}">照片 / 评价 ↗</a>${x.book?`<a class="lk" target="_blank" href="${x.book}">官网 / 预约 ↗</a>`:''}</div></article>`).join('')}
+modePanel=function(d){if(!['11','12'].includes(d.id))return basePanel1112(d);const choices=d.id==='11'?[['north','北镰仓寺庙线'],['coast','海岸富士山线']]:[['sun','不下雨的浅草寺'],['rain','下雨的博物馆／民俗体验']];return `<div class="planmodes">${choices.map(([v,n])=>`<button data-theme1112="${d.id}|${v}" class="${THEME1112[d.id]===v?'on':''}" aria-pressed="${THEME1112[d.id]===v}"><b>${n}</b></button>`).join('')}</div><div class="planmodes">${[['a','Plan A'],['b','Plan B'],['custom','自选 Plan']].map(([v,n])=>`<button data-mode="${d.id}|${v}" class="${(MODE[d.id]||'a')===v?'on':''}"><b>${n}</b></button>`).join('')}</div>${d.id==='11'?`<div class="panel"><b>东京晚间 · 与白天路线独立切换</b><div class="planmodes">${[['auto','随A/B：原晚餐／就近早归'],['near','酒店附近 · 正泰苑'],['ginza','银座旧备选 · 鳗鱼＋STAR BAR']].map(([v,n])=>`<button data-night11="${v}" class="${NIGHT11===v?'on':''}">${n}</button>`).join('')}</div><p>晚间均未在此新增预约。长海岸线17:45才离开片濑江之岛时，不建议赶19:50晚餐；优先缩短海岸线或选择酒店附近晚餐。若幻董庵14:30后才结束，明月院／建长寺只选一座，不压缩参观时间。</p></div><details class="panel"><summary>旧10号迁来的选品 · 周日营业限制</summary><p><strong style="color:#bf3434">10月11日是周日：六雁、Punch Room、焼鳥ひら野、おみ乃椿按常规营业表休息，不纳入当天导航。</strong>保留选品记录，不能当即时替补。STAR BAR为可执行的银座酒吧备选，不定休与当晚席位仍须核对。</p><p>${esc('六雁旧版套餐参考 ¥25,000／33,000；Punch旧版单杯 ¥2,600另15%服务费。其余店价格未重新核定，不作报价。')}</p><a class="lk" href="https://tabelog.com/tokyo/A1301/A130101/13005014/" target="_blank">六雁营业表</a> <a class="lk" href="https://www.editionhotels.com/tokyo-ginza/restaurants-and-bars/punch-room/" target="_blank">Punch官方营业日</a></details><details class="panel"><summary>北镰仓与东侧庭院 · 全部替换选品</summary>${cards1112(Object.values(N11))}<p>东庆寺可替换一寺，不另加站；报国寺＋净妙寺属于东侧整段替换。一条恵観山荘的10月开放日尚未核定，不列为可执行站。寺院交通为估算，假日堵车及叫车时间另计。</p></details><details class="panel"><summary>小红书参考 · 原帖与取舍</summary><p>参考正文中的庭院与寺院取舍，包括雪泥的春日徒步分享：圆觉寺→明月院→建长寺→八幡宫全线约4–5小时／2万步，本次不照搬；怀石主线仅一寺，不追加江之岛。</p>${[['庭院与茶席','6abf8e51000000000b005ae5'],['北镰仓寺庙巡礼','68fce3c3000000000401200b'],['Temple walk','68f874ca000000000301b98b']].map(([n,id])=>`<a class="lk" target="_blank" href="https://www.xiaohongshu.com/discovery/item/${id}">${n} ↗</a>`).join('')} <a class="lk" target="_blank" href="https://xhslink.cn/o/8hlRqkOn9pb">镰仓小众路线 ↗</a> <a class="lk" target="_blank" href="https://xhslink.cn/o/1SG9KC7yt7A">雪泥 · 春日徒步原帖 ↗</a></details>`:`<details class="panel"><summary>雨天怎么换 · 开馆与预约</summary><p>国立博物馆10月12日按法定假日规则开馆，常设票可现场买；茶禅必须提前约，不保证临时有位。两者是替代关系，不需要一天都去。暴雨时也不安排上野公园／汤岛天神户外散步。</p>${cards1112([museum12,tea12])}</details>`}`};
+
+/* Local craft alternatives and a separate Kiyosumi day. */
+let EXP12='chop';const CRAFT12={};
+function local12(id,n,ll,kind,note,meta,book,access='walk',r=[]){P[id]={n,q:n+' 東京',ll};return {p:id,n,kind,note,meta,book,bookN:'官方详情 / 预约',access,r,refs:[['官方信息',book]],route:['near','浅草片区衔接约5–15分钟步行；按所选项目替换购物时段，不追加。'],lines:['walk']};}
+CRAFT12.chop=local12('zenchop12','ZEN Craft 浅草 · 手作筷子',[35.713,139.7937],'手作 · 45–60分钟','挑木料、打磨筷子，成品带走。店方可能接受walk-in，但为保证行程请先锁定时段；刻字及升级木料另计。地址浅草1-27-2 Tosei大楼10层，以确认邮件为准。上油后24小时再使用。',['浅草项目 ¥1,200起／人；不是其他分店的起价'],'https://travelingjapan.com/brands/zen-craft/chopsticks/');
+CRAFT12.knife=local12('zenknife12','ZEN Craft 浅草 · 刀具研磨与装配',[35.713,139.7937],'刀具手作 · 60–90分钟','研磨刀刃、选择木柄，由导师协助装配；不是炉火锻刀。成品须托运，不能随身登机。可能接受walk-in，建议预约锁时段；24小时内取消可能全额收费。',['浅草项目 ¥14,000起／人；最终按所选刀型报价'],'https://travelingjapan.com/brands/zen-craft/knife/');
+CRAFT12.tea=clone(tea12);
+CRAFT12.glass=local12('sokichi12','創吉 · 江户切子玻璃',[35.7097,139.7975],'传统手作 · 90分钟','在玻璃杯上切磨纹样，雷门旁室内体验。需提前预约，语言协助预先确认；只安排90分钟课程。',['成人 ¥3,630／人含透明杯；彩色杯另 ¥1,100–4,510；现金'],'https://www.sokichi-workshop.com/90min','required');
+const craftBackup=local12('craftj12','CRAFT JAPAN 浅草本店 · 筷子',[35.7137,139.7949],'筷子 · 约30分钟','浅草2-7-13西参道；10:00–18:00。作为ZEN临时无位的近邻替补，电话070-3256-8578确认是否能现场接待。线上日历未核定可订时段。',['¥3,980起／人；刻字另 ¥1,100／处'],'https://craftjapan.jp/');
+const kendo12=local12('kendo12','Kendo Spirit · 真正剑道体验',[35.6879,139.7776],'低优 · 跨区体力体验','竹刀、护具与击打练习，约2小时；可询问低强度版本。日本桥小舟町2-9 SEC日本桥大楼2层。浅草出发单程多坐车约20–35分钟，须整段替换下午手作及甜品，不叠加在浅草主线上。',['成人 ¥20,000／人；装备与拍照包含，提前预约'],'https://kendospirit.jp/be-samurai/kendo-experience/','required');
+kendo12.route=['detour','相比浅草就地手作，多坐车约20–35分钟／单程；不是10分钟内的近邻替补。'];
+const samurai12=local12('samurai12','夢乃屋 · 武士杀阵',[35.7144,139.7956],'低优 · 杀阵而非剑道','约60分钟；浅草1-36-8为接待地址，两人体验可能另用道场，确认邮件为准。需确认语言、实际场地及费用后预约。',['旅游局2026年参考 ¥8,000／人，最终报价需确认'],'https://www.tokyo-samurai.com/','required');
+const KI12={};
+KI12.lunch=local12('koukai12','こうかいぼう',[35.6768,139.7963],'拉面 · 本区午餐','浓郁鱼介汤。拉面在完整偏好榜中低优，本区暂无已核定的Top6午餐替补，因此按品质与动线保留。预约不可、现金；祝日11:00–15:00，售罄即止。排队超过20分钟就改先逛／馆内休息，不能保证即刻有同标准午餐。',['菜单参考拉面 ¥850、叉烧面 ¥1,250；2024调价信息，现场菜单为准；每人预算 ¥1,000–2,000'],'https://tabelog.com/tokyo/A1313/A131303/13005052/','walk',[['Tabelog','3.79 · 3,049条'],['Google','评分与评论量未独立核定']]);
+KI12.lunch.route=['best','【最优路线】午餐→清澄庭园向北约10–15分钟步行；跨区酒店出发不属于餐后绕路。'];
+KI12.garden=local12('kiyosumi12','清澄庭园',[35.681,139.7986],'晴天 · 日式回游庭园','看池、石与日式庭园，40分钟足够。雨天石路湿滑跳过，不追完整绕池。',['9:00–17:00，末入16:30；成人 ¥150'],'https://www.tokyo-park.or.jp/park/kiyosumi/');
+KI12.baba=local12('baba12','Babaghuri 清澄本店',[35.6797,139.8001],'天然材质 · 器物与服饰','天然材料、陶器和有质感的服装，比商业大牌更符合手工与器物兴趣。只逛20–30分钟；11:00–19:00、不定休，出发前核对。',['逛店免费；商品按标价，不预设购买预算'],'https://www.babaghuri.jp/jp/shoplist/kiyosumi_bbg.html');
+KI12.iki=local12('iki12','iki Roastery & Eatery',[35.6835,139.7948],'咖啡 · 奶咖休息','自家烘焙与意式咖啡，优先奶咖，不宣称每款都有手冲。常盘1-4-7；祝日8:00–18:00，末单17:00，预约不可。留45–60分钟坐下。',['饮品预算 ¥700–1,200／人，预算而非已核定菜单单价'],'https://iki-espresso.com/pages/iki-roastery-eatery','walk',[['Tabelog','3.59 · 约1,094条'],['Google','本轮未核定']]);
+KI12.iki.route=['near','庭园到店步行约10–15分钟；再去Babaghuri步行约15分钟。若已逛器物店，再折回咖啡会额外多走约10–15分钟，因此先咖啡后器物。'];
+KI12.mot=local12('mot12','东京都现代美术馆 · 多田美波展',[35.6795,139.8087],'现代艺术 · 选一展','10月12日假日开放、13日闭馆。选多田美波展（含馆藏展）约90分钟，不沿用旧帖里的坂本龙一展信息。单馆已足够，不再往南加神社。',['10:00–18:00，末入17:30；成人 ¥1,600；其他展／联票另计'],'https://www.e-tix.jp/mot/index.html');
+KI12.mot.route=['best','【最优路线】Babaghuri→美术馆步行约12–15分钟；雨天短车约5–10分钟，结束直接回酒店。'];
+KI12.fudo=local12('fudo12','深川不动堂',[35.6718,139.7981],'寺院 · 替换美术馆','在自选中替换美术馆整段，器物店后向南走。只参拜一处，不与MOT串成南北折返；不承诺特定护摩法会时段。',['常规参拜 ¥0；供奉与授与品另计'],'https://www.fukagawafudou.gr.jp/');
+KI12.fudo.route=['near','Babaghuri→寺院约12–15分钟步行；相比去美术馆改向南走，不能两段全选。'];
+KI12.garden.route=['best','【最优路线】午餐→庭园→iki向北衔接，单段约10–15分钟步行。'];KI12.baba.route=['near','iki→Babaghuri约15分钟步行，再向东去美术馆约12–15分钟；不折返北侧咖啡店。'];
+const at12=(x,t)=>({...clone(x),t});
+const ka=[at12(KI12.lunch,'12:00'),at12(KI12.garden,'13:00'),at12(KI12.iki,'14:00'),at12(KI12.baba,'15:10'),at12(KI12.mot,'16:00'),home('18:15')];
+const kb=[at12(KI12.lunch,'12:00'),at12(KI12.iki,'13:00'),at12(KI12.baba,'14:15'),at12(KI12.mot,'15:00'),home('17:15')];
+const kt=[...clone(kb).slice(0,3),at12(KI12.fudo,'15:00'),home('16:30')];
+const exBefore=expand,panelBefore=modePanel;
+expand=function(d){if(d.id==='12'&&THEME1112[12]==='kiyosumi'){d.title='清澄白河 · 庭园、器物与美术';d.lead='独立整日替换浅草。Plan A晴天庭园，Plan B雨天省去户外，自选可用深川不动堂替换美术馆；只逛一家器物店，留咖啡休息。晚上回酒店，不额外新增远处晚餐。';if(MODE[12]==='custom'){d.plan=[{choice:'K12',label:'清澄白河完整线路',opts:[{k:'晴天',name:'午餐→庭园→奶咖→器物→美术馆',stops:ka},{k:'雨天',name:'午餐→奶咖→器物→美术馆',stops:kb},{k:'寺院',name:'午餐→奶咖→器物→深川不动堂',stops:kt}]}];originalExpand(d);}else d.stops=clone(MODE[12]==='b'?kb:ka);return;}exBefore(d);if(d.id==='12'){const craft=at12(CRAFT12[EXP12],THEME1112[12]==='sun'?(MODE[12]==='b'?'14:15':'15:50'):'14:00');if(THEME1112[12]==='sun')d.stops=d.stops.map(x=>x.p==='yonoya'?craft:x);else d.stops=d.stops.map(x=>x.p==='chazen12'?craft:x);d.lead+=' 手作时段只选一项；刀具／切子需要90分钟，之后甜品在15:40或取消，晚餐不提前。';if(d.stops.some(x=>x.p===craft.p)&&(THEME1112[12]==='rain'||MODE[12]==='b'))d.stops=d.stops.map(x=>x.p==='goto'?{...x,t:THEME1112[12]==='rain'?'15:40':'15:55'}:x);}};
+modePanel=function(d){let h=panelBefore(d);if(d.id!=='12')return h;h=h.replace('<div class="planmodes">','<div class="planmodes"><button data-theme1112="12|kiyosumi" class="'+(THEME1112[12]==='kiyosumi'?'on':'')+'"><b>清澄白河 · 整日替换</b></button>');return h+'<div class="panel"><b>浅草手作时段 · 点选一项替换</b><div class="planmodes">'+Object.entries(CRAFT12).map(([id,x])=>'<button data-exp12="'+id+'" class="'+(EXP12===id?'on':'')+'">'+x.n+'</button>').join('')+'</div><p>晴天替换筷子店购物站；雨天Plan B／自选民俗线替换茶道站。选中不代表已预约，时段以店方确认邮件为准。刀具体验是研磨装配，不是锻造。</p></div><details class="panel"><summary>全部手作体验 · 价格、预约与近邻替补</summary>'+cards1112([...Object.values(CRAFT12),craftBackup,samurai12,kendo12])+'<p>体验项目按契合度与官方内容推荐，平台星级未独立核定，不冒充Google高分。</p></details><details class="panel"><summary>清澄白河 · 选品与原帖取舍</summary>'+cards1112(Object.values(KI12))+'<p>青葉堂、POTPURRI、理科室、白灯舎、Stoop/taspo保留为临时店铺备选；出发前在地图核对当日营业及当前地址，最多替换Babaghuri一家，不追加全店巡礼。</p><div class="links">'+['青葉堂 清澄白河','POTPURRI 清澄白河','理科室 清澄白河','白灯舎','Stoop 清澄白河','taspo 清澄白河'].map(n=>'<a class="lk" target="_blank" href="'+G(n)+'">'+n+' · 图片／营业 ↗</a>').join('')+'</div><p>原帖深川饭候选本轮未达到Tabelog3.5门槛，不列主餐。Blue Bottle为3.44、Google高分尚未复核，故暂不纳入主推；ARiSE周一休息，Allpress营业状态未确认，不当即时替补。</p><a class="lk" target="_blank" href="https://www.xiaohongshu.com/discovery/item/6a22f60a000000000f03ac00">Khalil · 东京的好东西都藏在这条路上① ↗</a><p>原帖线路缩减为一园、一店、一咖啡、一展；雨天不进庭园。各段时间为估算，地图导航以当天交通为准。</p></details>';};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-exp12]');if(b){EXP12=b.dataset.exp12;refreshDay(day(12));refreshAll();}});
+
 DAYS.forEach(expand);
 
 const EXTRA_EVENTS=[{at:new Date("2026-10-08T08:00:00+08:00"),n:"HU439 起飞",where:"北京首都 T2 → 成田 T2",q:"北京首都国际机场 T2"}];
@@ -1324,7 +1486,7 @@ const EXTRA_EVENTS=[{at:new Date("2026-10-08T08:00:00+08:00"),n:"HU439 起飞",w
 const X = lng => 18 + (lng-139.690)*90.4*50;
 const Y = lat => 22 + (35.722-lat)*111*50;
 const KX = lng => 8 + (lng-139.474)*90.9*24;
-const KY = lat => 20 + (35.3285-lat)*111*24;
+const KY = lat => 20 + (35.345-lat)*111*20;
 const col = v => `var(${v})`;
 function pts(day){ return day.stops.map(s=>P[s.p]).filter((p,i,a)=>p&&p.ll&&(i===0||a[i-1]!==p)); }
 function kpts(day){ return day.stops.map(s=>P[s.p]).filter((p,i,a)=>p&&p.km&&(i===0||a[i-1]!==p)); }
@@ -1376,8 +1538,8 @@ function kamaMap(k,d){
   const coast=[[35.3060,139.470],[35.3050,139.490],[35.3040,139.500],[35.3040,139.512],[35.3032,139.518],[35.3040,139.524],[35.3066,139.530],[35.3084,139.538],[35.3094,139.546],[35.3086,139.553],[35.3060,139.560],[35.280,139.560],[35.280,139.470]];
   const cp="M"+coast.map(p=>KX(p[1]).toFixed(1)+" "+KY(p[0]).toFixed(1)).join(" L")+" Z";
   const pp=k.map((p,i)=>(i?"L":"M")+KX(p.km[1]).toFixed(1)+" "+KY(p.km[0]).toFixed(1)).join(" ");
-  return `<svg class="map" viewBox="0 0 200 175" role="img" aria-label="镰仓路线图"><defs><filter id="roughK" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter></defs>
-   <rect width="200" height="175" fill="var(--land)"/><path d="${cp}" fill="var(--water)" filter="url(#roughK)"/>
+  return `<svg class="map" viewBox="0 0 225 190" role="img" aria-label="镰仓路线图"><defs><filter id="roughK" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter></defs>
+   <rect width="225" height="190" fill="var(--land)"/><path d="${cp}" fill="var(--water)" filter="url(#roughK)"/>
    <text x="100" y="168" font-size="9" fill="var(--muted)" text-anchor="middle">相模湾 · 镰仓（放大）</text>
    <path d="${pp}" fill="none" stroke="${col(d.color)}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" filter="url(#roughK)"/>
    ${k.map(p=>{ const n=numbering(d).get(p); const x=KX(p.km[1]).toFixed(1), y=KY(p.km[0]).toFixed(1); return `<circle cx="${x}" cy="${y}" r="6.5" fill="${col(d.color)}" stroke="var(--land)" stroke-width="1.2"/><text x="${x}" y="${(+y+2.8).toFixed(1)}" font-size="7.5" font-weight="800" fill="#fff" text-anchor="middle">${n||"站"}</text>`; }).join("")}</svg>`;
@@ -1412,7 +1574,7 @@ const RISKS=[
   ["10.10–10.12 是日本三连休","镰仓和浅草都会很挤，江之电镰仓站和长谷站可能排队 30–60 分钟；时间紧就从长谷直接打车到七里滨。"],
   ["店铺休息日和现金","已避开：のだや 10 月 5–9 日和 13 日休；おみ乃 椿 11、12 日休；かねさか周日周一休；有涯周三周日休；新宿御苑周一休；照隅周三周四休。只收现金的有：とみやま午餐、初小川、鳥よし中目黑、ゴトー、力餅家、ふじ屋、L'Ambre；おみ乃 椿反过来不收现金。带 ¥20,000 现金。"]]],
  ["预订",[
-  ["要订的店尽早订","先预约 YORONIKU、のだや、银座うかい亭和六雁；若选 10.12 路线 3，再电话约きくち；10.12 只订所选线路的晚餐。10.10 Tierra 原宿 14:30 以用户预约确认信息为准。"],
+  ["要订的店尽早订","先预约 YORONIKU、のだや、银座うかい亭；若选 10.12 路线 3，再电话约きくち；10.12 只订所选线路的晚餐。10.10 Tierra 原宿 14:30 以用户预约确认信息为准。"],
   ["订不到就切 Plan B","每顿饭上方点「Plan B」，时间、地图和导航会跟着换。餐厅备选也以 Tabelog 3.5 为硬门槛、优先 3.7，大多也要订；真正能直接去的是京桥山崎的鳗鱼盖饭、とみやま、鳥よし中目黑。"],
   ["世邦（Seabourn）装备 11.18 前下单","开航前 30 天要在 Seabourn 预订管理里选好赠送的外套和防水背包尺码。防水裤船上不送也不借，10.9 在新宿买。"]]],
  ["其他",[
@@ -1499,15 +1661,17 @@ DAYS.forEach(d=>main.appendChild(renderDay(d)));
 const TODO=[
  ["预约（按紧急程度）",[
   ["Tierra 原宿 · 10.10 14:30 · 中村美侑","已按用户安排；预留 2–3 小时，确认项目是否包含妆面及实际结束时间"],
+  ["幻董庵 · 10.11 12:00 · 仅北镰仓Plan A","完整午餐约2–2.5小时；提前预约，未订到改ミンカ轻食慢线"],
+  ["茶禅 浅草 · 10.12 · 仅雨天茶道线","必须确认预约；留意取消费，不把它当临时walk-in"],
   ["YORONIKU TOKYO · 10.11 19:50 · 2 位","TableCheck / OMAKASE；高分和牛晚餐，优先锁位"],
   ["入谷 のだや · 10.12 12:00 · 2 位","Tabelog / 050-5869-5137；节假日营业再复核"],
   ["銀座うかい亭 · 10.13 12:00 · 2 位","官网 ukai.co.jp/ginza/；铁板烧套餐预留约两小时"],
-  ["きくち · 10.12 19:00 · 2 位 · 仅选路线 3 时预约","电话 03-3839-3382；问节假日营业及季节加价，备现金"],
-  ["六雁 · 10.10 19:30 · 2 位","TableCheck mutsukari；已订原烧鸟おみ乃椿的话可保留"],
-  ["The INNOCENT CARVERY · 10.10 12:30 · 可选","仅店家确认 13:40 前结束才订，14:15 要抵达 Tierra；否则原宿简餐"],
+  ["きくち · 10.12 19:00 · 2 位 · 仅选雨天博物馆线时预约","电话 03-3839-3382；问节假日营业及季节加价，备现金"],
+  ["10.10 晚餐只订一家 · 建议18:45","代官山いっさい喝采 / 中目黑夢鉄砲 / 青山太いち；未查询实时席位，先询位再决定。预算低选一芯或川上庵"],
+  ["The INNOCENT CARVERY · 10.10 12:15 · 已预约","11:35从酒店打车出发；协调与晨会重叠的25分钟，确认13:35–13:40结束套餐，14:15到Tierra"],
   ["10.8 晚饭三选一 · うな富士 / 鳥よし銀座 / 野田岩","根据抵店体力再选；野田岩尽早电话咨询"],
-  ["10.12 路线 1 本とさや / 路线 2 とり澤 / 路线 3 きくち","三条路线只订实际选择的一家"],
-  ["10.10 六雁晚餐与 Punch Room","六雁按实际预约场次；做完头发可跳过逛店，Punch Room 只在有精神时去"]]],
+  ["10.12 晴天浅草／雨天茶道：本とさや；雨天博物馆：きくち","只订实际选择的一家；雨天茶禅也须提前确认时段"],
+  ["10.10 TABLEAUX LOUNGE · 建议21:15入座","确认当晚21:30场次、音乐费、最低消费和烟味安排；尚未预约，不与另一家酒吧叠加"]]],
  ["不用预约、直接去",[
   ["饭","京桥山崎鳗鱼盖饭（平日 11:30）、とみやま（镰仓）、鳥よし中目黑（只能排队）"],["酒吧","Virtù、Bar Trench；EST! 去前打电话确认节假日营业"],["咖啡甜品","AALIYA、KOFFEE MAMEYA、ゴトー、IVY PLACE、L'Ambre、文明堂カフェ"]]],
  ["出发前",[
@@ -1561,6 +1725,8 @@ function tick(){
 tick(); setInterval(tick,1000);
 
 /* ---------- 交互 ---------- */
+document.addEventListener('click',e=>{const b=e.target.closest('[data-d10theme],[data-d10pick],[data-d10end]');if(!b)return;if(b.dataset.d10theme)D10THEME=b.dataset.d10theme;else if(b.dataset.d10end)D10END=b.dataset.d10end;else{const [slot,id]=b.dataset.d10pick.split('|');D10SELECT[D10THEME][slot]=id;MODE['10']='custom';}const y=b.getBoundingClientRect().top;refreshDay(day(10));refreshAll();});
+
 document.addEventListener("click",e=>{ const b=e.target.closest("[data-copy]"); if(b){ copy(b.getAttribute("data-copy")); } });
 function refreshDay(d,anchorSel,y){ expand(d); const old=document.getElementById("d"+d.id), wasOpen=old.querySelector("details.daymap").open;
   const det=old.querySelector("details.daymap"); (det._maps||[]).forEach(m=>m.remove());
@@ -1576,6 +1742,7 @@ document.addEventListener("click",e=>{ const b=e.target.closest("[data-foodall]"
   DAYS.forEach(d=>refreshDay(d)); refreshAll(); syncGlobal(); });
 function syncGlobal(){ const ks=[]; DAYS.forEach(d=>d.plan.forEach(function walk(it){ if(it.choice) it.opts.forEach(o=>o.stops.forEach(walk)); else if(it.mk&&it.c) ks.push(it.mk); }));
   const all=t=>ks.every(k=>(FOOD[k]||"q")===t); document.querySelectorAll("[data-foodall]").forEach(b=>b.classList.toggle("on",all(b.dataset.foodall))); }
+document.addEventListener('click',e=>{const t=e.target.closest('[data-theme1112]'),n=e.target.closest('[data-night11]');if(t){const [id,v]=t.dataset.theme1112.split('|');THEME1112[id]=v;refreshDay(day(id));refreshAll();}else if(n){NIGHT11=n.dataset.night11;refreshDay(day(11));refreshAll();}});
 document.addEventListener("click",e=>{ const b=e.target.closest("[data-ch]"); if(!b) return;
   const [id,c,k]=b.dataset.ch.split("|"); const d=DAYS.find(x=>x.id===id); if(CH[id][c]===k) return; CH[id][c]=k; expand(d);
   const old=document.getElementById("d"+id), y=b.getBoundingClientRect().top, wasOpen=old.querySelector("details.daymap").open;
