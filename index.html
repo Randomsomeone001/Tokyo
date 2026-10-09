@@ -1478,6 +1478,39 @@ expand=function(d){if(d.id==='12'&&THEME1112[12]==='kiyosumi'){d.title='清澄�
 modePanel=function(d){let h=panelBefore(d);if(d.id!=='12')return h;h=h.replace('<div class="planmodes">','<div class="planmodes"><button data-theme1112="12|kiyosumi" class="'+(THEME1112[12]==='kiyosumi'?'on':'')+'"><b>清澄白河 · 整日替换</b></button>');return h+'<div class="panel"><b>浅草手作时段 · 点选一项替换</b><div class="planmodes">'+Object.entries(CRAFT12).map(([id,x])=>'<button data-exp12="'+id+'" class="'+(EXP12===id?'on':'')+'">'+x.n+'</button>').join('')+'</div><p>晴天替换筷子店购物站；雨天Plan B／自选民俗线替换茶道站。选中不代表已预约，时段以店方确认邮件为准。刀具体验是研磨装配，不是锻造。</p></div><details class="panel"><summary>全部手作体验 · 价格、预约与近邻替补</summary>'+cards1112([...Object.values(CRAFT12),craftBackup,samurai12,kendo12])+'<p>体验项目按契合度与官方内容推荐，平台星级未独立核定，不冒充Google高分。</p></details><details class="panel"><summary>清澄白河 · 选品与原帖取舍</summary>'+cards1112(Object.values(KI12))+'<p>青葉堂、POTPURRI、理科室、白灯舎、Stoop/taspo保留为临时店铺备选；出发前在地图核对当日营业及当前地址，最多替换Babaghuri一家，不追加全店巡礼。</p><div class="links">'+['青葉堂 清澄白河','POTPURRI 清澄白河','理科室 清澄白河','白灯舎','Stoop 清澄白河','taspo 清澄白河'].map(n=>'<a class="lk" target="_blank" href="'+G(n)+'">'+n+' · 图片／营业 ↗</a>').join('')+'</div><p>原帖深川饭候选本轮未达到Tabelog3.5门槛，不列主餐。Blue Bottle为3.44、Google高分尚未复核，故暂不纳入主推；ARiSE周一休息，Allpress营业状态未确认，不当即时替补。</p><a class="lk" target="_blank" href="https://www.xiaohongshu.com/discovery/item/6a22f60a000000000f03ac00">Khalil · 东京的好东西都藏在这条路上① ↗</a><p>原帖线路缩减为一园、一店、一咖啡、一展；雨天不进庭园。各段时间为估算，地图导航以当天交通为准。</p></details>';};
 document.addEventListener('click',e=>{const b=e.target.closest('[data-exp12]');if(b){EXP12=b.dataset.exp12;refreshDay(day(12));refreshAll();}});
 
+
+/* October 9: hotel departure and three late dinner routes. */
+Object.assign(P,{
+ katoLate9:{n:'銀座 焼鳥かとう',q:'銀座 焼鳥かとう 東京都中央区銀座1-14-11 銀松ビルB1',ll:[35.6733,139.7713]},
+ opaLate9:{n:'BAR OPA 銀座店',q:'BAR OPA 銀座店 東京都中央区銀座1-4-8 銀座ビッグウエストビル5号館 B1',ll:[35.6752,139.7667]},
+ ippashiLate9:{n:'銀座いっぱし',q:'銀座いっぱし 東京都中央区銀座8-4-9 奥山ビルB1',ll:[35.6672,139.7593]},
+ highLate9:{n:'BAR HIGH FIVE',q:'BAR HIGH FIVE 東京都中央区銀座5-4-15 エフローレギンザ5ビルB1F',ll:[35.6710,139.7621]},
+ toriLate9:{n:'新橋 鶏繁 総本店',q:'鶏繁 総本店 東京都港区新橋2-9-17',ll:[35.6670,139.7564]}
+});
+let LATE9='a', LATE9DRINK=false;
+const BEFORE9=clone(day(9).plan.filter(x=>x.choice!=='9night'));
+const LATE9LEAD='已回mesm放好采购物，先完成工作，再决定出发。今晚避开牛肉与海鲜面；以21:45出发、22:00左右入座为示例，不是已订时段。今晚三条线均未确认席位，先电话问到位再出门。全部时间为东京时间（JST）。';
+const LATE9FOOD={
+ a:{t:'22:00',p:'katoLate9',n:'銀座 焼鳥かとう',access:'required',kind:'烧鸟 · 精致晚餐',r:[['Tabelog','3.54']],note:'21:00后可单点，但店铺标注完全预约制，必须先电话确认两位席位及可接待时间。22:30最晚入店，料理末单23:00，23:30关门。可点鸡肉、内脏和蔬菜，避开明日和牛午餐与今日海鲜面；全席禁烟。',meta:['银座1-14-11 銀松ビルB1','单串¥660起；21:00后另收10%服务费','人均点单预算¥8,000–11,000；非套餐报价，10%服务费另计'],book:'tel:+81362630629',bookN:'电话确认席位 · 03-6263-0629',lines:['taxi'],refs:[['官网与菜单','https://yakitori-kato.com/'],['Tabelog','https://tabelog.com/tokyo/A1301/A130101/13313510/']],route:['context','mesm打车约10–15分钟；饭后步行约7–10分钟接OPA。车程与步行均为估算，候车及拥堵另计。']},
+ b:{t:'22:00',p:'ippashiLate9',n:'銀座いっぱし',access:'walk',kind:'日式居酒屋 · 热菜与鸡肉',r:[['Tabelog','3.51']],note:'可现场询位，但周五晚必须先电话问空位再出门。料理末单22:30、饮料末单23:00、23:30关门；22:00左右落座后先一次点好主菜。今晚选鸡肉、蔬菜、蛋料理等热菜，跳过刺身和牛肉；全席禁烟。',meta:['银座8-4-9 奥山ビルB1','人均预算¥6,000–10,000；含饮料的估算，按实际点单结算'],book:'tel:+81362180818',bookN:'电话询位 · 03-6218-0818',lines:['taxi'],refs:[['官网','https://ippashi.jp/'],['Tabelog与营业表','https://tabelog.com/tokyo/A1301/A130103/13041208/']],route:['best','本组“晚餐＋酒吧”方案中靠近酒店一侧；mesm短车约10–15分钟，饭后步行约8–10分钟接HIGH FIVE，较A少向银座北侧绕行。']},
+ c:{t:'22:00',p:'toriLate9',n:'新橋 鶏繁 総本店',access:'walk',kind:'传统烧鸟 · 想吃完就回酒店',r:[['Tabelog','3.57']],note:'是新桥的「鶏繁 総本店」，不是银座的鳥繁。先电话确认两位可接待，再直接出发；料理末单23:00、23:30关门。以烧鸟和蔬菜为主，饭后可以直接回酒店；剩余菜品以现场为准。',meta:['新桥2-9-17','人均预算¥8,000–10,000'],book:'tel:+81335089532',bookN:'电话询位 · 03-3508-9532',lines:['taxi'],refs:[['官方门店与营业时间','https://www.torishige.com/store.html'],['Tabelog','https://tabelog.com/tokyo/A1301/A130103/13012718/']],route:['best','以“只吃晚餐即回酒店”为比较：新桥往返最省事，mesm短车约10–15分钟。不喝酒时不绕银座。']}
+};
+const OPA9={t:'23:10',p:'opaLate9',n:'BAR OPA 銀座店 · 可跳过',access:'walk',kind:'经典／水果鸡尾酒',r:[['Tabelog','3.79']],note:'可walk-in询位，不保证有座；17:00–次日01:00营业，末单时间未公开，进店前确认。全席禁烟。注意是银座1-4-8的银座店，不是并木通分店。没座或已累就回酒店，不再串第二间。',meta:['银座1-4-8 銀座ビッグウエストビル5号館 B1','水果鸡尾酒¥1,700起；人均预算¥3,000–5,000'],book:'tel:+81335350208',bookN:'电话询位 · 03-3535-0208',lines:['walk'],refs:[['官网','https://bar-opa.jp/ginza'],['菜单','https://bar-opa.jp/ginza/g-menu'],['Tabelog','https://tabelog.com/tokyo/A1301/A130101/13002248/']],route:['best','与かとう同在银座一丁目，饭后步行约7–10分钟；不跨区追榜单。']};
+const HIGH9={t:'23:15',p:'highLate9',n:'BAR HIGH FIVE · 可跳过',access:'walk',kind:'历史榜单名店 · 经典鸡尾酒',r:[['Tabelog','3.22 · 以历史榜单例外入选']],note:'可尝试walk-in；17:00–次日01:00营业，官网最晚入店00:00，末单时间需另询。全席禁烟。按历史World’s 50 Best Bars名店及2020 Legend of the List入选，不声称当前Top50。无座即回酒店。',meta:['银座5-4-15 エフローレギンザ5ビルB1F','人均预算¥6,000–8,000，不是单杯价格'],book:'tel:+81335715815',bookN:'电话询位 · 03-3571-5815',lines:['walk'],refs:[['官网','https://www.barhighfive.com/'],['官方营业与最晚入店','https://www.barhighfive.com/map'],['Tabelog','https://tabelog.com/tokyo/A1301/A130101/13188812/']],route:['context','いっぱし饭后步行约8–10分钟；若从鶏繁出发约12–15分钟。只喝一间。']};
+const exLate9=expand, panelLate9=modePanel;
+expand=function(d){if(d.id!=='9')return exLate9(d); MODE[9]='custom';
+ const back={t:'20:45',p:'hotel',n:'已回酒店 · 放装备／继续工作',k:'move',note:'出门时间跟随实际工作结束时间，21:45仅为规划锚点。',lines:['taxi']};
+ const depart={t:'21:45',p:LATE9FOOD[LATE9].p,n:'先确认席位，再从mesm打车出发',k:'move',note:'给司机看下方餐厅地址。预计10–15分钟车程，堵车另计；若晚于22:15才出发，不选22:30料理末单的いっぱし。',lines:['taxi']};
+ const evening=[back,depart,clone(LATE9FOOD[LATE9])];
+ if(LATE9==='a')evening.push(clone(OPA9));
+ if(LATE9==='b'||(LATE9==='c'&&LATE9DRINK))evening.push({...clone(HIGH9),t:LATE9==='c'?'23:20':'23:15'});
+ evening.push(home(LATE9==='c'&&!LATE9DRINK?'23:10':'23:55','打车回mesm · 时间随工作与用餐调整'));
+ d.plan=[...clone(BEFORE9),...evening];d.title='新宿采购 → 回酒店工作 → 深夜晚餐三选一';d.lead=LATE9LEAD;d.tags=[['','中国上班日'],['free','已回酒店 · 工作结束再出发']];originalExpand(d);
+};
+modePanel=function(d){if(d.id!=='9')return panelLate9(d);return `<div class="panel"><b>今晚 · 三条完整路线，点选同步地图与导航</b><div class="planmodes">${[['a','Plan A · 精致烧鸟','かとう → OPA'],['b','Plan B · 日式热菜','いっぱし → HIGH FIVE'],['c','Plan C · 简单早归','鶏繁 → mesm']].map(([k,n,t])=>`<button data-late9="${k}" class="${LATE9===k?'on':''}" aria-pressed="${LATE9===k}"><b>${n}</b><small>${t}</small></button>`).join('')}</div>${LATE9==='c'?`<label><input type="checkbox" data-late9drink ${LATE9DRINK?'checked':''}> 饭后还有精神：加一杯HIGH FIVE（多走约12–15分钟，另加喝酒时间）</label>`:''}<p><strong>先问两位席位，再离开酒店。</strong>可walk-in不代表现在有空位；这里没有完成任何订位。かとう必须提前预约。工作结束更晚时，先核对最晚入店与末单，不赶关门。</p><p>预算均为每人，100日元≈4.25元人民币为参考换算；不是实时汇率。小地图为示意，精确入口与车程点Google导航确认。酒吧均可跳过。</p><p><a class="lk" href="#tonight9">直接看今晚时间线 ↓</a></p></div>`};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-late9]');if(!b)return;LATE9=b.dataset.late9;refreshDay(day(9));refreshAll();});
+document.addEventListener('change',e=>{if(!e.target.matches('[data-late9drink]'))return;LATE9DRINK=e.target.checked;refreshDay(day(9));refreshAll();});
+
 DAYS.forEach(expand);
 
 const EXTRA_EVENTS=[{at:new Date("2026-10-08T08:00:00+08:00"),n:"HU439 起飞",where:"北京首都 T2 → 成田 T2",q:"北京首都国际机场 T2"}];
@@ -1561,7 +1594,7 @@ document.getElementById("bk").innerHTML=`
  <div class="panel wide"><h3><span class="k">酒店 · 5 晚</span>mesm Tokyo, Autograph Collection</h3>
   <dl class="kv"><dt>日期</dt><dd>10.8 入住 → 10.13 退房</dd><dt>地址</dt><dd>东京都港区海岸 1-10-30（竹芝）<button class="lk" type="button" data-copy="東京都港区海岸1-10-30">复制日文地址</button></dd><dt>电话</dt><dd class="tel">+81-3-5777-1111</dd><dt>车站</dt><dd>百合鸥线竹芝站 3 分钟 · JR 滨松町站 6 分钟 · 都营大门站 7 分钟</dd><dt>入退房</dt><dd>15:00 / 12:00；10.13 要到 17:15 才回来取行李，已列入待办：申请晚退房或寄存</dd></dl>
   <div class="links"><a class="lk go" style="--c:var(--ink)" target="_blank" rel="noopener" href="${NAVTO(HOTEL)}">导航回酒店 ↗</a><a class="lk" target="_blank" rel="noopener" href="https://www.mesm.jp/en/">官网 ↗</a></div></div>
- <div class="panel wide" style="font-size:14px;color:var(--muted)">门票和餐厅都还没订，预约入口和订不到时的 Plan B 都在「待办」和每一站的「备选」里。发机票、酒店或预约截图给我，我核对后更新这里（确认号和房间号不会写进页面）。</div>`;
+ <div class="panel wide" style="font-size:14px;color:var(--muted)">10.10 The INNOCENT CARVERY 12:15与Tierra原宿14:30已按确认安排；其他预订以对应项目状态为准。10.9今晚三条路线尚未确认席位，先询位再出门。</div>`;
 
 /* ---------- 风险 ---------- */
 const RISKS=[
@@ -1570,7 +1603,7 @@ const RISKS=[
   ["七里滨和江之岛的富士山要碰运气","10.11 下午在七里滨海岸、傍晚在江之岛 Sea Candle 看富士山；10 月雾气多，大约一半概率。当天查 isitvisible.com/fuji。阴天就早点回东京。"],
   ["早晚温差和海风","10 月东京白天约 20–24°C，傍晚在海边和高楼露台会凉，带一件薄外套。"]]],
  ["行程规划",[
-  ["会议窗口：东京 20:00–次日 12:00","巴西（UTC−3）比东京慢 12 小时。10.9、10.10 晚不开会；巴西 10.12 放假，所以东京 10.12 中午到 10.13 中午都空，只剩 10.8 和 10.13 晚上要开。"],
+  ["会议窗口：东京 20:00–次日 12:00","巴西（UTC−3）比东京慢 12 小时。10.9晚先在酒店完成临时工作再出发；10.10晚原定不开会；巴西 10.12 放假，所以东京 10.12 中午到 10.13 中午都空，只剩 10.8 和 10.13 晚上要开。"],
   ["10.10–10.12 是日本三连休","镰仓和浅草都会很挤，江之电镰仓站和长谷站可能排队 30–60 分钟；时间紧就从长谷直接打车到七里滨。"],
   ["店铺休息日和现金","已避开：のだや 10 月 5–9 日和 13 日休；おみ乃 椿 11、12 日休；かねさか周日周一休；有涯周三周日休；新宿御苑周一休；照隅周三周四休。只收现金的有：とみやま午餐、初小川、鳥よし中目黑、ゴトー、力餅家、ふじ屋、L'Ambre；おみ乃 椿反过来不收现金。带 ¥20,000 现金。"]]],
  ["预订",[
@@ -1653,7 +1686,7 @@ function renderDay(d){
     }
     h+=`</div></div></div>`;
   });
-  h+=`</div>`; s.innerHTML=h; return s;
+  h+=`</div>`; s.innerHTML=h; if(d.id==='9'){const times=[...s.querySelectorAll('.tm')];const hit=times.find(x=>x.textContent.includes('20:45'));if(hit)hit.id='tonight9';} return s;
 }
 DAYS.forEach(d=>main.appendChild(renderDay(d)));
 
